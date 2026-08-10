@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "CellXPatient"
+
+authors:
+  - family-names: Lütge
+    given-names: Almut
+    orcid: "..."
+    affiliation: "SDSC - Swiss Data Science Center"
+  - family-names: Rochat
+    given-names: Giliane
+    orcid: "..."
+    affiliation: "SDSC - Swiss Data Science Center"
+date-released: 2026-09-10
+version: "0.0.1"
+doi: ""
+url: https://github.com/sdsc-ordes/cellxpatient
+repository-code: https://github.com/sdsc-ordes/cellxpatient
+keywords: []
+license: apache2
