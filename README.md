@@ -8,8 +8,8 @@
 <p align="center">
 </p>
 
-[![Current Release](https://img.shields.io/github/release/swissdatasciencecenter/cellxpatient.svg?label=release)](https://github.com/swissdatasciencecenter/cellxpatient/releases/latest)
-[![Pipeline Status](https://img.shields.io/github/actions/workflow/status/swissdatasciencecenter/cellxpatient/normal.yaml?label=ci)](https://github.com/swissdatasciencecenter/cellxpatient/actions/workflows/normal.yaml)
+[![Current Release](https://img.shields.io/github/release/sdsc-ordes/cellxpatient.svg?label=release)](https://github.com/sdsc-ordes/cellxpatient/releases/latest)
+[![Pipeline Status](https://img.shields.io/github/actions/workflow/status/sdsc-ordes/cellxpatient/normal.yaml?label=ci)](https://github.com/sdsc-ordes/cellxpatient/actions/workflows/normal.yaml)
 [![License label](https://img.shields.io/badge/License-Apache2.0-blue.svg?)](http://www.apache.org/licenses/LICENSE-2.0.html)
 
 **Authors:**

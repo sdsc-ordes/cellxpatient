@@ -13,7 +13,7 @@ project_description:
   data in clinical context.
 project_hosts:
   - host: github.com
-    organization: swissdatasciencecenter
+    organization: sdsc-ordes
     repo: cellxpatient
 project_language: generic
 project_license: apache2
