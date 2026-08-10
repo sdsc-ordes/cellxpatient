@@ -2,16 +2,17 @@
 _src_path: src/generic
 project_affiliation: SDSC - Swiss Data Science Center
 project_authors:
--   email: almut.luetge@sdsc.ethz.ch
+  - email: almut.luetge@sdsc.ethz.ch
     first_name: Almut
     last_name: Lütge
--   email: giliane.rochat@epfl.ch
+  - email: giliane.rochat@epfl.ch
     first_name: Giliane
     last_name: Rochat
-project_description: Visualization platform of single-cell and spatial transcriptomics
-    data in clinical context.
+project_description:
+  Visualization platform of single-cell and spatial transcriptomics
+  data in clinical context.
 project_hosts:
--   host: github.com
+  - host: github.com
     organization: swissdatasciencecenter
     repo: cellxpatient
 project_language: generic

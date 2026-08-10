@@ -8,7 +8,6 @@
 <p align="center">
 </p>
 
-
 [![Current Release](https://img.shields.io/github/release/swissdatasciencecenter/cellxpatient.svg?label=release)](https://github.com/swissdatasciencecenter/cellxpatient/releases/latest)
 [![Pipeline Status](https://img.shields.io/github/actions/workflow/status/swissdatasciencecenter/cellxpatient/normal.yaml?label=ci)](https://github.com/swissdatasciencecenter/cellxpatient/actions/workflows/normal.yaml)
 [![License label](https://img.shields.io/badge/License-Apache2.0-blue.svg?)](http://www.apache.org/licenses/LICENSE-2.0.html)
@@ -18,14 +17,20 @@
 - [Almut Lütge](mailto:almut.luetge@sdsc.ethz.ch)
 - [Giliane Rochat](mailto:giliane.rochat@epfl.ch)
 
-
 ## Description
 
-CellXPatient is a project that focuses on the visualization of single-cell and spatial transcriptomics data in clinical context.
+CellXPatient is a project that focuses on the visualization of single-cell and
+spatial transcriptomics data in clinical context.
 
-As single-cell and spatial transcriptomics move closer to clinical use, there is a need for visualization platform that can evolve with a rapidly changing field. CELLxGENE has been a strong foundation for interactive single-cell exploration, but its current maintenance no longer provides the level of evolvability needed for the project.
+As single-cell and spatial transcriptomics move closer to clinical use, there is
+a need for visualization platform that can evolve with a rapidly changing field.
+CELLxGENE has been a strong foundation for interactive single-cell exploration,
+but its current maintenance no longer provides the level of evolvability needed
+for the project.
 
-This repository brings together the evaluation and benchmarking of existing open-source solutions that could replace CellXgene, and will serve as the basis for the development of the future CellXPatient platform.
+This repository brings together the evaluation and benchmarking of existing
+open-source solutions that could replace CellXgene, and will serve as the basis
+for the development of the future CellXPatient platform.
 
 ## Development
 
