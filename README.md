@@ -3,7 +3,7 @@
 </p>
 
 <h1 align="center">
-  cellxpatient
+  CellXPatient
 </h1>
 <p align="center">
 </p>
@@ -19,13 +19,13 @@
 - [Giliane Rochat](mailto:giliane.rochat@epfl.ch)
 
 
-## Installation
+## Description
 
-Describe the installation instruction here.
+CellXPatient is a project that focuses on the visualization of single-cell and spatial transcriptomics data in clinical context.
 
-## Usage
+As single-cell and spatial transcriptomics move closer to clinical use, there is a need for visualization platform that can evolve with a rapidly changing field. CELLxGENE has been a strong foundation for interactive single-cell exploration, but its current maintenance no longer provides the level of evolvability needed for the project.
 
-Describe the installation instruction here.
+This repository brings together the evaluation and benchmarking of existing open-source solutions that could replace CellXgene, and will serve as the basis for the development of the future CellXPatient platform.
 
 ## Development
 
