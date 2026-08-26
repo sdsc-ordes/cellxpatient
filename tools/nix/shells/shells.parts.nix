@@ -32,6 +32,11 @@
         modules = toolchains.format;
       };
 
+      devShells.cirrocumulus = self.lib.shell.mkShell {
+        inherit (args) system;
+        modules = toolchains.cirrocumulus;
+      };
+
       # The CI shell is the same as the default.
       devShells.ci = self'.devShells.default;
     };
