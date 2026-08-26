@@ -71,6 +71,14 @@ heatmaps with >10'000 of features and support for multi GB images.
 
 - not a ready-to-use solution
 
+#### Deployement test
+
+- highly extensible but only on the dev side, once built => fix layout 
+- polished presentation. Interactivity seems limited but might depend on the view preparation.
+- data preparation: need to prepare a config view (json file). Not clear if ready-to-use dataloaders to prepare config views exist.
+- good documentation but steep learning curve to learn how to build custom views.
+
+
 
 
 
@@ -162,6 +170,14 @@ heatmaps with >10'000 of features and support for multi GB images.
 - sparse documentation
 
 
+#### Local deployement
+- docker containers already available (one for PostgreSQL database, one for MDV app, user authentification possible)
+- data preparation: dataloaders provided for common transcriptomics data. Smooth for spatial (Xenium, Visium) data, buggy with anndata/pandas version for h5ad.
+- layout organised into "View". Each view is a window that can contain several plots/windows. 
+- plots lack polishness (axis legend not visible if too long, stacked on each other if too many, not manually customisable/editable)
+- nicely interactivity (list of plots to build on the spot, can manually define and change the settings of the plots)
+
+
 
 
 ## [UCSC Cell browser](https://cells.ucsc.edu/?)
@@ -206,7 +222,14 @@ heatmaps with >10'000 of features and support for multi GB images.
 - long term maintenance
 - limited extension
 
-
+#### Deployement test
+- pip package
+- command to prepare h5ad (from Scanpy) to view in UCSC. Smooth conversion. No extra step needed.
+- no comprehensive data loaders for all common scRNA and **spatial transcriptomics** (especially) data -> need additional data preparation layer!!!
+- web browser built once (folder with hmtl/css/js files, usable on any static web server)
+- each new dataset gets added to the html local folder -> might need additional steps to handle the sensitive data and authentification handling
+- no interactive annotation, only reading the datasets
+- efficient and simple viewer if all required features are covered
 
 
 
