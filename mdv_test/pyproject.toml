@@ -1,0 +1,58 @@
+[project]
+name = "mdv_test"
+authors = [
+  { name = "Almut Lütge", email = "almut.luetge@epfl.ch" },
+  { name = "Giliane Rochat", email = "giliane.rochat@epfl.ch" },
+  { name = "Antonin Thiebaut", email = "antonin.thiebault@chuv.ch" },
+]
+description = "Test project to deploy a visualization dashboard for scRNA and spatial transcriptomics based on MDV"
+readme = "README.md"
+requires-python = ">=3.12"
+version = "0.0.1"
+
+dependencies = [
+    "pydantic>=2.10.6",
+    "pytest>=8.4.2",
+    "mdvtools"
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/mdv_test"]
+
+[tool.hatch.build]
+exclude = [
+    ".direnv",
+    ".devenv",
+    ".output",
+]
+
+
+[tool.ruff]
+extend-include = ["*.ipynb"]
+target-version = "py313"
+line-length = 88
+
+[tool.ruff.lint]
+extend-select = [
+    "W605",   # pycodestyle: invalid-escape-sequence
+    "S102",   # flake8-bandit: exec-builtin
+    "INP",    # flake8-no-pep420
+    "PYI",    # flake8-pyi
+    "PT",     # flake8-pytest-style
+    "PGH",    # pygrep-hooks
+    "PL",     # Pylint
+    "NPY",    # NumPy-specific rules
+    "RUF",    # Ruff-specific rules
+]
+ignore = [
+    "NPY002", # numpy-legacy-random
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
+"tests/**" = ["INP001"]
+"[!t][!e][!s][!t][!s]*/**" = ["PT"]

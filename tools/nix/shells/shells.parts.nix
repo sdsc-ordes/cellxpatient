@@ -34,7 +34,17 @@
 
       devShells.cirrocumulus = self.lib.shell.mkShell {
         inherit (args) system;
-        modules = toolchains.cirrocumulus;
+        modules = toolchains.cirrocumulus ++ toolchains.common;
+      };
+
+      devShells.mdv = self.lib.shell.mkShell {
+        inherit (args) system;
+        modules = toolchains.mdv ++ toolchains.common;
+      };
+
+      devShells.vitessce = self.lib.shell.mkShell {
+        inherit (args) system;
+        modules = toolchains.vitessce ++ toolchains.common;
       };
 
       # The CI shell is the same as the default.
