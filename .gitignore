@@ -24,3 +24,6 @@
 .prettierrc.yaml
 .yamllint.yaml
 .typos.toml
+
+# Mac DS Store
+.DS_Store
