@@ -16,7 +16,22 @@ develop *args:
     args=("$@") && [ "${#args[@]}" != 0 ] ||
         args=(env SHELL="$SHELL" "$SHELL")
 
-    nix_args=("--no-pure-eval")
+    # Manually pass the devenv-root dir to Nix.
+    if [ -d "$root_dir/.devenv/state" ]; then
+        if [ ! -f "$root_dir/.devenv/state/pwd" ]; then
+            echo $root_dir > "$root_dir/.devenv/state/pwd"
+        fi
+    else
+        mkdir -p "$root_dir/.devenv/state"
+        echo $root_dir > "$root_dir/.devenv/state/pwd"
+    fi
+
+    nix_args=(
+        "--no-pure-eval"
+        "--override-input"
+        "devenv-root"
+        "path:$root_dir/.devenv/state/pwd"
+    )
 
     nix develop \
         "${nix_args[@]}" \

@@ -68,6 +68,12 @@
       url = "github:cachix/devenv?ref=v1.11.1";
       inputs.nixpkgs.follows = "nixpkgs-devenv";
     };
+
+    devenv-root = {
+      url = "file+file:///dev/null";
+      flake = false;
+    };
+
     # This is the rolling nixpkgs with what devenv was tested.
     nixpkgs-devenv = {
       url = "github:cachix/devenv-nixpkgs?ref=rolling";
