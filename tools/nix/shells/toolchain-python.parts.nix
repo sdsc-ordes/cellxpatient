@@ -43,6 +43,7 @@
             package = pkgs.python312.withPackages (p: [
               p.numpy
               p.matplotlib
+              p.tkinter
             ]);
 
             uv = {

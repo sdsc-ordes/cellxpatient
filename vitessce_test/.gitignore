@@ -1,0 +1,5 @@
+# Heavy data
+data/
+
+# Notebook checkpoints
+.ipynb_checkpoints/

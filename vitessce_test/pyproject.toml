@@ -20,7 +20,8 @@ dependencies = [
 dev = [
     "notebook>=7.3.2",
     "jupyterlab",
-    "easy_vitessce"
+    "easy_vitessce",
+    "ruff"
 ]
 
 [build-system]
@@ -37,6 +38,8 @@ exclude = [
     ".output",
 ]
 
+[tool.pyright]
+reportUnknownMemberType = false
 
 [tool.ruff]
 extend-include = ["*.ipynb"]

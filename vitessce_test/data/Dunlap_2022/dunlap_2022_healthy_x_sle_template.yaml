@@ -1,0 +1,128 @@
+name: Dunlap 2022 - Healthy vs SLE
+description: Comparison of gene expression between Healthy and SLE scRNA-seq data
+
+# Add all datasets to be used
+datasets:
+  A:
+    dataset_name: scRNA-seq
+    dataset_path: dunlap_2022_corrected.zarr
+    type: anndata_zarr
+    subsets_only: true
+    subsets:
+      healthy:
+        column: Disease
+        value: Healthy
+      sle:
+        column: Disease
+        value: Systemic Lupus Erythematosus
+    data:
+      obs_sets_paths: [obs/pred_cell_type_filtered]
+      obs_sets_names: [Cell Type]
+      # By default for anndata_zarr, override if different:
+      # obs_sets_paths: [pred_cell_type]
+      # obs_sets_names: [Cell Type]
+      # obs_embedding_names: [UMAP]
+      # obs_embedding_paths: [obsm/X_umap]
+      # feature_matrix_path: X
+      # feature_filter_path: var/highly_variable
+
+
+views:
+  description:
+    datasets:
+      healthy:
+        grid_offset_xy: [0, 0]
+      sle:
+        grid_offset_xy: [6, 0]
+    grid_xywh:
+      [0, 0, 6, 2]
+    props:
+      description: Comparison of gene expression between Healthy and SLE scRNA-seq data
+
+  scatterplot:
+    datasets:
+      healthy:
+        grid_offset_xy: [0, 0]
+      sle:
+        grid_offset_xy: [6, 0]
+    grid_xywh: [0, 2, 6, 4]
+
+  obs_sets:
+    datasets:
+      healthy:
+        grid_offset_xy: [0, 0]
+      sle:
+        grid_offset_xy: [6, 0]
+    grid_xywh: [0, 6, 3, 4]
+
+  obs_sets_sizes:
+    datasets:
+      healthy:
+        grid_offset_xy: [0, 0]
+      sle:
+        grid_offset_xy: [6, 0]
+    grid_xywh: [3, 6, 3, 4]
+
+  heatmap:
+    datasets:
+      healthy:
+        grid_offset_xy: [0, 0]
+      sle:
+        grid_offset_xy: [6, 0]
+    grid_xywh: [0, 10, 6, 4]
+    props:
+      transpose: true
+
+  violin:
+    datasets:
+      healthy:
+        grid_offset_xy: [0, 0]
+      sle:
+        grid_offset_xy: [6, 0]
+    grid_xywh: [0, 14, 6, 4]
+
+
+coordination:
+
+  # Observation coordination is independent for each dataset.
+  healthy_obs:
+    datasets:
+      - healthy
+    views:
+      - scatterplot
+      - obs_sets
+      - obs_sets_sizes
+      - heatmap
+      - violin
+    values:
+      obsType: cell
+      obsSetSelection: null
+      obsHighlight: null
+
+  sle_obs:
+    datasets:
+      - sle
+    views:
+      - scatterplot
+      - obs_sets
+      - obs_sets_sizes
+      - heatmap
+      - violin
+    values:
+      obsType: cell
+      obsSetSelection: null
+      obsHighlight: null
+
+  # Feature coordination is shared by both datasets.
+  shared_features:
+    datasets:
+      - healthy
+      - sle
+    views:
+      - heatmap
+      - violin
+    values:
+      featureType: gene
+      featureValueType: expression
+      featureHighlight: null
+      featureSelection: [FXYD3]

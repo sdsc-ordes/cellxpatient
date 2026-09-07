@@ -1,6 +1,6 @@
 {
     "version": "1.0.15",
-    "name": "Dunlap 2022",
+    "name": "Dunlap 2022 - Healthy vs SLE",
     "description": "Comparison of gene expression between Healthy and SLE scRNA-seq data",
     "datasets": [
         {
@@ -9,7 +9,7 @@
             "files": [
                 {
                     "fileType": "anndata.zarr",
-                    "url": "http://localhost:8008/Dunlap_2022_corrected_healthy.zarr",
+                    "url": "http://localhost:8008/dunlap_2022_corrected_healthy.zarr",
                     "options": {
                         "obsEmbedding": [
                             {
@@ -41,7 +41,7 @@
             "files": [
                 {
                     "fileType": "anndata.zarr",
-                    "url": "http://localhost:8008/Dunlap_2022_corrected_systemic_lupus_erythematosus.zarr",
+                    "url": "http://localhost:8008/dunlap_2022_corrected_systemic_lupus_erythematosus.zarr",
                     "options": {
                         "obsEmbedding": [
                             {
@@ -82,114 +82,8 @@
             "B": "cell"
         },
         "obsSetSelection": {
-            "A": [
-                [
-                    "Cell Type",
-                    "melanocyte"
-                ],
-                [
-                    "Cell Type",
-                    "endothelial cell"
-                ],
-                [
-                    "Cell Type",
-                    "unknown"
-                ],
-                [
-                    "Cell Type",
-                    "fibroblast"
-                ],
-                [
-                    "Cell Type",
-                    "sebocyte"
-                ],
-                [
-                    "Cell Type",
-                    "macrophage"
-                ],
-                [
-                    "Cell Type",
-                    "smooth muscle cell"
-                ],
-                [
-                    "Cell Type",
-                    "CD8-positive, alpha-beta T cell"
-                ],
-                [
-                    "Cell Type",
-                    "T cell"
-                ],
-                [
-                    "Cell Type",
-                    "mast cell"
-                ],
-                [
-                    "Cell Type",
-                    "Langerhans cell"
-                ],
-                [
-                    "Cell Type",
-                    "regulatory T cell"
-                ],
-                [
-                    "Cell Type",
-                    "plasma cell"
-                ]
-            ],
-            "B": [
-                [
-                    "Cell Type",
-                    "unknown"
-                ],
-                [
-                    "Cell Type",
-                    "CD8-positive, alpha-beta T cell"
-                ],
-                [
-                    "Cell Type",
-                    "fibroblast"
-                ],
-                [
-                    "Cell Type",
-                    "macrophage"
-                ],
-                [
-                    "Cell Type",
-                    "endothelial cell"
-                ],
-                [
-                    "Cell Type",
-                    "smooth muscle cell"
-                ],
-                [
-                    "Cell Type",
-                    "sebocyte"
-                ],
-                [
-                    "Cell Type",
-                    "melanocyte"
-                ],
-                [
-                    "Cell Type",
-                    "mast cell"
-                ],
-                [
-                    "Cell Type",
-                    "T cell"
-                ],
-                [
-                    "Cell Type",
-                    "regulatory T cell"
-                ],
-                [
-                    "Cell Type",
-                    "plasma cell"
-                ],
-                [
-                    "Cell Type",
-                    "neutrophil"
-                ]
-            ]
+            "A": null,
+            "B": null
         },
         "obsHighlight": {
             "A": null,
@@ -212,6 +106,19 @@
     },
     "layout": [
         {
+            "component": "description",
+            "coordinationScopes": {
+                "dataset": "A"
+            },
+            "x": 0,
+            "y": 0,
+            "w": 6,
+            "h": 2,
+            "props": {
+                "description": "Comparison of gene expression between Healthy and SLE scRNA-seq data"
+            }
+        },
+        {
             "component": "scatterplot",
             "coordinationScopes": {
                 "dataset": "A",
@@ -222,43 +129,6 @@
             },
             "x": 0,
             "y": 2,
-            "w": 6,
-            "h": 4
-        },
-        {
-            "component": "heatmap",
-            "coordinationScopes": {
-                "dataset": "A",
-                "obsType": "A",
-                "obsSetSelection": "A",
-                "obsHighlight": "A",
-                "featureType": "A",
-                "featureValueType": "A",
-                "featureHighlight": "A",
-                "featureSelection": "A"
-            },
-            "x": 0,
-            "y": 10,
-            "w": 6,
-            "h": 4,
-            "props": {
-                "transpose": true
-            }
-        },
-        {
-            "component": "obsSetFeatureValueDistribution",
-            "coordinationScopes": {
-                "dataset": "A",
-                "obsType": "A",
-                "obsSetSelection": "A",
-                "obsHighlight": "A",
-                "featureType": "A",
-                "featureValueType": "A",
-                "featureHighlight": "A",
-                "featureSelection": "A"
-            },
-            "x": 0,
-            "y": 14,
             "w": 6,
             "h": 4
         },
@@ -289,16 +159,53 @@
             "h": 4
         },
         {
-            "component": "description",
+            "component": "heatmap",
             "coordinationScopes": {
-                "dataset": "A"
+                "dataset": "A",
+                "obsType": "A",
+                "obsSetSelection": "A",
+                "obsHighlight": "A",
+                "featureType": "A",
+                "featureValueType": "A",
+                "featureHighlight": "A",
+                "featureSelection": "A"
             },
             "x": 0,
+            "y": 10,
+            "w": 6,
+            "h": 4,
+            "props": {
+                "transpose": true
+            }
+        },
+        {
+            "component": "obsSetFeatureValueDistribution",
+            "coordinationScopes": {
+                "dataset": "A",
+                "obsType": "A",
+                "obsSetSelection": "A",
+                "obsHighlight": "A",
+                "featureType": "A",
+                "featureValueType": "A",
+                "featureHighlight": "A",
+                "featureSelection": "A"
+            },
+            "x": 0,
+            "y": 14,
+            "w": 6,
+            "h": 4
+        },
+        {
+            "component": "description",
+            "coordinationScopes": {
+                "dataset": "B"
+            },
+            "x": 6,
             "y": 0,
             "w": 6,
             "h": 2,
             "props": {
-                "description": "scRNA-seq from healthy donors"
+                "description": "Comparison of gene expression between Healthy and SLE scRNA-seq data"
             }
         },
         {
@@ -313,6 +220,32 @@
             "x": 6,
             "y": 2,
             "w": 6,
+            "h": 4
+        },
+        {
+            "component": "obsSets",
+            "coordinationScopes": {
+                "dataset": "B",
+                "obsType": "B",
+                "obsSetSelection": "B",
+                "obsHighlight": "B"
+            },
+            "x": 6,
+            "y": 6,
+            "w": 3,
+            "h": 4
+        },
+        {
+            "component": "obsSetSizes",
+            "coordinationScopes": {
+                "dataset": "B",
+                "obsType": "B",
+                "obsSetSelection": "B",
+                "obsHighlight": "B"
+            },
+            "x": 9,
+            "y": 6,
+            "w": 3,
             "h": 4
         },
         {
@@ -351,45 +284,6 @@
             "y": 14,
             "w": 6,
             "h": 4
-        },
-        {
-            "component": "obsSets",
-            "coordinationScopes": {
-                "dataset": "B",
-                "obsType": "B",
-                "obsSetSelection": "B",
-                "obsHighlight": "B"
-            },
-            "x": 6,
-            "y": 6,
-            "w": 3,
-            "h": 4
-        },
-        {
-            "component": "obsSetSizes",
-            "coordinationScopes": {
-                "dataset": "B",
-                "obsType": "B",
-                "obsSetSelection": "B",
-                "obsHighlight": "B"
-            },
-            "x": 9,
-            "y": 6,
-            "w": 3,
-            "h": 4
-        },
-        {
-            "component": "description",
-            "coordinationScopes": {
-                "dataset": "B"
-            },
-            "x": 6,
-            "y": 0,
-            "w": 6,
-            "h": 2,
-            "props": {
-                "description": "scRNA-seq from systemic lupus erythematosus donors"
-            }
         }
     ],
     "initStrategy": "auto"
