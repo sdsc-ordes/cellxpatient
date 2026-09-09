@@ -1,0 +1,95 @@
+name: Xenium 0OE1 Example - Spatial Data
+description: Visualization of gene expression in spatial transcriptomics
+
+# Add all datasets to be used
+datasets:
+  A:
+    dataset_name: spatial
+    dataset_path: 0OE1_xenium_example.zarr
+    type: spatialdata_zarr
+    data:
+      obs_sets_paths: [tables/table/obs/region]
+      obs_sets_names: [Region]
+      # By default for spatialdata_zarr, override if different:
+      # obs_feature_matrix_paths: [tables/table/X]
+      # obs_sets_paths: [tables/table/obs/pred_cell_type]
+      # obs_sets_names: [Cell Type]
+      # obs_points_paths: [points/transcripts]
+
+
+views:
+  spatial:
+    datasets:
+     spatial:
+       grid_offset_xy: [0, 0]
+    grid_xywh:
+      [3, 0, 4, 4]
+    props:
+      description: Comparison of gene expression between Healthy and SLE scRNA-seq data
+
+  layer_controller:
+    datasets:
+     spatial:
+       grid_offset_xy: [0, 0]
+    grid_xywh: [0, 1, 3, 4]
+
+  obs_sets:
+    datasets:
+     spatial:
+       grid_offset_xy: [0, 0]
+    grid_xywh: [10, 2, 2, 2]
+
+  heatmap:
+    datasets:
+     spatial:
+       grid_offset_xy: [0, 0]
+    grid_xywh: [3, 4, 5, 2]
+    props:
+      transpose: true
+
+  feature_list:
+    datasets:
+     spatial:
+       grid_offset_xy: [0, 0]
+    grid_xywh: [10, 0, 2, 2]
+
+  violin:
+    datasets:
+     spatial:
+       grid_offset_xy: [0, 0]
+    grid_xywh: [8, 4, 4, 2]
+
+  description:
+    datasets:
+     spatial:
+       grid_offset_xy: [0, 0]
+    grid_xywh: [0, 0, 3, 1]
+    props:
+      description: "Example view of spatial data (Xenium 0OE1)"
+
+  status:
+    datasets:
+     spatial:
+       grid_offset_xy: [0, 0]
+    grid_xywh: [0, 5, 3, 1]
+
+
+coordination:
+
+  # Observation coordination is independent for each dataset.
+  spatial_obs:
+    datasets:
+      - spatial
+    views:
+      - obs_sets
+      - spatial
+      - layer_controller
+      - feature_list
+      - heatmap
+      - violin
+    values:
+      obsType: cell
+      featureType: gene
+      featureValueType: expression
+      obsSetSelection: null
+      featureSelection: null

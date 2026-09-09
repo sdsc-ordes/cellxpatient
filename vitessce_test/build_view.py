@@ -5,14 +5,15 @@ from typing import Any
 
 import anndata as ad
 import yaml
-from vitessce import AnnDataWrapper, VitessceConfig
+import zarr
+from vitessce import AnnDataWrapper, SpatialDataWrapper, VitessceConfig
 from vitessce import Component as cm
 from vitessce import CoordinationType as ct
 from vitessce.config import VitessceConfigDataset, VitessceConfigView
 
 PORT = 8008
 BASE_URL = f"http://localhost:{PORT}"
-DATA_DIR = Path(".", "data", "Dunlap_2022")
+DATA_DIR = Path(".", "data", "Xenium_0OE1")
 
 DEFAULT_EMBEDDING_PATH = "obsm/X_umap"
 DEFAULT_EMBEDDING_NAME = "UMAP"
@@ -28,6 +29,10 @@ VIEW_MAPPING = {
     "obs_sets": cm.OBS_SETS,
     "obs_sets_sizes": cm.OBS_SET_SIZES,
     "description": cm.DESCRIPTION,
+    "feature_list": cm.FEATURE_LIST,
+    "spatial": "spatialBeta",
+    "layer_controller": "layerControllerBeta",
+    "status": cm.STATUS,
 }
 
 COORDINATION_MAPPING = {
@@ -38,6 +43,7 @@ COORDINATION_MAPPING = {
     "featureValueType": ct.FEATURE_VALUE_TYPE,
     "featureHighlight": ct.FEATURE_HIGHLIGHT,
     "featureSelection": ct.FEATURE_SELECTION,
+    "obsColorEncoding": ct.OBS_COLOR_ENCODING,
 }
 
 
@@ -62,7 +68,7 @@ def prepare_subset(
         f"{source_path.stem}_{condition_name.lower().replace(' ', '_')}.zarr"
     )
     mask = adata.obs[condition_col] == condition_name
-    subset = adata[mask]
+    subset: ad.Anndata = adata[mask]
     if not out_path.exists():
         subset.write_zarr(
             store=out_path
@@ -87,11 +93,11 @@ def add_anndata_dataset(
     obs_set_names = obs_set_names or [DEFAULT_OBS_SET_NAME]
 
     # Add datasets to the widget (dataset = container for file per data type)
-    dataset = vc.add_dataset(
+    dataset = vc.add_dataset(                       # pyright: ignore[reportUnknownMemberType]
         name=dataset_name)
 
     # Use AnnDataWrapper to automatically handle pahts to relevant data
-    _ = dataset.add_object(
+    _ = dataset.add_object(                         # pyright: ignore[reportUnknownMemberType]
         AnnDataWrapper(
             adata_path=adata_path,
             obs_embedding_paths=obs_embedding_paths,
@@ -111,10 +117,10 @@ def prepare_anndata_dataset(
 ) -> dict[str,VitessceConfigDataset]:
 
     adata_path = Path(DATA_DIR, dataset["dataset_path"])
-    adata = ad.read_zarr(
+    adata = ad.read_zarr(                                   # pyright: ignore[reportUnknownMemberType]
         adata_path)
 
-    datasets = {}
+    datasets: dict[str, tuple[str, Path]] = {}
     if dataset['subsets_only'] and 'subsets' not in dataset:
         raise ValueError("subsets_only set to True but no subsets defined")
     if not dataset['subsets_only']:
@@ -130,7 +136,7 @@ def prepare_anndata_dataset(
             )
             datasets[subset_id] = f"{dataset['dataset_name']} - {subset['value']}", subset_path
 
-    vitessce_datasets = {}
+    vitessce_datasets: dict[str, VitessceConfigDataset] = {}
     for dataset_id, dataset_data in datasets.items():
         vitessce_datasets[dataset_id] = add_anndata_dataset(
             vc,
@@ -143,8 +149,64 @@ def prepare_anndata_dataset(
             obs_feature_matrix_path=dataset["data"].get("feature_matrix_path", DEFAULT_FEATURE_MATRIX_PATH),
             initial_feature_filter_path=dataset["data"].get("feature_filter_path", DEFAULT_FEATURE_FILTER_PATH)
         )
-
     return vitessce_datasets
+
+
+def add_spatial_dataset(
+    vc: VitessceConfig,
+    dataset: dict[str, Any],
+    options: dict[str, Any],
+) -> dict[str, VitessceConfigDataset]:
+
+    spatialzarr_path = Path(DATA_DIR, dataset["dataset_path"])
+    image_path = "images/morphology_focus"
+    obs_embedding_paths = options.get("obs_embedding_paths", ["tables/table/obsm/X_umap"])
+    obs_embedding_names = options.get("obs_embedding_names", ["UMAP"])
+    obs_sets_paths = options.get("obs_sets_paths", ["tables/table/obs/pred_cell_type"])
+    obs_sets_names = options.get("obs_sets_names", ["Cell Type"])
+    obs_seg_paths = options.get("obs_seg_paths", {"Cell Boundaries":"shapes/cell_boundaries",
+        "Nucleus Boundaries": "shapes/nucleus_boundaries"})
+    obs_feature_matrix_path = options.get("obs_feature_matrix_path", "tables/table/X")
+    obs_spots_paths = options.get("obs_spots_paths", "shapes/cell_circles")
+    obs_points_feature_index_column = None
+    obs_points_morton_code_column = None
+
+    # Add datasets to the widget (dataset = container for file per data type)
+    vitessce_dataset = vc.add_dataset(                       # pyright: ignore[reportUnknownMemberType]
+        name=dataset["dataset_name"])
+
+    _ = vitessce_dataset.add_object(
+        SpatialDataWrapper(
+            sdata_path=str(spatialzarr_path.relative_to(DATA_DIR)),
+            image_path=image_path,
+            region="cell_circles",
+            coordinate_system="global",
+            #obs_embedding_paths=obs_embedding_paths,
+            #obs_embedding_names=obs_embedding_names,
+            obs_set_paths=obs_sets_paths,
+            obs_set_names=obs_sets_names,
+            obs_feature_matrix_path=obs_feature_matrix_path,
+            obs_spots_path=obs_spots_paths,
+            coordination_values={
+                "obsType": "cell",
+                "featureType": "gene",
+                "featureValueType": "expression",
+            }
+        )
+    )
+
+    for seg_name, seg_path in obs_seg_paths.items():
+        continue
+        url = f"{BASE_URL}/{spatialzarr_path.relative_to(DATA_DIR).as_posix()}"
+        _ = vitessce_dataset.add_file(
+            file_type = "shapes.spatialdata.zarr",
+            url=url,
+            coordination_values=None,
+            options={
+                "path": seg_path
+            }
+        )
+    return { dataset["dataset_name"]: vitessce_dataset }
 
 
 def add_view(
@@ -159,15 +221,15 @@ def add_view(
     x, y, w, h = grid
     x = x + grid_offset[0]
     y = y + grid_offset[1]
-    if view_name == "scatterplot" and mapping is not None:
-        view = vc.add_view(
+    if view_name == "scatterplot":
+        view = vc.add_view(                         # pyright: ignore[reportUnknownMemberType]
             VIEW_MAPPING[view_name],
             dataset=dataset,
             mapping=mapping,
         ).set_xywh(x, y, w, h)
 
     else:
-        view = vc.add_view(
+        view = vc.add_view(                         # pyright: ignore[reportUnknownMemberType]
             VIEW_MAPPING[view_name],
             dataset=dataset,
         ).set_xywh(x, y, w, h)
@@ -189,7 +251,7 @@ def add_coordination_space(
     vitessce_view_to_link = [views[dataset][view_name] for dataset in datasets for view_name in view_to_link_names]
     coord_types = [COORDINATION_MAPPING[coord_type] for coord_type in coordination_space["values"]]
     coord_initial_values = [coordination_space["values"][coord_type] for coord_type in coordination_space["values"]]
-    vc.link_views(
+    _ = vc.link_views(                              # pyright: ignore[reportUnknownMemberType]
         vitessce_view_to_link,
         coord_types,
         coord_initial_values,
@@ -202,7 +264,7 @@ def build_view(
 
     # Instantiate the Vitessce widget configuration
     vc = VitessceConfig(
-        schema_version="1.0.15",
+        schema_version="1.0.17",
         name=template["name"],
         description=template["description"],
         base_dir=DATA_DIR)
@@ -211,13 +273,15 @@ def build_view(
     datasets = [template["datasets"][dataset] for dataset in template["datasets"]]
 
     # Add datasets to config
-    vitessce_datasets = {}
+    vitessce_datasets: dict[str, VitessceConfigDataset] = {}
     for dataset in datasets:
         if dataset["type"] == "anndata_zarr":
             vitessce_datasets.update(prepare_anndata_dataset(vc, dataset))
+        if dataset["type"] == "spatialdata_zarr":
+            vitessce_datasets.update(add_spatial_dataset(vc, dataset, options=dataset["data"]))
 
     views = template["views"]
-    views_per_dataset = {}
+    views_per_dataset: dict[str, dict[str, VitessceConfigView]] = {}
     for vitessce_dataset_name, vitessce_dataset in vitessce_datasets.items():
         views_to_add = [view_name for view_name in views if vitessce_dataset_name in views[view_name]["datasets"]]
         views_per_dataset[vitessce_dataset_name] = {}
@@ -226,10 +290,10 @@ def build_view(
                 raise ValueError(f"Grid indent not found for view {view} and dataset {vitessce_dataset_name}")
             if "grid_xywh" in views[view]:
                 grid = views[view]["grid_xywh"]
-                grid_offset = views[view]["datasets"][vitessce_dataset_name]["grid_offset_xy"]
+                grid_offset = views[view]["datasets"][vitessce_dataset_name].get("grid_offset_xy", [0, 0])
             else:
                 grid = views[view]["datasets"][vitessce_dataset_name]["grid_xywh"]
-                grid_offset = (0, 0)
+                grid_offset = [0, 0]
 
             views_per_dataset[vitessce_dataset_name][view] = add_view(
                 vc,
@@ -244,9 +308,8 @@ def build_view(
     for coordination_space in coordination_spaces:
         add_coordination_space(vc, coordination_space, views_per_dataset)
 
-    _ = vc.web_app(port=PORT)
-
-    return vc.to_dict(base_url=BASE_URL)
+    _ = vc.web_app(port=PORT)                               # pyright: ignore[reportUnknownMemberType]
+    return vc.to_dict(base_url=BASE_URL)                    # pyright: ignore[reportUnknownMemberType, reportUnknownVariableType]
 
 
 def parse_args() -> argparse.Namespace:

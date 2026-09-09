@@ -14,7 +14,7 @@ dependencies = [
     "pydantic>=2.10.6",
     "pytest>=8.4.2",
     "vitessce",
-    "react"
+    "spatialdata-io"
 ]
 [dependency-groups]
 dev = [
@@ -39,7 +39,9 @@ exclude = [
 ]
 
 [tool.pyright]
-reportUnknownMemberType = false
+reportMissingTypeStubs = false
+reportExplicitAny = false
+reportAny = false
 
 [tool.ruff]
 extend-include = ["*.ipynb"]
