@@ -14,7 +14,8 @@ dependencies = [
     "pydantic>=2.10.6",
     "pytest>=8.4.2",
     "vitessce",
-    "spatialdata-io"
+    "spatialdata-io",
+    "spatialdata>=0.8.0"
 ]
 [dependency-groups]
 dev = [

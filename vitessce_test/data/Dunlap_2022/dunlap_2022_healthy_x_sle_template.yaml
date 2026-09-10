@@ -3,8 +3,7 @@ description: Comparison of gene expression between Healthy and SLE scRNA-seq dat
 
 # Add all datasets to be used
 datasets:
-  A:
-    dataset_name: scRNA-seq
+  dunlap_2022:
     dataset_path: dunlap_2022_corrected.zarr
     type: anndata_zarr
     subsets_only: true
