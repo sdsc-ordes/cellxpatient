@@ -10,7 +10,7 @@ from vitessce import (
 )
 from vitessce import (
     VitessceConfig,
-    get_initial_coordination_scope_prefix,
+    get_initial_coordination_scope_prefix,  # pyright: ignore[reportUnknownVariableType]
 )
 from vitessce.config import (
     VitessceConfigCoordinationScope,
@@ -254,31 +254,63 @@ def build_view(
     for space_name, coordination_space in template["coordination"].items():
         coordination_scopes[space_name] = add_coordination_space(vc, coordination_space, views_per_dataset, vitessce_datasets)
 
-    _ = vc.web_app(port=PORT)                               # pyright: ignore[reportUnknownMemberType]
+    launch_app(vc)
     return vc.to_dict(base_url=BASE_URL)                    # pyright: ignore[reportUnknownMemberType, reportUnknownVariableType]
+
+
+def serve_view(config_path: Path) -> None:
+    with open(config_path) as f:
+        config = json.load(f)
+    vc = VitessceConfig.from_dict(config=config)           # pyright: ignore[reportUnknownMemberType]
+    launch_app(vc)
+
+
+def launch_app(
+    vc: VitessceConfig
+) -> None:
+    _ = vc.web_app(port=PORT)                               # pyright: ignore[reportUnknownMemberType]
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Build a Vitessce view from a YAML template."
+        description=(
+            "Build a Vitessce config view from a YAML template or "
+            "render a Vitessce config view from a JSON view file."
+        )
     )
     _ = parser.add_argument(
-        "template",
+        "--template",
+        default=None,
         type=str,
-        help="Path to the Vitessce view template.",
+        help="Path to the Vitessce view YAML template.",
     )
+    _ = parser.add_argument(
+        "--config",
+        default=None,
+        type=str,
+        help="Path to the Vitessce view JSON config.",
+    )
+
     return parser.parse_args()
 
 
 if __name__ == "__main__":
     args = parse_args()
 
-    template_path = Path(args.template)
-    config_dict = build_view(template_path)
+    if args.config is not None and args.template is not None:
+        raise ValueError("Cannot specify both --config and --template.")
 
-    config_json_filename = template_path.with_name(
-        template_path.stem.replace("template", "view") + ".json"
-    )
+    if args.config is not None:
+        config_path = Path(args.config)
+        serve_view(config_path)
 
-    with open(config_json_filename, "w") as f:
-        json.dump(config_dict, f, indent=4)
+    if args.template is not None:
+        template_path = Path(args.template)
+        config_dict = build_view(template_path)
+
+        config_json_filename = template_path.with_name(
+            template_path.stem.replace("template", "view") + ".json"
+        )
+
+        with open(config_json_filename, "w") as f:
+            json.dump(config_dict, f, indent=4)
