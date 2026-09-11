@@ -1,18 +1,18 @@
 # Vitessce evaluation
 
-The goal of this subfolder is to provide a minimal functional environment to evaluate whether Vitessce is suitable to replace CellXGene for 
-the CellXPatient project.
+The goal of this subfolder is to provide a minimal functional environment to
+evaluate whether Vitessce is suitable to replace CellXGene for the CellXPatient
+project.
 
-The focus is on tool fit and deployment requirements. It is not intended to implement the complete production workflow.
-
-## Input data
-
-Preprocessed scRNA and spatial data can be found in the `data` folder.
+The focus is on tool fit and deployment requirements. It is not intended to
+implement the complete production workflow.
 
 ## Initial theoretical workflow
 
+Proposed initial theoretical workflow from data preprocessing to view visualization.
+
 ```mermaid
-flowchart TD
+flowchart LR
     A(Raw data)--> B[Preprocessing]
     B --> C[Select predefined view template]
     C --> D[Validate required data]
@@ -21,66 +21,183 @@ flowchart TD
     F --> G[Serve / deploy view]
 ```
 
-It is likely that several types of views will be required for the CellXPatient project, for ex. Spatial Data only, scRNA + spatial, or Healthy vs Tumoral sample from the same patient, etc... There should be thus a clear data preparation/validation wrt each predefined view. 
-
 ## Current prototype
-> [!IMPORTANT]
-> The current prototype duplicates the input data and several views to compare two conditions (Healthy and Disease). The reason is that although Vitessce already defines an obsFilter coordination type, no filtering is currently applied across the views used here. It is possible to select specific metadata conditions, but the observations are still present in all plots, just greyed out. Proper obsFilter support would allow conditions to be selected dynamically at runtime, avoiding condition-specific data subsets and duplicated views. This could potentially be addressed through a fork or a custom plugin.
 
+Vitessce configurations are generated programmatically using the Python API in
+[build_view.py](build_view.py). To facilitate the creation of a Vitessce view,
+the expected configuration is defined using a more human-readable YAML template
+(see [example_template.yaml](example_template.yaml)).
 
-To test the suitability of Vitessce, we consider a theoretical scRNA view template that compares gene expression between two conditions (e.g. **Healthy vs Disease**).
+### Template Structure
 
-The view is generated programmatically using the Vitessce Python API in [`build_view.py`](./build_view.py). The script:
+The template contains three main sections:
+- Datasets
 
-* creates condition-specific AnnData/Zarr subsets from the preprocessed input;
-* configures UMAP, cell-set, cell set sizes, heatmap and violin plots;
-* defines coordination scopes between related components;
-* generates the corresponding Vitessce `config.json`.
+  It defines the datasets used in the view and, when required, paths to specific
+  elements within them.
+  Default paths are used for standard AnnData and SpatialData structures, so the
+  template only needs to specify paths that differ from these defaults.
+  Defaults can be found in [datasets.py](datasets.py).
+
+- Views
+
+  It defines which Vitessce views should be displayed, which datasets they refer to,
+  and their position and size on a 12 × 12 grid.
+
+- Coordination
+
+  It defines how views interact and update together. This is the most tricky part
+  of the Vitessce configuration.
+
+  A coordination type represents a property that can be coordinated, such as
+  featureSelection, obsSetSelection or obsColorEncoding. Not every view
+  supports every coordination type and the coordination types have expected values depending on their definition;
+  refer to the [Vitessce coordination documentation](https://vitessce.io/docs/coordination-types/#initial-coordination-values).
+
+  For each coordination type, one or more coordination scopes can exist.
+  Views referencing the same scope share the state of the corresponding coordination type:
+
+  - view_1: coord_type_A -> scope_1
+  - view_2: coord_type_A -> scope_1
+  - view_3: coord_type_A -> scope_2
+
+  Here, view_1 and view_2 are coordinated for coord_type_A, while view_3
+  is independent.
+
+  Spatial views require additional hierarchical coordination for individual
+  image and segmentation layers. The current prototype uses this to display the
+  morphology image together with cell and nucleus boundaries, while linking the
+  cell segmentation to selected gene expression.
+
+## scRNA data example
+
+> [!IMPORTANT] The current prototype duplicates the input data and several views
+> to compare two conditions (Healthy and Disease). The reason is that although
+> Vitessce already defines an obsFilter coordination type, no filtering is
+> currently applied across the views used here. It is possible to select
+> specific metadata conditions, but the observations are still present in all
+> plots, just greyed out. Proper obsFilter support would allow conditions to be
+> selected dynamically at runtime, avoiding condition-specific data subsets and
+> duplicated views. This could potentially be addressed through a fork or a
+> custom plugin.
+
+To test the suitability of Vitessce, we consider a theoretical scRNA view
+template that compares gene expression between two conditions (e.g. **Healthy vs
+Disease**).
+
+The view is generated using the [corresponding YAML template](data/Dunlap_2022/dunlap_2022_healthy_x_sle_template.yaml). The following diagram shows in essence
+the plots layout and coordination space, to facilitate the composition of the template.
 
 ### Prototype view template
 
 <table>
   <tr>
     <th> x </th>
-    <th>Grid 1</th>
-    <th>Grid 2</th>
-    <th>Grid 3</th>
-    <th>Grid 4</th>
+    <th>Grid 1-3</th>
+    <th>Grid 4-6</th>
+    <th>Grid 7-9</th>
+    <th>Grid 10-12</th>
   </tr>
   <tr>
-    <td>Grid 1</td>
-    <td colspan="2" rowspan="2">Scatterplot UMAP Healthy</td>
-    <td colspan="2" rowspan="2">Scatterplot UMAP Disease</td>
+    <td>Grid 1-4</td>
+    <td colspan="2">Scatterplot UMAP Healthy 
+      (Scope A for gene feature, Scope B for cell feature)</td>
+    <td colspan="2">Scatterplot UMAP Disease
+      (Scope A for gene feature, Scope C for cell feature)</td>
   </tr>
   <tr>
-    <td>Grid 2</td>
+    <td>Grid 5-6</td>
+    <td>Cell type Healthy
+      (Scope B)</td>
+    <td>Cell type Comp. Healthy
+      (Scope B)</td>
+    <td>Cell type Disease
+      (Scope C)</td>
+    <td>Cell type Comp. Disease
+      (Scope C)</td>
   </tr>
   <tr>
-    <td>Grid 3</td>
-    <td rowspan="2">Cell type Healthy</td>
-    <td rowspan="2">Cell type Comp. Healthy</td>
-    <td rowspan="2">Cell type Disease</td>
-    <td rowspan="2">Cell type Comp. Disease</td>
+    <td>Grid 7-10</td>
+    <td colspan="2">Heatmap Healthy
+      (Scope A for gene feature, Scope B for cell feature)</td>
+    <td colspan="2">Heatmap Disease
+      (Scope A for gene feature, Scope C for cell feature)</td>
   </tr>
   <tr>
-    <td>Grid 4</td>
-  </tr>
-  <tr>
-    <td>Grid 5</td>
-    <td colspan="2" rowspan="2">Heatmap Healthy</td>
-    <td colspan="2" rowspan="2">Heatmap Disease</td>
-  </tr>
-  <tr>
-    <td>Grid 6</td>
-  </tr>
-  <tr>
-    <td>Grid 7</td>
-    <td colspan="2" rowspan="2">Gene-linked Violin Plot Healthy</td>
-    <td colspan="2" rowspan="2">Gene-linked Violin Plot Healthy</td>
+    <td>Grid 11-12</td>
+    <td colspan="2">Gene-linked Violin Plot Healthy
+      (Scope A for gene feature, Scope B for cell feature)</td>
+    <td colspan="2">Gene-linked Violin Plot Healthy
+      (Scope A for gene feature, Scope C for cell feature)</td>
   </tr>
 
 </table>
 
+## Spatial data example
+
+To test the coordination between multi-layer spatial data and gene expression data, we consider 
+a theoretical spatial view template.
+
+The view is generated using the [corresponding YAML template](data/Xenium_0OE1/xenium_0OE1_example_template.yaml). The following diagram shows in essence
+the plots layout and coordination space, to facilitate the composition of the template.
+
+### Prototype view template
+
+<table> 
+  <tr> 
+    <th>x</th> 
+    <th>Grid 1-2</th> 
+    <th>Grid 3-7</th> 
+    <th>Grid 8-12</th> 
+  </tr>
+  <tr> 
+    <td>Grid 1</td> 
+    <td>Description</td> 
+    <td rowspan="3">Spatial view (Scope A for cell/gene; Scope B for nucleus layer; Scope C for image layer)</td> 
+    <td rowspan="3">Scatterplot UMAP (Scope A for cell/gene)</td> 
+  </tr>
+  <tr> 
+    <td>Grid 2</td> 
+    <td>Status</td> 
+  </tr>
+  <tr> 
+    <td>Grid 3-6</td> 
+    <td>Layer controller (Scopes A, B, C)</td> 
+  </tr>
+  <tr> 
+    <td>Grid 7-9</td> 
+    <td>Cell Sets (Scope A for cell)</td> 
+    <td rowspan="2">Heatmap (Scope A for cell/gene)</td> 
+    <td rowspan="2">Gene-linked Violin Plot (Scope A for cell/gene)</td> 
+  </tr>
+  <tr> 
+    <td>Grid 10-12</td> 
+    <td>Feature List (Scope A for gene)</td> 
+  </tr>
+</table>
+
 ## Usage
 
+Create or adapt a YAML view template, then generate and serve the corresponding
+Vitessce configuration with the tempalte option:
+
+```bash
+python build_view.py --template ./data/DatasetFolder/dataset_template.yaml
+```
+
+The script writes the generated Vitessce JSON configuration next to the template.
+
+To view an already generated Vitessce config, use the --config option:
+
+```bash
+python build_view.py --config ./data/DatasetFolder/dataset_config.json
+```
+
 ## Data
+
+Input data is expected to be served from `./data` using http-server via the port 8008.
+
+```bash
+cd ./data
+http-server --cors -p 8008
+```

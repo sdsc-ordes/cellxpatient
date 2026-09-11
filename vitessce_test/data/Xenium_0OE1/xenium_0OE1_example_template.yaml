@@ -71,7 +71,7 @@ views:
     - 0
     - 4
     - 2
-    - 5
+    - 4
   obs_sets:
     datasets:
       xenium_0OE1:
