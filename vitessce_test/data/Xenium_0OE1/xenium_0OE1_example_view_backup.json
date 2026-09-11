@@ -79,107 +79,31 @@
         "embeddingType": {
             "A": "UMAP"
         },
-        "featureSelection": {
-            "A": null
+        "obsType": {
+            "A": "cell",
+            "init_A_obsSegmentations_0": "nucleus"
         },
         "featureType": {
             "A": "gene"
+        },
+        "featureValueType": {
+            "A": "expression"
+        },
+        "obsSetSelection": {
+            "A": null
+        },
+        "featureSelection": {
+            "A": null
+        },
+        "obsColorEncoding": {
+            "A": "geneSelection",
+            "init_A_obsSegmentations_0": "spatialChannelColor"
         },
         "featureValueColormapRange": {
             "A": [
                 0.0,
                 0.5
             ]
-        },
-        "featureValueType": {
-            "A": "expression"
-        },
-        "obsColorEncoding": {
-            "A": "geneSelection",
-            "init_A_obsSegmentations_0": "spatialChannelColor"
-        },
-        "obsSetSelection": {
-            "A": null
-        },
-        "obsType": {
-            "A": "cell",
-            "init_A_obsSegmentations_0": "nucleus"
-        },
-        "imageLayer": {
-            "init_A_image_0": "__dummy__"
-        },
-        "spatialLayerColormap": {
-            "init_A_image_0": "viridis"
-        },
-        "metaCoordinationScopes": {
-            "init_A_image_0": {
-                "imageLayer": [
-                    "init_A_image_0"
-                ]
-            },
-            "init_A_obsSegmentations_0": {
-                "segmentationLayer": [
-                    "init_A_obsSegmentations_0",
-                    "init_A_obsSegmentations_1"
-                ]
-            }
-        },
-        "metaCoordinationScopesBy": {
-            "init_A_image_0": {
-                "imageLayer": {
-                    "spatialLayerColormap": {
-                        "init_A_image_0": "init_A_image_0"
-                    }
-                }
-            },
-            "init_A_obsSegmentations_0": {
-                "segmentationLayer": {
-                    "fileUid": {
-                        "init_A_obsSegmentations_0": "init_A_obsSegmentations_0",
-                        "init_A_obsSegmentations_1": "init_A_obsSegmentations_1"
-                    },
-                    "segmentationChannel": {
-                        "init_A_obsSegmentations_0": [
-                            "init_A_obsSegmentations_0"
-                        ],
-                        "init_A_obsSegmentations_1": [
-                            "init_A_obsSegmentations_1"
-                        ]
-                    }
-                },
-                "segmentationChannel": {
-                    "spatialSegmentationFilled": {
-                        "init_A_obsSegmentations_0": "init_A_obsSegmentations_0",
-                        "init_A_obsSegmentations_1": "init_A_obsSegmentations_1"
-                    },
-                    "featureSelection": {
-                        "init_A_obsSegmentations_0": "A"
-                    },
-                    "featureType": {
-                        "init_A_obsSegmentations_0": "A"
-                    },
-                    "featureValueColormapRange": {
-                        "init_A_obsSegmentations_0": "A"
-                    },
-                    "featureValueType": {
-                        "init_A_obsSegmentations_0": "A"
-                    },
-                    "obsColorEncoding": {
-                        "init_A_obsSegmentations_0": "A",
-                        "init_A_obsSegmentations_1": "init_A_obsSegmentations_0"
-                    },
-                    "obsSetSelection": {
-                        "init_A_obsSegmentations_0": "A"
-                    },
-                    "obsType": {
-                        "init_A_obsSegmentations_0": "A",
-                        "init_A_obsSegmentations_1": "init_A_obsSegmentations_0"
-                    },
-                    "spatialChannelColor": {
-                        "init_A_obsSegmentations_1": "init_A_obsSegmentations_0"
-                    }
-                }
-            }
         },
         "segmentationLayer": {
             "init_A_obsSegmentations_0": "__dummy__",
@@ -203,9 +127,213 @@
                 0,
                 139
             ]
+        },
+        "metaCoordinationScopes": {
+            "init_A_obsSegmentations_0": {
+                "segmentationLayer": [
+                    "init_A_obsSegmentations_0",
+                    "init_A_obsSegmentations_1"
+                ]
+            },
+            "init_A_image_0": {
+                "imageLayer": [
+                    "init_A_image_0"
+                ]
+            }
+        },
+        "metaCoordinationScopesBy": {
+            "init_A_obsSegmentations_0": {
+                "segmentationLayer": {
+                    "fileUid": {
+                        "init_A_obsSegmentations_0": "init_A_obsSegmentations_0",
+                        "init_A_obsSegmentations_1": "init_A_obsSegmentations_1"
+                    },
+                    "segmentationChannel": {
+                        "init_A_obsSegmentations_0": [
+                            "init_A_obsSegmentations_0"
+                        ],
+                        "init_A_obsSegmentations_1": [
+                            "init_A_obsSegmentations_1"
+                        ]
+                    }
+                },
+                "segmentationChannel": {
+                    "obsType": {
+                        "init_A_obsSegmentations_0": "A",
+                        "init_A_obsSegmentations_1": "init_A_obsSegmentations_0"
+                    },
+                    "featureType": {
+                        "init_A_obsSegmentations_0": "A"
+                    },
+                    "featureValueType": {
+                        "init_A_obsSegmentations_0": "A"
+                    },
+                    "obsSetSelection": {
+                        "init_A_obsSegmentations_0": "A"
+                    },
+                    "featureSelection": {
+                        "init_A_obsSegmentations_0": "A"
+                    },
+                    "obsColorEncoding": {
+                        "init_A_obsSegmentations_0": "A",
+                        "init_A_obsSegmentations_1": "init_A_obsSegmentations_0"
+                    },
+                    "featureValueColormapRange": {
+                        "init_A_obsSegmentations_0": "A"
+                    },
+                    "spatialSegmentationFilled": {
+                        "init_A_obsSegmentations_0": "init_A_obsSegmentations_0",
+                        "init_A_obsSegmentations_1": "init_A_obsSegmentations_1"
+                    },
+                    "spatialChannelColor": {
+                        "init_A_obsSegmentations_1": "init_A_obsSegmentations_0"
+                    }
+                }
+            },
+            "init_A_image_0": {
+                "imageLayer": {
+                    "spatialLayerColormap": {
+                        "init_A_image_0": "init_A_image_0"
+                    }
+                }
+            }
+        },
+        "imageLayer": {
+            "init_A_image_0": "__dummy__"
+        },
+        "spatialLayerColormap": {
+            "init_A_image_0": "viridis"
         }
     },
     "layout": [
+        {
+            "component": "spatialBeta",
+            "coordinationScopes": {
+                "dataset": "A",
+                "metaCoordinationScopes": [
+                    "init_A_obsSegmentations_0",
+                    "init_A_image_0"
+                ],
+                "metaCoordinationScopesBy": [
+                    "init_A_obsSegmentations_0",
+                    "init_A_image_0"
+                ]
+            },
+            "x": 2,
+            "y": 0,
+            "w": 5,
+            "h": 6,
+            "props": {
+                "description": "Comparison of gene expression between Healthy and SLE scRNA-seq data"
+            }
+        },
+        {
+            "component": "layerControllerBeta",
+            "coordinationScopes": {
+                "dataset": "A",
+                "metaCoordinationScopes": [
+                    "init_A_obsSegmentations_0",
+                    "init_A_image_0"
+                ],
+                "metaCoordinationScopesBy": [
+                    "init_A_obsSegmentations_0",
+                    "init_A_image_0"
+                ]
+            },
+            "x": 0,
+            "y": 4,
+            "w": 2,
+            "h": 5
+        },
+        {
+            "component": "scatterplot",
+            "coordinationScopes": {
+                "dataset": "A",
+                "embeddingType": "A",
+                "obsType": "A",
+                "featureType": "A",
+                "featureValueType": "A",
+                "obsSetSelection": "A",
+                "featureSelection": "A",
+                "obsColorEncoding": "A",
+                "featureValueColormapRange": "A"
+            },
+            "x": 7,
+            "y": 0,
+            "w": 5,
+            "h": 6
+        },
+        {
+            "component": "obsSets",
+            "coordinationScopes": {
+                "dataset": "A",
+                "obsType": "A",
+                "featureType": "A",
+                "featureValueType": "A",
+                "obsSetSelection": "A",
+                "featureSelection": "A",
+                "obsColorEncoding": "A",
+                "featureValueColormapRange": "A"
+            },
+            "x": 0,
+            "y": 6,
+            "w": 2,
+            "h": 3
+        },
+        {
+            "component": "heatmap",
+            "coordinationScopes": {
+                "dataset": "A",
+                "obsType": "A",
+                "featureType": "A",
+                "featureValueType": "A",
+                "obsSetSelection": "A",
+                "featureSelection": "A",
+                "obsColorEncoding": "A",
+                "featureValueColormapRange": "A"
+            },
+            "x": 2,
+            "y": 6,
+            "w": 5,
+            "h": 6,
+            "props": {
+                "transpose": true
+            }
+        },
+        {
+            "component": "featureList",
+            "coordinationScopes": {
+                "dataset": "A",
+                "obsType": "A",
+                "featureType": "A",
+                "featureValueType": "A",
+                "obsSetSelection": "A",
+                "featureSelection": "A",
+                "obsColorEncoding": "A",
+                "featureValueColormapRange": "A"
+            },
+            "x": 0,
+            "y": 8,
+            "w": 2,
+            "h": 3
+        },
+        {
+            "component": "obsSetFeatureValueDistribution",
+            "coordinationScopes": {
+                "dataset": "A",
+                "obsType": "A",
+                "featureType": "A",
+                "featureValueType": "A",
+                "obsSetSelection": "A",
+                "featureSelection": "A",
+                "obsColorEncoding": "A",
+                "featureValueColormapRange": "A"
+            },
+            "x": 7,
+            "y": 6,
+            "w": 5,
+            "h": 6
+        },
         {
             "component": "description",
             "coordinationScopes": {
@@ -220,117 +348,6 @@
             }
         },
         {
-            "component": "featureList",
-            "coordinationScopes": {
-                "dataset": "A",
-                "featureSelection": "A",
-                "featureType": "A",
-                "featureValueColormapRange": "A",
-                "featureValueType": "A",
-                "obsColorEncoding": "A",
-                "obsSetSelection": "A",
-                "obsType": "A"
-            },
-            "x": 0,
-            "y": 8,
-            "w": 2,
-            "h": 3
-        },
-        {
-            "component": "heatmap",
-            "coordinationScopes": {
-                "dataset": "A",
-                "featureSelection": "A",
-                "featureType": "A",
-                "featureValueColormapRange": "A",
-                "featureValueType": "A",
-                "obsColorEncoding": "A",
-                "obsSetSelection": "A",
-                "obsType": "A"
-            },
-            "x": 2,
-            "y": 6,
-            "w": 5,
-            "h": 6,
-            "props": {
-                "transpose": true
-            }
-        },
-        {
-            "component": "layerControllerBeta",
-            "coordinationScopes": {
-                "dataset": "A",
-                "metaCoordinationScopes": [
-                    "init_A_image_0",
-                    "init_A_obsSegmentations_0"
-                ],
-                "metaCoordinationScopesBy": [
-                    "init_A_image_0",
-                    "init_A_obsSegmentations_0"
-                ]
-            },
-            "x": 0,
-            "y": 4,
-            "w": 2,
-            "h": 5
-        },
-        {
-            "component": "obsSets",
-            "coordinationScopes": {
-                "dataset": "A",
-                "featureSelection": "A",
-                "featureType": "A",
-                "featureValueColormapRange": "A",
-                "featureValueType": "A",
-                "obsColorEncoding": "A",
-                "obsSetSelection": "A",
-                "obsType": "A"
-            },
-            "x": 0,
-            "y": 6,
-            "w": 2,
-            "h": 3
-        },
-        {
-            "component": "scatterplot",
-            "coordinationScopes": {
-                "dataset": "A",
-                "embeddingType": "A",
-                "featureSelection": "A",
-                "featureType": "A",
-                "featureValueColormapRange": "A",
-                "featureValueType": "A",
-                "obsColorEncoding": "A",
-                "obsSetSelection": "A",
-                "obsType": "A"
-            },
-            "x": 7,
-            "y": 0,
-            "w": 5,
-            "h": 6
-        },
-        {
-            "component": "spatialBeta",
-            "coordinationScopes": {
-                "dataset": "A",
-                "metaCoordinationScopes": [
-                    "init_A_image_0",
-                    "init_A_obsSegmentations_0"
-                ],
-                "metaCoordinationScopesBy": [
-                    "init_A_image_0",
-                    "init_A_obsSegmentations_0"
-                ]
-            },
-            "x": 2,
-            "y": 0,
-            "w": 5,
-            "h": 6,
-            "props": {
-                "description": "Comparison of gene expression between Healthy and SLE scRNA-seq data"
-            }
-        },
-        {
             "component": "status",
             "coordinationScopes": {
                 "dataset": "A"
@@ -339,23 +356,6 @@
             "y": 1,
             "w": 2,
             "h": 1
-        },
-        {
-            "component": "obsSetFeatureValueDistribution",
-            "coordinationScopes": {
-                "dataset": "A",
-                "featureSelection": "A",
-                "featureType": "A",
-                "featureValueColormapRange": "A",
-                "featureValueType": "A",
-                "obsColorEncoding": "A",
-                "obsSetSelection": "A",
-                "obsType": "A"
-            },
-            "x": 7,
-            "y": 6,
-            "w": 5,
-            "h": 6
         }
     ],
     "initStrategy": "auto"

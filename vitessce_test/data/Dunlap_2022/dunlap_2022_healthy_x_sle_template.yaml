@@ -4,7 +4,7 @@ description: Comparison of gene expression between Healthy and SLE scRNA-seq dat
 # Add all datasets to be used
 datasets:
   dunlap_2022:
-    dataset_path: dunlap_2022_corrected.zarr
+    dataset_path: Dunlap_2022/dunlap_2022_corrected.zarr
     type: anndata_zarr
     subsets_only: true
     subsets:
@@ -15,15 +15,8 @@ datasets:
         column: Disease
         value: Systemic Lupus Erythematosus
     data:
-      obs_sets_paths: [obs/pred_cell_type_filtered]
-      obs_sets_names: [Cell Type]
-      # By default for anndata_zarr, override if different:
-      # obs_sets_paths: [pred_cell_type]
-      # obs_sets_names: [Cell Type]
-      # obs_embedding_names: [UMAP]
-      # obs_embedding_paths: [obsm/X_umap]
-      # feature_matrix_path: X
-      # feature_filter_path: var/highly_variable
+      obs_set_paths: [obs/pred_cell_type_filtered]
+      obs_set_names: [Cell Type]
 
 
 views:
@@ -120,6 +113,7 @@ coordination:
     views:
       - heatmap
       - violin
+      - scatterplot
     values:
       featureType: gene
       featureValueType: expression

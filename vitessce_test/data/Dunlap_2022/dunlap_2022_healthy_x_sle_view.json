@@ -1,15 +1,15 @@
 {
-    "version": "1.0.15",
+    "version": "1.0.17",
     "name": "Dunlap 2022 - Healthy vs SLE",
     "description": "Comparison of gene expression between Healthy and SLE scRNA-seq data",
     "datasets": [
         {
             "uid": "A",
-            "name": "scRNA-seq - Healthy",
+            "name": "Dunlap_2022 - Healthy",
             "files": [
                 {
                     "fileType": "anndata.zarr",
-                    "url": "http://localhost:8008/dunlap_2022_corrected_healthy.zarr",
+                    "url": "http://localhost:8008/Dunlap_2022/dunlap_2022_corrected_healthy.zarr",
                     "options": {
                         "obsEmbedding": [
                             {
@@ -37,11 +37,11 @@
         },
         {
             "uid": "B",
-            "name": "scRNA-seq - Systemic Lupus Erythematosus",
+            "name": "Dunlap_2022 - Systemic Lupus Erythematosus",
             "files": [
                 {
                     "fileType": "anndata.zarr",
-                    "url": "http://localhost:8008/dunlap_2022_corrected_systemic_lupus_erythematosus.zarr",
+                    "url": "http://localhost:8008/Dunlap_2022/dunlap_2022_corrected_systemic_lupus_erythematosus.zarr",
                     "options": {
                         "obsEmbedding": [
                             {
@@ -125,7 +125,11 @@
                 "embeddingType": "A",
                 "obsType": "A",
                 "obsSetSelection": "A",
-                "obsHighlight": "A"
+                "obsHighlight": "A",
+                "featureType": "A",
+                "featureValueType": "A",
+                "featureHighlight": "A",
+                "featureSelection": "A"
             },
             "x": 0,
             "y": 2,
@@ -215,7 +219,11 @@
                 "embeddingType": "B",
                 "obsType": "B",
                 "obsSetSelection": "B",
-                "obsHighlight": "B"
+                "obsHighlight": "B",
+                "featureType": "A",
+                "featureValueType": "A",
+                "featureHighlight": "A",
+                "featureSelection": "A"
             },
             "x": 6,
             "y": 2,
