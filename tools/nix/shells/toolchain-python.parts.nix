@@ -33,7 +33,7 @@
       toolchains.vitessce = [
         {
           packages = [
-            pkgs.nodejs_22
+            pkgs.nodejs_24
           ];
 
           # We use `devenv` language support since, it's
