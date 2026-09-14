@@ -12,8 +12,7 @@
                     "url": "http://localhost:8008/Xenium_0OE1/0OE1_xenium_example.zarr",
                     "options": {
                         "path": "shapes/nucleus_boundaries",
-                        "tablePath": "tables/table",
-                        "region": "cell_boundaries"
+                        "tablePath": "tables/table"
                     },
                     "coordinationValues": {
                         "obsType": "nucleus",
@@ -25,8 +24,7 @@
                     "url": "http://localhost:8008/Xenium_0OE1/0OE1_xenium_example.zarr",
                     "options": {
                         "path": "shapes/cell_boundaries",
-                        "tablePath": "tables/table",
-                        "region": "cell_boundaries"
+                        "tablePath": "tables/table"
                     },
                     "coordinationValues": {
                         "obsType": "cell",
@@ -42,6 +40,10 @@
                         },
                         "obsSets": {
                             "obsSets": [
+                                {
+                                    "name": "Clusters",
+                                    "path": "tables/table/obs/clusters"
+                                },
                                 {
                                     "name": "Clusters",
                                     "path": "tables/table/obs/clusters"
@@ -272,7 +274,7 @@
             "x": 0,
             "y": 4,
             "w": 2,
-            "h": 5
+            "h": 4
         },
         {
             "component": "obsSets",

@@ -1,10 +1,15 @@
 from pathlib import Path
+import yaml
 from typing import Any
+import shutil
 
+from scipy.sparse import csc_matrix, issparse
 import anndata as ad
 import numpy as np
 import pandas as pd
+from skimage import data
 from spatialdata_io import xenium
+from spatialdata import read_zarr
 from vitessce import (
     AnnDataWrapper,
     SpatialDataWrapper,
@@ -54,11 +59,64 @@ VIEW_MAPPING = {
 }
 
 
+def update_template(
+    template: dict[str, Any],
+    template_path: Path,
+) -> None:
+    with open(template_path, "w") as f:
+        yaml.safe_dump(template, f)
+
+
 def get_dataset_data(
     dataset_data: dict[str, Any],
     defaults: dict[str, Any]
 ) -> dict[str, Any]:
     return {**defaults, **dataset_data}
+
+
+def write_sparse_matrix(
+    adata: ad.AnnData,
+    source_path: Path,
+    matrix_path: Path,
+    spatial: bool = False,
+) -> None:
+
+    adata.X = csc_matrix(adata.X)                               # pyright: ignore[reportUnknownMemberType,reportUnknownArgumentType]
+    if spatial:
+        backup_path = source_path.with_name(f"{source_path.stem}_backup.zarr")
+        _ = source_path.rename(backup_path)
+        sdata = read_zarr(backup_path)
+        sdata.tables[matrix_path.parent.name] = adata
+
+        # Recover backed up data if write fails
+        try:
+            sdata.write(source_path)
+            _ = read_zarr(source_path)
+        except Exception as e:
+            if source_path.exists():
+                shutil.rmtree(source_path)
+            _ = backup_path.rename(source_path)
+            raise RuntimeError(f"Failed to write sparse matrix to {source_path}: {e}")
+        else:
+            shutil.rmtree(backup_path)
+    else:
+        adata.write_zarr(store=source_path)                     # pyright: ignore[reportUnknownMemberType]
+
+
+def verify_sparse_matrix(
+    source_path: Path,
+    matrix_path: Path,
+    spatial: bool = False,
+) -> None:
+
+    adata = ad.read_zarr(Path(source_path, matrix_path.parent))     # pyright: ignore[reportUnknownMemberType]
+    if not issparse(adata.X):                         # pyright: ignore[reportUnknownMemberType]
+        write_sparse_matrix(
+            adata,
+            source_path,
+            matrix_path,
+            spatial
+        )
 
 
 def prepare_subset(
@@ -86,13 +144,21 @@ def prepare_subset(
 def add_anndata_dataset(
     vc: VitessceConfig,
     dataset_name: str,
-    adata_path: Path | str,
+    adata_path: Path,
     options: dict[str, Any],
 ) -> VitessceConfigDataset:
 
     # Add datasets to the widget (dataset = container for file per data type)
     dataset = vc.add_dataset(                       # pyright: ignore[reportUnknownMemberType]
         name=dataset_name)
+
+    # If feature matrix is used, convert to CSC format
+    matrix_path = options.get("obs_feature_matrix_path", None)
+    if matrix_path:
+        verify_sparse_matrix(
+            adata_path,
+            Path(matrix_path)
+        )
 
     # Use AnnDataWrapper to automatically handle pahts to relevant data
     _ = dataset.add_object(                         # pyright: ignore[reportUnknownMemberType]
@@ -107,9 +173,10 @@ def add_anndata_dataset(
 def prepare_anndata_dataset(
     vc: VitessceConfig,
     dataset_name: str,
-    dataset: dict[str, Any]
+    template: dict[str, Any]
 ) -> dict[str,VitessceConfigDataset]:
 
+    dataset = template["datasets"][dataset_name]
     adata_path = Path(DATA_DIR, dataset["dataset_path"])
     adata = ad.read_zarr(                                   # pyright: ignore[reportUnknownMemberType]
         adata_path)
@@ -145,7 +212,7 @@ def prepare_anndata_dataset(
 def prepare_xenium_dataset(
     dataset_path: Path,
     dataset: dict[str, Any],
-    preprocessing_data: dict[str, Any],
+    preprocessing_data: dict[str, Any]
 ) -> None:
 
     sdata = xenium(dataset_path)
@@ -197,6 +264,11 @@ def add_spatial_dataset(
     spatialzarr_path = Path(DATA_DIR, dataset["dataset_path"])
     obs_seg_paths = options.pop("obs_seg_paths")
 
+    # Verify that the feature matrix is sparse
+    matrix_path = options.get("obs_feature_matrix_path", None)
+    if matrix_path:
+        verify_sparse_matrix(spatialzarr_path, Path(matrix_path), spatial=True)
+
     # Add datasets to the widget (dataset = container for file per data type)
     vitessce_dataset = vc.add_dataset(                        # pyright: ignore[reportUnknownMemberType]
         name=dataset_name)
@@ -239,11 +311,11 @@ def add_spatial_dataset(
 def prepare_spatial_dataset(
     vc: VitessceConfig,
     dataset_name: str,
-    dataset: dict[str, Any]
-) -> tuple[dict[str, VitessceConfigDataset], bool]:
-
+    template: dict[str, Any],
+    template_path: Path,
+) -> dict[str, VitessceConfigDataset]:
+    dataset = template["datasets"][dataset_name]
     dataset_path = Path(DATA_DIR, dataset["dataset_path"])
-    template_changed = False
     if not dataset.get("is_preprocessed", False) and not dataset_path.with_suffix(".zarr").exists():
         preprocessing_data = dataset.get("preprocessing_data", {})
         if not preprocessing_data:
@@ -251,29 +323,28 @@ def prepare_spatial_dataset(
         spatial_type = preprocessing_data.get("spatial_type", "")
         if spatial_type == "xenium":
             prepare_xenium_dataset(dataset_path, dataset, preprocessing_data)
-            template_changed = True
+            update_template(template, template_path)
         else:
             raise ValueError(f"Unsupported spatial type: {spatial_type}")
 
     options = get_dataset_data(dataset.get("data", {}), SPATIALDATA_DEFAULTS)
-    return add_spatial_dataset(vc, dataset_name, dataset, options=options), template_changed
+    return add_spatial_dataset(vc, dataset_name, dataset, options=options)
 
 
 def prepare_datasets(
     vc: VitessceConfig,
-    datasets: dict[str, Any]
-) -> tuple[dict[str, VitessceConfigDataset], bool]:
+    template: dict[str, Any],
+    template_path: Path,
+) -> dict[str, VitessceConfigDataset]:
 
+    datasets = template["datasets"]
     vitessce_datasets: dict[str, VitessceConfigDataset] = {}
-    glob_template_changed = False
     for dataset_name, dataset in datasets.items():
         if dataset["type"] == "anndata_zarr":
-            vit_dataset = prepare_anndata_dataset(vc, dataset_name, dataset)
+            vit_dataset = prepare_anndata_dataset(vc, dataset_name, template)
             vitessce_datasets.update(vit_dataset)
         if dataset["type"] == "spatialdata_zarr":
-            vit_dataset, template_changed = prepare_spatial_dataset(vc, dataset_name, dataset)
+            vit_dataset = prepare_spatial_dataset(vc, dataset_name, template, template_path)
             vitessce_datasets.update(vit_dataset)
-            if template_changed:
-                glob_template_changed = True
 
-    return vitessce_datasets, glob_template_changed
+    return vitessce_datasets

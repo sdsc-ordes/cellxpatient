@@ -1,15 +1,49 @@
-description: Visualization of gene expression in spatial transcriptomics
-name: Xenium 0OE1 Example - Spatial Data
-
+coordination:
+  global:
+    datasets:
+    - xenium_0OE1
+    per_layer:
+      image_layer:
+        values:
+          spatialLayerColormap: viridis
+        views:
+        - spatial
+        - layer_controller
+      segmentation_layer:
+        cell_channel:
+          inherit: true
+          values:
+            spatialSegmentationFilled: false
+        nucleus_channel:
+          values:
+            obsColorEncoding: spatialChannelColor
+            obsType: nucleus
+            spatialChannelColor:
+            - 0
+            - 0
+            - 139
+            spatialSegmentationFilled: true
+        views:
+        - spatial
+        - layer_controller
+    values:
+      featureSelection: null
+      featureType: gene
+      featureValueColormapRange:
+      - 0.0
+      - 0.5
+      featureValueType: expression
+      obsColorEncoding: geneSelection
+      obsSetSelection: null
+      obsType: cell
+    views:
+    - obs_sets
+    - scatterplot
+    - feature_list
+    - heatmap
+    - violin
 datasets:
   xenium_0OE1:
-    type: spatialdata_zarr
-    dataset_path: Xenium_0OE1/0OE1_xenium_example.zarr
-    is_preprocessed: true
-    preprocessing_data:
-      clusters_path: analysis/clustering/gene_expression_graphclust/clusters.csv
-      spatial_type: xenium
-      umap_path: analysis/umap/gene_expression_2_components/projection.csv
     data:
       obs_embedding_names:
       - UMAP
@@ -20,9 +54,19 @@ datasets:
       - shapes/cell_boundaries
       obs_set_names:
       - Clusters
+      - Clusters
       obs_set_paths:
       - tables/table/obs/clusters
-
+      - tables/table/obs/clusters
+    dataset_path: Xenium_0OE1/0OE1_xenium_example.zarr
+    is_preprocessed: true
+    preprocessing_data:
+      clusters_path: analysis/clustering/gene_expression_graphclust/clusters.csv
+      spatial_type: xenium
+      umap_path: analysis/umap/gene_expression_2_components/projection.csv
+    type: spatialdata_zarr
+description: Visualization of gene expression in spatial transcriptomics
+name: Xenium 0OE1 Example - Spatial Data
 views:
   description:
     datasets:
@@ -130,49 +174,3 @@ views:
     - 6
     - 5
     - 6
-
-
-coordination:
-  global:
-    datasets:
-    - xenium_0OE1
-    per_layer:
-      image_layer:
-        values:
-          spatialLayerColormap: viridis
-        views:
-        - spatial
-        - layer_controller
-      segmentation_layer:
-        cell_channel:
-          inherit: true
-          values:
-            spatialSegmentationFilled: false
-        nucleus_channel:
-          values:
-            obsColorEncoding: spatialChannelColor
-            obsType: nucleus
-            spatialChannelColor:
-            - 0
-            - 0
-            - 139
-            spatialSegmentationFilled: true
-        views:
-        - spatial
-        - layer_controller
-    values:
-      featureSelection: null
-      featureType: gene
-      featureValueColormapRange:
-      - 0.0
-      - 0.5
-      featureValueType: expression
-      obsColorEncoding: geneSelection
-      obsSetSelection: null
-      obsType: cell
-    views:
-    - obs_sets
-    - scatterplot
-    - feature_list
-    - heatmap
-    - violin

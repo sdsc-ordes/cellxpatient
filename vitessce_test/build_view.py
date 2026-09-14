@@ -45,14 +45,6 @@ def load_template(
         return yaml.safe_load(f)
 
 
-def update_template(
-    template: dict[str, Any],
-    template_path: Path,
-) -> None:
-    with open(template_path, "w") as f:
-        yaml.safe_dump(template, f)
-
-
 def add_view(
     vc: VitessceConfig,
     dataset: VitessceConfigDataset,
@@ -217,12 +209,7 @@ def build_view(
         base_dir=DATA_DIR)
 
     # Add to vitessce config all datasets to display
-    datasets = template["datasets"]
-    vitessce_datasets, template_changed = prepare_datasets(vc, datasets)
-
-    # Update template if datasets changed
-    if template_changed:
-        update_template(template, template_path)
+    vitessce_datasets = prepare_datasets(vc, template, template_path)
 
     # Add views to vitessce config
     views = template["views"]
