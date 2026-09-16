@@ -37,6 +37,7 @@ in
       modules ? [ ],
       pkgs ? null,
       system ? null,
+      subRootdir ? null,
     }:
     assert lib.assertMsg (lib.hasAttr "self" inputs) "Inputs must contain `self`.";
     assert lib.assertMsg (lib.hasAttr "devenv" inputs) "Inputs must contain `devenv`.";
@@ -72,13 +73,18 @@ in
             devenv.flakesIntegration = true;
           }
           # Only apply it if `devenv-root` is defined.
-          // lib.optionalAttrs (lib.hasAttr "devenv-root" inputs) {
+          // lib.optionalAttrs (lib.hasAttr "devenv-root" inputs) (
             # This is currently needed for devenv to properly run in pure hermetic
             # mode while still being able to run processes & services and modify
             # (some parts) of the active shell.
             # We read here the root for devenv from the workaround flake input `devenv-root`.
-            devenv.root = lib.strings.trim (builtins.readFile inputs.devenv-root.outPath);
-          }
+            let
+              root = lib.strings.trim (builtins.readFile inputs.devenv-root.outPath);
+            in
+            {
+              devenv.root = if subRootdir != null then "${root}/${subRootdir}" else root;
+            }
+          )
         )
       ]
       ++ devenv-modules

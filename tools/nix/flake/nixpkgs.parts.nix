@@ -1,7 +1,7 @@
 # Flake-Parts module which imports nixpkgs from
-# `inputs.nixpkgs` and `inputs.nixpkgs-stable`
+# `inputs.nixpkgs`, `inputs.nixpkgs-stable` and `inputs.nixpkgs-numcodecs`
 # It makes these packages available as
-# `pkgs` and `pkgsStable` in each flake-parts module.
+# `pkgs`, `pkgsStable` and `pkgsNumcodecs` in each flake-parts module.
 #
 # There are two functions
 # - `self.lib.importPkgs`
@@ -9,7 +9,6 @@
 # to import nixpkgs somewhere else.
 {
   self,
-  inputs,
   ...
 }:
 let
@@ -26,7 +25,7 @@ in
       pkgsStable = self.lib.import.pkgsStable { inherit system; };
     in
     {
-      # All flake-parts modules now have two more arguments.
+      # All flake-parts modules now have three more arguments.
       _module.args.pkgs = pkgs;
       _module.args.pkgsStable = pkgsStable;
 
