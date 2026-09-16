@@ -7,7 +7,6 @@ from scipy.sparse import csc_matrix, issparse
 import anndata as ad
 import numpy as np
 import pandas as pd
-from skimage import data
 from spatialdata_io import xenium
 from spatialdata import read_zarr
 from vitessce import (
@@ -15,14 +14,11 @@ from vitessce import (
     SpatialDataWrapper,
     VitessceConfig,
 )
-from vitessce import Component as cm
 from vitessce.config import (
     VitessceConfigDataset,
 )
 
-DATA_DIR = Path(".", "data")
-PORT = 8008
-BASE_URL = f"http://localhost:{PORT}"
+from vitessce_test.settings import DATA_DIR, DATA_URL
 
 
 ANNDATA_DEFAULTS = {
@@ -44,19 +40,6 @@ SPATIALDATA_DEFAULTS = {
     ]
 }
 
-
-VIEW_MAPPING = {
-    "scatterplot": cm.SCATTERPLOT,
-    "heatmap": cm.HEATMAP,
-    "violin": cm.OBS_SET_FEATURE_VALUE_DISTRIBUTION,
-    "obs_sets": cm.OBS_SETS,
-    "obs_sets_sizes": cm.OBS_SET_SIZES,
-    "description": cm.DESCRIPTION,
-    "feature_list": cm.FEATURE_LIST,
-    "spatial": "spatialBeta",
-    "layer_controller": "layerControllerBeta",
-    "status": cm.STATUS,
-}
 
 
 def update_template(
@@ -163,7 +146,7 @@ def add_anndata_dataset(
     # Use AnnDataWrapper to automatically handle pahts to relevant data
     _ = dataset.add_object(                         # pyright: ignore[reportUnknownMemberType]
         AnnDataWrapper(
-            adata_path=adata_path,
+            adata_path=adata_path.relative_to(DATA_DIR),
             **options
         )
     )
@@ -203,7 +186,7 @@ def prepare_anndata_dataset(
         vitessce_datasets[dataset_id] = add_anndata_dataset(
             vc,
             dataset_data[0],
-            dataset_data[1].relative_to(DATA_DIR),
+            dataset_data[1],
             options
         )
     return vitessce_datasets
@@ -286,7 +269,7 @@ def add_spatial_dataset(
     )
 
     for seg_path in obs_seg_paths:
-        url = f"{BASE_URL}/{spatialzarr_path.relative_to(DATA_DIR).as_posix()}"
+        url = f"{DATA_URL}/{spatialzarr_path.relative_to(DATA_DIR).as_posix()}"
         if 'cell' in seg_path:
             seg_type = "cell"
         elif 'nucleus' in seg_path:

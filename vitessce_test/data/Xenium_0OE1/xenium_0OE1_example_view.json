@@ -9,7 +9,7 @@
             "files": [
                 {
                     "fileType": "shapes.spatialdata.zarr",
-                    "url": "http://localhost:8008/Xenium_0OE1/0OE1_xenium_example.zarr",
+                    "url": "/data/Xenium_0OE1/0OE1_xenium_example.zarr",
                     "options": {
                         "path": "shapes/nucleus_boundaries",
                         "tablePath": "tables/table"
@@ -21,7 +21,7 @@
                 },
                 {
                     "fileType": "shapes.spatialdata.zarr",
-                    "url": "http://localhost:8008/Xenium_0OE1/0OE1_xenium_example.zarr",
+                    "url": "/data/Xenium_0OE1/0OE1_xenium_example.zarr",
                     "options": {
                         "path": "shapes/cell_boundaries",
                         "tablePath": "tables/table"
@@ -33,7 +33,7 @@
                 },
                 {
                     "fileType": "spatialdata.zarr",
-                    "url": "http://localhost:8008/Xenium_0OE1/0OE1_xenium_example.zarr",
+                    "url": "/data/Xenium_0OE1/0OE1_xenium_example.zarr",
                     "options": {
                         "obsFeatureMatrix": {
                             "path": "tables/table/X"

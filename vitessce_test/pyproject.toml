@@ -15,7 +15,8 @@ dependencies = [
     "pytest>=8.4.2",
     "vitessce",
     "spatialdata-io",
-    "spatialdata>=0.8.0"
+    "spatialdata>=0.8.0",
+    "fastapi"
 ]
 [dependency-groups]
 dev = [
@@ -24,6 +25,9 @@ dev = [
     "easy_vitessce",
     "ruff"
 ]
+
+[project.scripts]
+vitessce-test = "vitessce_test.cli:main"
 
 [build-system]
 requires = ["hatchling"]

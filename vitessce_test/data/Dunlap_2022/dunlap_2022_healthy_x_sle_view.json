@@ -9,7 +9,7 @@
             "files": [
                 {
                     "fileType": "anndata.zarr",
-                    "url": "http://localhost:8008/Dunlap_2022/dunlap_2022_corrected_healthy.zarr",
+                    "url": "/data/Dunlap_2022/dunlap_2022_corrected_healthy.zarr",
                     "options": {
                         "obsEmbedding": [
                             {
@@ -41,7 +41,7 @@
             "files": [
                 {
                     "fileType": "anndata.zarr",
-                    "url": "http://localhost:8008/Dunlap_2022/dunlap_2022_corrected_systemic_lupus_erythematosus.zarr",
+                    "url": "/data/Dunlap_2022/dunlap_2022_corrected_systemic_lupus_erythematosus.zarr",
                     "options": {
                         "obsEmbedding": [
                             {

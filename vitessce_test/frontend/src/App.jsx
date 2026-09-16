@@ -1,12 +1,35 @@
 import { Vitessce } from 'vitessce';
-import myViewConfig from '../../data/Dunlap_2022/dunlap_2022_healthy_x_sle_view.json';
+import { useEffect, useState } from 'react'
 
-export default function MyApp() {
-    return (
-        <Vitessce
-            config={myViewConfig}
-            height={1800}
-            theme="light"
-        />
-    );
+export default function App() {
+  const [config, setConfig] = useState(null)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    fetch('/api/config')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`)
+        }
+        return response.json()
+      })
+      .then(setConfig)
+      .catch(setError)
+  }, [])
+
+  if (error) {
+    return <div>Error loading config: {error.message}</div>
+  }
+
+  if (!config) {
+    return <div>Loading configuration...</div>
+  }
+
+  return (
+    <Vitessce
+      config={config}
+      height={1800}
+      theme="dark"
+    />
+  )
 }
