@@ -23,8 +23,21 @@ flowchart LR
 
 ## Current prototype
 
+The prototype is a small Python package ([src/vitessce_test](src/vitessce_test)) with
+a command-line interface in three steps:
+ 
+```mermaid
+flowchart LR
+    A(Raw data) --> B[preprocess]
+    B --> C(data/processed)
+    C --> D[build]
+    D --> E(JSON view config)
+    E --> F[serve]
+```
+
+
 Vitessce configurations are generated programmatically using the Python API in
-[build_view.py](build_view.py). To facilitate the creation of a Vitessce view,
+[build.py](src/vitessce_test/build.py). To facilitate the creation of a Vitessce view,
 the expected configuration is defined using a more human-readable YAML template
 (see [example_template.yaml](example_template.yaml)).
 
@@ -37,7 +50,7 @@ The template contains three main sections:
   elements within them.
   Default paths are used for standard AnnData and SpatialData structures, so the
   template only needs to specify paths that differ from these defaults.
-  Defaults can be found in [datasets.py](datasets.py).
+  Defaults can be found in [datasets.py](src/vitessce_test/datasets.py).
 
 - Views
 
@@ -69,6 +82,66 @@ The template contains three main sections:
   morphology image together with cell and nucleus boundaries, while linking the
   cell segmentation to selected gene expression.
 
+## Setup
+ 
+Install the package in editable mode (`pip install -e .` or `uv sync`) and build
+the frontend once:
+ 
+```bash
+cd frontend
+npm install
+npm run build
+```
+
+## Usage
+ 
+Run `vitessce-test <command> --help` for all options.
+ 
+### 1. Preprocess the data
+ 
+Converts an AnnData (h5ad or zarr) or a Xenium dataset into a Vitessce-ready zarr 
+store in `data/processed`. The
+expression matrix is stored as a CSC sparse matrix and the input is never
+modified. Existing outputs are only replaced with the option `--overwrite`.
+ 
+- AnnData (`.h5ad` or `.zarr`), optionally keeping only the cells where an obs
+  column equals a value:
+ 
+  ```bash
+  vitessce-test preprocess --type anndata --input path/to/dataset.h5ad
+  vitessce-test preprocess --type anndata --input path/to/dataset.h5ad --subset condition Healthy --output new_name
+  ```
+ 
+- Xenium output directory, with UMAP and clusters from the Xenium analysis files
+  (default paths can be changed with `--umap` and `--clusters`):
+ 
+  ```bash
+  vitessce-test preprocess --type xenium --input path/to/xenium_output
+  ```
+ 
+Without `--output`, the output name is built from the input name
+(`<input>_corrected.zarr`, or `<input>_<value>.zarr` for a subset). Use this
+path, relative to `data/processed`, as `dataset_path` in the view template.
+ 
+### 2. Build and serve a view
+ 
+```bash
+vitessce-test build --template path/to/dataset_template.yaml
+```
+ 
+The JSON config is written next to the template as `<name>_view.json`, and the
+view is served at <http://127.0.0.1:8008>. Add `--build-only` to only write the
+config.
+ 
+### 3. Serve an existing config
+ 
+```bash
+vitessce-test serve --config path/to/dataset_view.json
+```
+ 
+Both `build` and `serve` accept `--port`. The server hosts the frontend, the
+processed data and the config, so no separate data server is needed.
+
 ## scRNA data example
 
 > [!IMPORTANT] The current prototype duplicates the input data and several views
@@ -81,14 +154,19 @@ The template contains three main sections:
 > duplicated views. This could potentially be addressed through a fork or a
 > custom plugin.
 
-To test the suitability of Vitessce, we consider a theoretical scRNA view
+To test the view coordination with Vitessce, we consider a theoretical scRNA view
 template that compares gene expression between two conditions (e.g. **Healthy vs
 Disease**).
 
-The view is generated using the [corresponding YAML template](data/Dunlap_2022/dunlap_2022_healthy_x_sle_template.yaml). The following diagram shows in essence
-the plots layout and coordination space, to facilitate the composition of the template.
+### Data source
+
+The data used for the scRNA view template is the [DUNLAP 2022 dataset](https://biohub.skinsciencefoundation.org/download/Dunlap_2022_all_final_label_transfer_swapped.h5ad) on the [Skin Science Foundation BioHub](https://biohub.skinsciencefoundation.org/filecrawl).
+
 
 ### Prototype view template
+
+The view is generated using the [corresponding YAML template](data/processed/dunlap_2022_healthy_x_sle_template.yaml). The following diagram shows in essence
+the plots layout and coordination space, to facilitate the composition of the template.
 
 <table>
   <tr>
@@ -138,10 +216,13 @@ the plots layout and coordination space, to facilitate the composition of the te
 To test the coordination between multi-layer spatial data and gene expression data, we consider 
 a theoretical spatial view template.
 
-The view is generated using the [corresponding YAML template](data/Xenium_0OE1/xenium_0OE1_example_template.yaml). The following diagram shows in essence
-the plots layout and coordination space, to facilitate the composition of the template.
+### Data source
+
+The data used for the spatial view template is the Xenium 0OE1 example dataset provided by Antonin Thiebault.
 
 ### Prototype view template
+The view is generated using the [corresponding YAML template](data/processed/xenium_0OE1_example_template.yaml). The following diagram shows in essence
+the plots layout and coordination space, to facilitate the composition of the template.
 
 <table> 
   <tr> 
@@ -175,29 +256,3 @@ the plots layout and coordination space, to facilitate the composition of the te
     <td>Feature List (Scope A for gene)</td> 
   </tr>
 </table>
-
-## Usage
-
-Create or adapt a YAML view template, then generate and serve the corresponding
-Vitessce configuration with the tempalte option:
-
-```bash
-python build_view.py --template ./data/DatasetFolder/dataset_template.yaml
-```
-
-The script writes the generated Vitessce JSON configuration next to the template.
-
-To view an already generated Vitessce config, use the --config option:
-
-```bash
-python build_view.py --config ./data/DatasetFolder/dataset_config.json
-```
-
-## Data
-
-Input data is expected to be served from `./data` using http-server via the port 8008.
-
-```bash
-cd ./data
-http-server --cors -p 8008
-```
