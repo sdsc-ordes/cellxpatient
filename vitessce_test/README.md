@@ -9,7 +9,8 @@ implement the complete production workflow.
 
 ## Initial theoretical workflow
 
-Proposed initial theoretical workflow from data preprocessing to view visualization.
+Proposed initial theoretical workflow from data preprocessing to view
+visualization.
 
 ```mermaid
 flowchart LR
@@ -23,9 +24,9 @@ flowchart LR
 
 ## Current prototype
 
-The prototype is a small Python package ([src/vitessce_test](src/vitessce_test)) with
-a command-line interface in three steps:
- 
+The prototype is a small Python package ([src/vitessce_test](src/vitessce_test))
+with a command-line interface in three steps:
+
 ```mermaid
 flowchart LR
     A(Raw data) --> B[preprocess]
@@ -35,47 +36,49 @@ flowchart LR
     E --> F[serve]
 ```
 
-
 Vitessce configurations are generated programmatically using the Python API in
-[build.py](src/vitessce_test/build.py). To facilitate the creation of a Vitessce view,
-the expected configuration is defined using a more human-readable YAML template
-(see [example_template.yaml](example_template.yaml)).
+[build.py](src/vitessce_test/build.py). To facilitate the creation of a Vitessce
+view, the expected configuration is defined using a more human-readable YAML
+template (see [example_template.yaml](example_template.yaml)).
 
 ### Template Structure
 
 The template contains three main sections:
+
 - Datasets
 
   It defines the datasets used in the view and, when required, paths to specific
-  elements within them.
-  Default paths are used for standard AnnData and SpatialData structures, so the
-  template only needs to specify paths that differ from these defaults.
-  Defaults can be found in [datasets.py](src/vitessce_test/datasets.py).
+  elements within them. Default paths are used for standard AnnData and
+  SpatialData structures, so the template only needs to specify paths that
+  differ from these defaults. Defaults can be found in
+  [datasets.py](src/vitessce_test/datasets.py).
 
 - Views
 
-  It defines which Vitessce views should be displayed, which datasets they refer to,
-  and their position and size on a 12 × 12 grid.
+  It defines which Vitessce views should be displayed, which datasets they refer
+  to, and their position and size on a 12 × 12 grid.
 
 - Coordination
 
-  It defines how views interact and update together. This is the most tricky part
-  of the Vitessce configuration.
+  It defines how views interact and update together. This is the most tricky
+  part of the Vitessce configuration.
 
   A coordination type represents a property that can be coordinated, such as
-  featureSelection, obsSetSelection or obsColorEncoding. Not every view
-  supports every coordination type and the coordination types have expected values depending on their definition;
-  refer to the [Vitessce coordination documentation](https://vitessce.io/docs/coordination-types/#initial-coordination-values).
+  featureSelection, obsSetSelection or obsColorEncoding. Not every view supports
+  every coordination type and the coordination types have expected values
+  depending on their definition; refer to the
+  [Vitessce coordination documentation](https://vitessce.io/docs/coordination-types/#initial-coordination-values).
 
-  For each coordination type, one or more coordination scopes can exist.
-  Views referencing the same scope share the state of the corresponding coordination type:
+  For each coordination type, one or more coordination scopes can exist. Views
+  referencing the same scope share the state of the corresponding coordination
+  type:
 
   - view_1: coord_type_A -> scope_1
   - view_2: coord_type_A -> scope_1
   - view_3: coord_type_A -> scope_2
 
-  Here, view_1 and view_2 are coordinated for coord_type_A, while view_3
-  is independent.
+  Here, view_1 and view_2 are coordinated for coord_type_A, while view_3 is
+  independent.
 
   Spatial views require additional hierarchical coordination for individual
   image and segmentation layers. The current prototype uses this to display the
@@ -83,10 +86,10 @@ The template contains three main sections:
   cell segmentation to selected gene expression.
 
 ## Setup
- 
+
 Install the package in editable mode (`pip install -e .` or `uv sync`) and build
 the frontend once:
- 
+
 ```bash
 cd frontend
 npm install
@@ -94,51 +97,51 @@ npm run build
 ```
 
 ## Usage
- 
+
 Run `vitessce-test <command> --help` for all options.
- 
+
 ### 1. Preprocess the data
- 
-Converts an AnnData (h5ad or zarr) or a Xenium dataset into a Vitessce-ready zarr 
-store in `data/processed`. The
-expression matrix is stored as a CSC sparse matrix and the input is never
-modified. Existing outputs are only replaced with the option `--overwrite`.
- 
+
+Converts an AnnData (h5ad or zarr) or a Xenium dataset into a Vitessce-ready
+zarr store in `data/processed`. The expression matrix is stored as a CSC sparse
+matrix and the input is never modified. Existing outputs are only replaced with
+the option `--overwrite`.
+
 - AnnData (`.h5ad` or `.zarr`), optionally keeping only the cells where an obs
   column equals a value:
- 
+
   ```bash
   vitessce-test preprocess --type anndata --input path/to/dataset.h5ad
   vitessce-test preprocess --type anndata --input path/to/dataset.h5ad --subset condition Healthy --output new_name
   ```
- 
+
 - Xenium output directory, with UMAP and clusters from the Xenium analysis files
   (default paths can be changed with `--umap` and `--clusters`):
- 
+
   ```bash
   vitessce-test preprocess --type xenium --input path/to/xenium_output
   ```
- 
+
 Without `--output`, the output name is built from the input name
 (`<input>_corrected.zarr`, or `<input>_<value>.zarr` for a subset). Use this
 path, relative to `data/processed`, as `dataset_path` in the view template.
- 
+
 ### 2. Build and serve a view
- 
+
 ```bash
 vitessce-test build --template path/to/dataset_template.yaml
 ```
- 
+
 The JSON config is written next to the template as `<name>_view.json`, and the
 view is served at <http://127.0.0.1:8008>. Add `--build-only` to only write the
 config.
- 
+
 ### 3. Serve an existing config
- 
+
 ```bash
 vitessce-test serve --config path/to/dataset_view.json
 ```
- 
+
 Both `build` and `serve` accept `--port`. The server hosts the frontend, the
 processed data and the config, so no separate data server is needed.
 
@@ -154,19 +157,23 @@ processed data and the config, so no separate data server is needed.
 > duplicated views. This could potentially be addressed through a fork or a
 > custom plugin.
 
-To test the view coordination with Vitessce, we consider a theoretical scRNA view
-template that compares gene expression between two conditions (e.g. **Healthy vs
-Disease**).
+To test the view coordination with Vitessce, we consider a theoretical scRNA
+view template that compares gene expression between two conditions (e.g.
+**Healthy vs Disease**).
 
 ### Data source
 
-The data used for the scRNA view template is the [DUNLAP 2022 dataset](https://biohub.skinsciencefoundation.org/download/Dunlap_2022_all_final_label_transfer_swapped.h5ad) on the [Skin Science Foundation BioHub](https://biohub.skinsciencefoundation.org/filecrawl).
-
+The data used for the scRNA view template is the
+[DUNLAP 2022 dataset](https://biohub.skinsciencefoundation.org/download/Dunlap_2022_all_final_label_transfer_swapped.h5ad)
+on the
+[Skin Science Foundation BioHub](https://biohub.skinsciencefoundation.org/filecrawl).
 
 ### Prototype view template
 
-The view is generated using the [corresponding YAML template](data/processed/dunlap_2022_healthy_x_sle_template.yaml). The following diagram shows in essence
-the plots layout and coordination space, to facilitate the composition of the template.
+The view is generated using the
+[corresponding YAML template](data/processed/dunlap_2022_healthy_x_sle_template.yaml).
+The following diagram shows in essence the plots layout and coordination space,
+to facilitate the composition of the template.
 
 <table>
   <tr>
@@ -213,16 +220,20 @@ the plots layout and coordination space, to facilitate the composition of the te
 
 ## Spatial data example
 
-To test the coordination between multi-layer spatial data and gene expression data, we consider 
-a theoretical spatial view template.
+To test the coordination between multi-layer spatial data and gene expression
+data, we consider a theoretical spatial view template.
 
 ### Data source
 
-The data used for the spatial view template is the Xenium 0OE1 example dataset provided by Antonin Thiebault.
+The data used for the spatial view template is the Xenium 0OE1 example dataset
+provided by Antonin Thiebault.
 
 ### Prototype view template
-The view is generated using the [corresponding YAML template](data/processed/xenium_0OE1_example_template.yaml). The following diagram shows in essence
-the plots layout and coordination space, to facilitate the composition of the template.
+
+The view is generated using the
+[corresponding YAML template](data/processed/xenium_0OE1_example_template.yaml).
+The following diagram shows in essence the plots layout and coordination space,
+to facilitate the composition of the template.
 
 <table> 
   <tr> 

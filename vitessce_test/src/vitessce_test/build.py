@@ -56,19 +56,15 @@ def add_view(
     vc: VitessceConfig,
     dataset: VitessceConfigDataset,
     view_name: str,
-    grid_offset: list[int],
     grid: list[int],
     props: dict[str, Any] | None = None,
-    mapping: str = "UMAP"
 ) -> VitessceConfigView:
     x, y, w, h = grid
-    x = x + grid_offset[0]
-    y = y + grid_offset[1]
     if view_name == "scatterplot":
         view = vc.add_view(                         # pyright: ignore[reportUnknownMemberType]
             VIEW_MAPPING[view_name],
             dataset=dataset,
-            mapping=mapping,
+            mapping="UMAP",
         ).set_xywh(x, y, w, h)
 
     else:
@@ -239,8 +235,7 @@ def build_config(
                 vc,
                 vitessce_dataset,
                 view_name=view,
-                grid=grid,
-                grid_offset=grid_offset,
+                grid=[grid[0] + grid_offset[0], grid[1] + grid_offset[1], grid[2], grid[3]],
                 props=views[view].get("props", None),
             )
 

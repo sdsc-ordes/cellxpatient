@@ -5,7 +5,10 @@ from typing import Any
 import anndata as ad
 import numpy as np
 import pandas as pd
-from scipy.sparse import csc_matrix, issparse
+from scipy.sparse import (
+    csc_matrix,
+    issparse,  # pyright: ignore[reportUnknownVariableType]
+)
 from spatialdata_io import xenium
 
 from vitessce_test.settings import DATA_DIR
@@ -22,11 +25,11 @@ def write_with_backup(
         # Recover backed up data if write fails
         try:
             write_func(output_path)
-        except Exception as e:
+        except Exception:
             if output_path.exists():
                 shutil.rmtree(output_path)
             _ = backup_path.rename(output_path)
-            raise RuntimeError(f"Failed to write sparse matrix to {output_path}: {e}")
+            raise
         else:
             shutil.rmtree(backup_path)
     else:

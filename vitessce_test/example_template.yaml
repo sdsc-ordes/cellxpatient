@@ -3,7 +3,7 @@ description:
 
 # Add all datasets to be used
 datasets:
-  <dataset_id>:   # to differentiate between datasets
+  <dataset_id>: # to differentiate between datasets
     dataset_path:
     type: anndata_zarr or spatialdata_zarr
 
@@ -12,16 +12,15 @@ datasets:
     subsets_only: true
     subsets:
       <subset_A>:
-        column:    # column name to define the subset
+        column: # column name to define the subset
         value:
       <subset_B>:
-        column:    # column name to define the subset
+        column: # column name to define the subset
         value:
     data:
       # only need to specify if different from the default
       obs_set_paths: [obs/pred_cell_type_filtered]
       obs_set_names: [Cell Type]
-
 
 views:
   <view_type_1>:
@@ -32,14 +31,11 @@ views:
         grid_offset_xy: [0, 0]
       <subset_B>:
         grid_offset_xy: [6, 0]
-    grid_xywh:
-      [0, 0, 6, 2]
+    grid_xywh: [0, 0, 6, 2]
     props:
-      <props_name>:
-        <props_value>
+      <props_name>: <props_value>
 
 coordination:
-
   # Coordination spaces define shared elements (e.g. coloring) that should be coordinated
   # across multiple datasets and views
   <space_id>:
@@ -59,15 +55,15 @@ coordination:
         values:
           <coord_type>: <value>
         views:
-        - <spatial_view_type>
+          - <spatial_view_type>
       segmentation_layer:
         # nucleus or cell channel
         <channel_type>:
-          inherit: true       # if inherit is true or inherit_values is specified,
-          inherit_values:     # the corresponding coord values are inherited from the parent scope
+          inherit: true # if inherit is true or inherit_values is specified,
+          inherit_values: # the corresponding coord values are inherited from the parent scope
             values:
               <coord_type>: <value>
           values:
             <coord_type>: <value>
         views:
-        - <spatial_view_type>
+          - <spatial_view_type>
