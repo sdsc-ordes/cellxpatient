@@ -1,13 +1,15 @@
 import shutil
-from scipy.sparse import csc_matrix, issparse
-import numpy as np
-import pandas as pd
-import anndata as ad
-from spatialdata_io import xenium
 from pathlib import Path
 from typing import Any
 
+import anndata as ad
+import numpy as np
+import pandas as pd
+from scipy.sparse import csc_matrix, issparse
+from spatialdata_io import xenium
+
 from vitessce_test.settings import DATA_DIR
+
 
 def write_with_backup(
     output_path: Path,
@@ -33,7 +35,7 @@ def write_with_backup(
 def make_sparse_matrix(
     adata: ad.AnnData
 ) -> None:
-    if not (issparse(adata.X) and adata.X.format == "csc"):                           # pyright: ignore[reportUnknownMemberType]
+    if not (issparse(adata.X) and adata.X.format == "csc"):                           # pyright: ignore[reportUnknownMemberType, reportOptionalMemberAccess, reportAttributeAccessIssue]
         adata.X = csc_matrix(adata.X)                   # pyright: ignore[reportUnknownMemberType,reportUnknownArgumentType]
 
 
@@ -111,16 +113,16 @@ def prepare_subset(
         raise ValueError(f"Condition column not found: {condition_col}")
 
     mask = adata.obs[condition_col] == condition_name            # pyright: ignore[reportUnknownVariableType]
-    if not mask.any():
+    if not mask.any():                                           # pyright: ignore[reportUnknownMemberType]
         raise ValueError(f"No cells with condition {condition_col} == '{condition_name}'.\nPossible values: " + ", ".join(adata.obs[condition_col].unique()))
-    subset_adata = adata[mask].copy()
+    subset_adata = adata[mask].copy()                            # pyright: ignore[reportUnknownMemberType]
 
-    make_sparse_matrix(subset_adata)
+    make_sparse_matrix(subset_adata)                             # pyright: ignore[reportArgumentType]
 
     if output_path.exists() and options.get("overwrite", False):
-        write_with_backup(output_path, subset_adata.write_zarr)
+        write_with_backup(output_path, subset_adata.write_zarr)  # pyright: ignore[reportUnknownMemberType, reportAttributeAccessIssue]
     else:
-        subset_adata.write_zarr(
+        subset_adata.write_zarr(                                  # pyright: ignore[reportUnknownMemberType, reportAttributeAccessIssue]
             store=output_path
         )
 
@@ -163,7 +165,7 @@ def prepare_anndata(
         prepare_subset(source_path, final_output_path, options)
     else:
         adata = clean_up_anndata(source_path)
-        write_with_backup(final_output_path, adata.write_zarr)
+        write_with_backup(final_output_path, adata.write_zarr)          # pyright: ignore[reportUnknownMemberType]
 
 
 def prepare_xenium(

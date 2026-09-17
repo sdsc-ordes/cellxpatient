@@ -1,9 +1,7 @@
 import argparse
 from pathlib import Path
 
-from vitessce_test import build
-from vitessce_test import serve
-from vitessce_test import preprocess
+from vitessce_test import build, preprocess, serve
 
 
 def existing_file(

@@ -20,8 +20,6 @@ from vitessce.config import (
 from vitessce_test.datasets import prepare_datasets
 from vitessce_test.settings import DATA_DIR, DATA_URL
 
-
-
 VIEW_MAPPING = {
     "scatterplot": cm.SCATTERPLOT,
     "heatmap": cm.HEATMAP,

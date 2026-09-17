@@ -12,7 +12,6 @@ from vitessce.config import (
 
 from vitessce_test.settings import DATA_DIR, DATA_URL
 
-
 ANNDATA_DEFAULTS = {
     "obs_embedding_paths": ["obsm/X_umap"],
     "obs_embedding_names": ["UMAP"],
