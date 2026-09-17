@@ -50,7 +50,7 @@ def save_config(
 
     config_path = template_path.parent / (template_path.stem.replace("_template", "") + "_view.json")
     with open(config_path, "w") as f:
-        json.dump(config_dict, f)
+        json.dump(config_dict, f, indent=2)
     return config_path
 
 
@@ -218,7 +218,8 @@ def build_config(
         base_dir=DATA_DIR)
 
     # Add to vitessce config all datasets to display
-    vitessce_datasets = prepare_datasets(vc, template, template_path)
+    datasets = template["datasets"]
+    vitessce_datasets = prepare_datasets(vc, datasets)
 
     # Add views to vitessce config
     views = template["views"]
@@ -231,7 +232,7 @@ def build_config(
                 raise ValueError(f"Grid indent not found for view {view} and dataset {vitessce_dataset_name}")
             if "grid_xywh" in views[view]:
                 grid = views[view]["grid_xywh"]
-                grid_offset = views[view]["datasets"][vitessce_dataset_name].get("grid_offset_xy", [0, 0])
+                grid_offset = datasets[vitessce_dataset_name].get("grid_offset_xy", [0, 0])
             else:
                 grid = views[view]["datasets"][vitessce_dataset_name]["grid_xywh"]
                 grid_offset = [0, 0]

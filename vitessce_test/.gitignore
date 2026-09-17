@@ -1,5 +1,10 @@
 # Heavy data
-data/
+data/raw/
+*.zarr
+*.h5ad
 
 # Notebook checkpoints
 .ipynb_checkpoints/
+
+# Python cache
+__pycache__/

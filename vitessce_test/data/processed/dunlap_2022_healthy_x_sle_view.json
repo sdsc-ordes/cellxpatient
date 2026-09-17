@@ -1,0 +1,298 @@
+{
+  "version": "1.0.17",
+  "name": "Dunlap 2022 - Healthy vs SLE",
+  "description": "Comparison of gene expression between Healthy and SLE scRNA-seq data",
+  "datasets": [
+    {
+      "uid": "A",
+      "name": "dunlap_2022_healthy",
+      "files": [
+        {
+          "fileType": "anndata.zarr",
+          "url": "/data/processed/dunlap_2022_corrected_healthy.zarr",
+          "options": {
+            "obsEmbedding": [
+              {
+                "path": "obsm/X_umap",
+                "dims": [
+                  0,
+                  1
+                ],
+                "embeddingType": "UMAP"
+              }
+            ],
+            "obsSets": [
+              {
+                "name": "Cell Type",
+                "path": "obs/pred_cell_type_filtered"
+              }
+            ],
+            "obsFeatureMatrix": {
+              "path": "X",
+              "initialFeatureFilterPath": "var/highly_variable"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "uid": "B",
+      "name": "dunlap_2022_sle",
+      "files": [
+        {
+          "fileType": "anndata.zarr",
+          "url": "/data/processed/dunlap_2022_corrected_sle.zarr",
+          "options": {
+            "obsEmbedding": [
+              {
+                "path": "obsm/X_umap",
+                "dims": [
+                  0,
+                  1
+                ],
+                "embeddingType": "UMAP"
+              }
+            ],
+            "obsSets": [
+              {
+                "name": "Cell Type",
+                "path": "obs/pred_cell_type_filtered"
+              }
+            ],
+            "obsFeatureMatrix": {
+              "path": "X",
+              "initialFeatureFilterPath": "var/highly_variable"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "coordinationSpace": {
+    "dataset": {
+      "A": "A",
+      "B": "B"
+    },
+    "embeddingType": {
+      "A": "UMAP",
+      "B": "UMAP"
+    },
+    "obsType": {
+      "A": "cell",
+      "B": "cell"
+    },
+    "obsSetSelection": {
+      "A": null,
+      "B": null
+    },
+    "obsHighlight": {
+      "A": null,
+      "B": null
+    },
+    "featureType": {
+      "A": "gene"
+    },
+    "featureValueType": {
+      "A": "expression"
+    },
+    "featureHighlight": {
+      "A": null
+    },
+    "featureSelection": {
+      "A": [
+        "FXYD3"
+      ]
+    }
+  },
+  "layout": [
+    {
+      "component": "description",
+      "coordinationScopes": {
+        "dataset": "A"
+      },
+      "x": 0,
+      "y": 0,
+      "w": 6,
+      "h": 2,
+      "props": {
+        "description": "Comparison of gene expression between Healthy and SLE scRNA-seq data"
+      }
+    },
+    {
+      "component": "scatterplot",
+      "coordinationScopes": {
+        "dataset": "A",
+        "embeddingType": "A",
+        "obsType": "A",
+        "obsSetSelection": "A",
+        "obsHighlight": "A",
+        "featureType": "A",
+        "featureValueType": "A",
+        "featureHighlight": "A",
+        "featureSelection": "A"
+      },
+      "x": 0,
+      "y": 2,
+      "w": 6,
+      "h": 4
+    },
+    {
+      "component": "obsSets",
+      "coordinationScopes": {
+        "dataset": "A",
+        "obsType": "A",
+        "obsSetSelection": "A",
+        "obsHighlight": "A"
+      },
+      "x": 0,
+      "y": 6,
+      "w": 3,
+      "h": 4
+    },
+    {
+      "component": "obsSetSizes",
+      "coordinationScopes": {
+        "dataset": "A",
+        "obsType": "A",
+        "obsSetSelection": "A",
+        "obsHighlight": "A"
+      },
+      "x": 3,
+      "y": 6,
+      "w": 3,
+      "h": 4
+    },
+    {
+      "component": "heatmap",
+      "coordinationScopes": {
+        "dataset": "A",
+        "obsType": "A",
+        "obsSetSelection": "A",
+        "obsHighlight": "A",
+        "featureType": "A",
+        "featureValueType": "A",
+        "featureHighlight": "A",
+        "featureSelection": "A"
+      },
+      "x": 0,
+      "y": 10,
+      "w": 6,
+      "h": 4,
+      "props": {
+        "transpose": true
+      }
+    },
+    {
+      "component": "obsSetFeatureValueDistribution",
+      "coordinationScopes": {
+        "dataset": "A",
+        "obsType": "A",
+        "obsSetSelection": "A",
+        "obsHighlight": "A",
+        "featureType": "A",
+        "featureValueType": "A",
+        "featureHighlight": "A",
+        "featureSelection": "A"
+      },
+      "x": 0,
+      "y": 14,
+      "w": 6,
+      "h": 4
+    },
+    {
+      "component": "description",
+      "coordinationScopes": {
+        "dataset": "B"
+      },
+      "x": 6,
+      "y": 0,
+      "w": 6,
+      "h": 2,
+      "props": {
+        "description": "Comparison of gene expression between Healthy and SLE scRNA-seq data"
+      }
+    },
+    {
+      "component": "scatterplot",
+      "coordinationScopes": {
+        "dataset": "B",
+        "embeddingType": "B",
+        "obsType": "B",
+        "obsSetSelection": "B",
+        "obsHighlight": "B",
+        "featureType": "A",
+        "featureValueType": "A",
+        "featureHighlight": "A",
+        "featureSelection": "A"
+      },
+      "x": 6,
+      "y": 2,
+      "w": 6,
+      "h": 4
+    },
+    {
+      "component": "obsSets",
+      "coordinationScopes": {
+        "dataset": "B",
+        "obsType": "B",
+        "obsSetSelection": "B",
+        "obsHighlight": "B"
+      },
+      "x": 6,
+      "y": 6,
+      "w": 3,
+      "h": 4
+    },
+    {
+      "component": "obsSetSizes",
+      "coordinationScopes": {
+        "dataset": "B",
+        "obsType": "B",
+        "obsSetSelection": "B",
+        "obsHighlight": "B"
+      },
+      "x": 9,
+      "y": 6,
+      "w": 3,
+      "h": 4
+    },
+    {
+      "component": "heatmap",
+      "coordinationScopes": {
+        "dataset": "B",
+        "obsType": "B",
+        "obsSetSelection": "B",
+        "obsHighlight": "B",
+        "featureType": "A",
+        "featureValueType": "A",
+        "featureHighlight": "A",
+        "featureSelection": "A"
+      },
+      "x": 6,
+      "y": 10,
+      "w": 6,
+      "h": 4,
+      "props": {
+        "transpose": true
+      }
+    },
+    {
+      "component": "obsSetFeatureValueDistribution",
+      "coordinationScopes": {
+        "dataset": "B",
+        "obsType": "B",
+        "obsSetSelection": "B",
+        "obsHighlight": "B",
+        "featureType": "A",
+        "featureValueType": "A",
+        "featureHighlight": "A",
+        "featureSelection": "A"
+      },
+      "x": 6,
+      "y": 14,
+      "w": 6,
+      "h": 4
+    }
+  ],
+  "initStrategy": "auto"
+}

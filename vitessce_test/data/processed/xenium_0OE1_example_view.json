@@ -1,0 +1,357 @@
+{
+  "version": "1.0.17",
+  "name": "Xenium 0OE1 Example - Spatial Data",
+  "description": "Visualization of gene expression in spatial transcriptomics",
+  "datasets": [
+    {
+      "uid": "A",
+      "name": "xenium_0OE1",
+      "files": [
+        {
+          "fileType": "shapes.spatialdata.zarr",
+          "url": "/data/processed/0OE1_xenium_example.zarr",
+          "options": {
+            "path": "shapes/nucleus_boundaries",
+            "tablePath": "tables/table"
+          },
+          "coordinationValues": {
+            "obsType": "nucleus",
+            "fileUid": "nucleus"
+          }
+        },
+        {
+          "fileType": "shapes.spatialdata.zarr",
+          "url": "/data/processed/0OE1_xenium_example.zarr",
+          "options": {
+            "path": "shapes/cell_boundaries",
+            "tablePath": "tables/table"
+          },
+          "coordinationValues": {
+            "obsType": "cell",
+            "fileUid": "cell"
+          }
+        },
+        {
+          "fileType": "spatialdata.zarr",
+          "url": "/data/processed/0OE1_xenium_example.zarr",
+          "options": {
+            "obsFeatureMatrix": {
+              "path": "tables/table/X"
+            },
+            "obsSets": {
+              "obsSets": [
+                {
+                  "name": "Clusters",
+                  "path": "tables/table/obs/clusters"
+                }
+              ],
+              "tablePath": "tables/table"
+            },
+            "image": {
+              "path": "images/morphology_focus"
+            },
+            "obsEmbedding": [
+              {
+                "path": "tables/table/obsm/X_umap",
+                "dims": [
+                  0,
+                  1
+                ],
+                "embeddingType": "UMAP"
+              }
+            ]
+          },
+          "coordinationValues": {
+            "obsType": "cell",
+            "featureType": "gene",
+            "featureValueType": "expression"
+          }
+        }
+      ]
+    }
+  ],
+  "coordinationSpace": {
+    "dataset": {
+      "A": "A"
+    },
+    "embeddingType": {
+      "A": "UMAP"
+    },
+    "featureSelection": {
+      "A": null
+    },
+    "featureType": {
+      "A": "gene"
+    },
+    "featureValueColormapRange": {
+      "A": [
+        0.0,
+        0.5
+      ]
+    },
+    "featureValueType": {
+      "A": "expression"
+    },
+    "obsColorEncoding": {
+      "A": "geneSelection",
+      "init_A_obsSegmentations_0": "spatialChannelColor"
+    },
+    "obsSetSelection": {
+      "A": null
+    },
+    "obsType": {
+      "A": "cell",
+      "init_A_obsSegmentations_0": "nucleus"
+    },
+    "imageLayer": {
+      "init_A_image_0": "__dummy__"
+    },
+    "spatialLayerColormap": {
+      "init_A_image_0": "viridis"
+    },
+    "metaCoordinationScopes": {
+      "init_A_image_0": {
+        "imageLayer": [
+          "init_A_image_0"
+        ]
+      },
+      "init_A_obsSegmentations_0": {
+        "segmentationLayer": [
+          "init_A_obsSegmentations_0",
+          "init_A_obsSegmentations_1"
+        ]
+      }
+    },
+    "metaCoordinationScopesBy": {
+      "init_A_image_0": {
+        "imageLayer": {
+          "spatialLayerColormap": {
+            "init_A_image_0": "init_A_image_0"
+          }
+        }
+      },
+      "init_A_obsSegmentations_0": {
+        "segmentationLayer": {
+          "fileUid": {
+            "init_A_obsSegmentations_0": "init_A_obsSegmentations_0",
+            "init_A_obsSegmentations_1": "init_A_obsSegmentations_1"
+          },
+          "segmentationChannel": {
+            "init_A_obsSegmentations_0": [
+              "init_A_obsSegmentations_0"
+            ],
+            "init_A_obsSegmentations_1": [
+              "init_A_obsSegmentations_1"
+            ]
+          }
+        },
+        "segmentationChannel": {
+          "spatialSegmentationFilled": {
+            "init_A_obsSegmentations_0": "init_A_obsSegmentations_0",
+            "init_A_obsSegmentations_1": "init_A_obsSegmentations_1"
+          },
+          "featureSelection": {
+            "init_A_obsSegmentations_0": "A"
+          },
+          "featureType": {
+            "init_A_obsSegmentations_0": "A"
+          },
+          "featureValueColormapRange": {
+            "init_A_obsSegmentations_0": "A"
+          },
+          "featureValueType": {
+            "init_A_obsSegmentations_0": "A"
+          },
+          "obsColorEncoding": {
+            "init_A_obsSegmentations_0": "A",
+            "init_A_obsSegmentations_1": "init_A_obsSegmentations_0"
+          },
+          "obsSetSelection": {
+            "init_A_obsSegmentations_0": "A"
+          },
+          "obsType": {
+            "init_A_obsSegmentations_0": "A",
+            "init_A_obsSegmentations_1": "init_A_obsSegmentations_0"
+          },
+          "spatialChannelColor": {
+            "init_A_obsSegmentations_1": "init_A_obsSegmentations_0"
+          }
+        }
+      }
+    },
+    "segmentationLayer": {
+      "init_A_obsSegmentations_0": "__dummy__",
+      "init_A_obsSegmentations_1": "__dummy__"
+    },
+    "fileUid": {
+      "init_A_obsSegmentations_0": "cell",
+      "init_A_obsSegmentations_1": "nucleus"
+    },
+    "segmentationChannel": {
+      "init_A_obsSegmentations_0": "__dummy__",
+      "init_A_obsSegmentations_1": "__dummy__"
+    },
+    "spatialSegmentationFilled": {
+      "init_A_obsSegmentations_0": false,
+      "init_A_obsSegmentations_1": true
+    },
+    "spatialChannelColor": {
+      "init_A_obsSegmentations_0": [
+        0,
+        0,
+        139
+      ]
+    }
+  },
+  "layout": [
+    {
+      "component": "description",
+      "coordinationScopes": {
+        "dataset": "A"
+      },
+      "x": 0,
+      "y": 0,
+      "w": 2,
+      "h": 1,
+      "props": {
+        "description": "Example view of spatial data (Xenium 0OE1)"
+      }
+    },
+    {
+      "component": "featureList",
+      "coordinationScopes": {
+        "dataset": "A",
+        "featureSelection": "A",
+        "featureType": "A",
+        "featureValueColormapRange": "A",
+        "featureValueType": "A",
+        "obsColorEncoding": "A",
+        "obsSetSelection": "A",
+        "obsType": "A"
+      },
+      "x": 0,
+      "y": 8,
+      "w": 2,
+      "h": 3
+    },
+    {
+      "component": "heatmap",
+      "coordinationScopes": {
+        "dataset": "A",
+        "featureSelection": "A",
+        "featureType": "A",
+        "featureValueColormapRange": "A",
+        "featureValueType": "A",
+        "obsColorEncoding": "A",
+        "obsSetSelection": "A",
+        "obsType": "A"
+      },
+      "x": 2,
+      "y": 6,
+      "w": 5,
+      "h": 6,
+      "props": {
+        "transpose": true
+      }
+    },
+    {
+      "component": "layerControllerBeta",
+      "coordinationScopes": {
+        "dataset": "A",
+        "metaCoordinationScopes": [
+          "init_A_image_0",
+          "init_A_obsSegmentations_0"
+        ],
+        "metaCoordinationScopesBy": [
+          "init_A_image_0",
+          "init_A_obsSegmentations_0"
+        ]
+      },
+      "x": 0,
+      "y": 4,
+      "w": 2,
+      "h": 4
+    },
+    {
+      "component": "obsSets",
+      "coordinationScopes": {
+        "dataset": "A",
+        "featureSelection": "A",
+        "featureType": "A",
+        "featureValueColormapRange": "A",
+        "featureValueType": "A",
+        "obsColorEncoding": "A",
+        "obsSetSelection": "A",
+        "obsType": "A"
+      },
+      "x": 0,
+      "y": 6,
+      "w": 2,
+      "h": 3
+    },
+    {
+      "component": "scatterplot",
+      "coordinationScopes": {
+        "dataset": "A",
+        "embeddingType": "A",
+        "featureSelection": "A",
+        "featureType": "A",
+        "featureValueColormapRange": "A",
+        "featureValueType": "A",
+        "obsColorEncoding": "A",
+        "obsSetSelection": "A",
+        "obsType": "A"
+      },
+      "x": 7,
+      "y": 0,
+      "w": 5,
+      "h": 6
+    },
+    {
+      "component": "spatialBeta",
+      "coordinationScopes": {
+        "dataset": "A",
+        "metaCoordinationScopes": [
+          "init_A_image_0",
+          "init_A_obsSegmentations_0"
+        ],
+        "metaCoordinationScopesBy": [
+          "init_A_image_0",
+          "init_A_obsSegmentations_0"
+        ]
+      },
+      "x": 2,
+      "y": 0,
+      "w": 5,
+      "h": 6
+    },
+    {
+      "component": "status",
+      "coordinationScopes": {
+        "dataset": "A"
+      },
+      "x": 0,
+      "y": 1,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "component": "obsSetFeatureValueDistribution",
+      "coordinationScopes": {
+        "dataset": "A",
+        "featureSelection": "A",
+        "featureType": "A",
+        "featureValueColormapRange": "A",
+        "featureValueType": "A",
+        "obsColorEncoding": "A",
+        "obsSetSelection": "A",
+        "obsType": "A"
+      },
+      "x": 7,
+      "y": 6,
+      "w": 5,
+      "h": 6
+    }
+  ],
+  "initStrategy": "auto"
+}
