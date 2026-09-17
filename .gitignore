@@ -29,4 +29,4 @@
 .DS_Store
 
 # Data
-data/
+data/raw/*
