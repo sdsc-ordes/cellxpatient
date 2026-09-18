@@ -32,17 +32,25 @@
 
       toolchains.vitessce = [
         {
+          packages = [
+            pkgs.nodejs_24
+          ];
+
           # We use `devenv` language support since, it's
           # pretty involved to setup a python environment.
           languages.python = {
             enable = true;
-            venv.enable = true;
+            venv = {
+              enable = true;
+
+            };
 
             # Heavy modules relying (CYTHON, ext. shared libraries etc)
             # should be built by Nix.
             package = pkgs.python312.withPackages (p: [
               p.numpy
               p.matplotlib
+              p.tkinter
             ]);
 
             uv = {

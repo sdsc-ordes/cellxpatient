@@ -1,0 +1,110 @@
+name: Xenium 0OE1 Example - Spatial Data
+description: Visualization of gene expression in spatial transcriptomics
+
+datasets:
+  xenium_0OE1:
+    dataset_path: 0OE1_xenium_example.zarr
+    type: spatialdata_zarr
+
+    data:
+      obs_embedding_names: [UMAP]
+      obs_embedding_paths: [tables/table/obsm/X_umap]
+      obs_seg_paths: [shapes/nucleus_boundaries, shapes/cell_boundaries]
+      obs_set_names: [Clusters]
+      obs_set_paths: [tables/table/obs/clusters]
+
+
+
+views:
+  description:
+    datasets:
+      - xenium_0OE1
+    grid_xywh: [0, 0, 2, 1]
+    props:
+      description: Example view of spatial data (Xenium 0OE1)
+
+  feature_list:
+    datasets:
+      - xenium_0OE1
+    grid_xywh: [0, 6, 2, 2]
+
+  heatmap:
+    datasets:
+      - xenium_0OE1
+    grid_xywh: [2, 4, 5, 4]
+    props:
+      transpose: true
+
+  layer_controller:
+    datasets:
+      - xenium_0OE1
+    grid_xywh: [0, 2, 2, 2]
+
+  obs_sets:
+    datasets:
+      - xenium_0OE1
+    grid_xywh: [0, 4, 2, 2]
+
+  scatterplot:
+    datasets:
+      - xenium_0OE1
+    grid_xywh: [7, 0, 5, 4]
+
+  spatial:
+    datasets:
+      - xenium_0OE1
+    grid_xywh: [2, 0, 5, 4]
+
+  status:
+    datasets:
+      - xenium_0OE1
+    grid_xywh: [0, 1, 2, 1]
+
+  violin:
+    datasets:
+      - xenium_0OE1
+    grid_xywh: [7, 4, 5, 4]
+
+
+coordination:
+  global:
+    datasets:
+    - xenium_0OE1
+
+    views:
+    - obs_sets
+    - scatterplot
+    - feature_list
+    - heatmap
+    - violin
+
+    values:
+      featureSelection: null
+      featureType: gene
+      featureValueColormapRange: [0.0, 0.5]
+      featureValueType: expression
+      obsColorEncoding: geneSelection
+      obsSetSelection: null
+      obsType: cell
+
+    per_layer:
+      image_layer:
+        values:
+          spatialLayerColormap: viridis
+        views:
+        - spatial
+        - layer_controller
+      segmentation_layer:
+        cell_channel:
+          inherit: true
+          values:
+            spatialSegmentationFilled: false
+        nucleus_channel:
+          values:
+            obsColorEncoding: spatialChannelColor
+            obsType: nucleus
+            spatialChannelColor: [0,0,139]
+            spatialSegmentationFilled: true
+        views:
+        - spatial
+        - layer_controller

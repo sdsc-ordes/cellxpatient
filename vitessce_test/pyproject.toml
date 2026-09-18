@@ -14,14 +14,20 @@ dependencies = [
     "pydantic>=2.10.6",
     "pytest>=8.4.2",
     "vitessce",
-    "react"
+    "spatialdata-io",
+    "spatialdata>=0.8.0",
+    "fastapi"
 ]
 [dependency-groups]
 dev = [
     "notebook>=7.3.2",
     "jupyterlab",
-    "easy_vitessce"
+    "easy_vitessce",
+    "ruff"
 ]
+
+[project.scripts]
+vitessce-test = "vitessce_test.cli:main"
 
 [build-system]
 requires = ["hatchling"]
@@ -37,6 +43,10 @@ exclude = [
     ".output",
 ]
 
+[tool.pyright]
+reportMissingTypeStubs = false
+reportExplicitAny = false
+reportAny = false
 
 [tool.ruff]
 extend-include = ["*.ipynb"]
