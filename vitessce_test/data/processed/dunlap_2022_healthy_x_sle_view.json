@@ -1,4 +1,7 @@
 {
+  "app": {
+    "height": 1800
+  },
   "version": "1.0.17",
   "name": "Dunlap 2022 - Healthy vs SLE",
   "description": "Comparison of gene expression between Healthy and SLE scRNA-seq data",

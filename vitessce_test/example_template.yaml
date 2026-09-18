@@ -6,7 +6,7 @@ datasets:
   <dataset_id>: # to differentiate between datasets
     dataset_path:
     type: anndata_zarr or spatialdata_zarr
-    gird_offset: [0, 0]
+    gird_offset_xy: [0, 0]
     data:
       # only need to specify if different from the default
       obs_set_paths: [obs/pred_cell_type_filtered]

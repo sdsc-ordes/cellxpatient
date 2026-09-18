@@ -26,34 +26,34 @@ views:
   feature_list:
     datasets:
       - xenium_0OE1
-    grid_xywh: [0, 8, 2, 3]
+    grid_xywh: [0, 6, 2, 2]
 
   heatmap:
     datasets:
       - xenium_0OE1
-    grid_xywh: [2, 6, 5, 6]
+    grid_xywh: [2, 4, 5, 4]
     props:
       transpose: true
 
   layer_controller:
     datasets:
       - xenium_0OE1
-    grid_xywh: [0,4,2,4]
+    grid_xywh: [0, 2, 2, 2]
 
   obs_sets:
     datasets:
       - xenium_0OE1
-    grid_xywh: [0, 6, 2, 3]
+    grid_xywh: [0, 4, 2, 2]
 
   scatterplot:
     datasets:
       - xenium_0OE1
-    grid_xywh: [7, 0, 5, 6]
+    grid_xywh: [7, 0, 5, 4]
 
   spatial:
     datasets:
       - xenium_0OE1
-    grid_xywh: [2, 0, 5, 6]
+    grid_xywh: [2, 0, 5, 4]
 
   status:
     datasets:
@@ -63,7 +63,7 @@ views:
   violin:
     datasets:
       - xenium_0OE1
-    grid_xywh: [7, 6, 5, 6]
+    grid_xywh: [7, 4, 5, 4]
 
 
 coordination:

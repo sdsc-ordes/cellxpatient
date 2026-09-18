@@ -230,9 +230,9 @@
         "obsType": "A"
       },
       "x": 0,
-      "y": 8,
+      "y": 6,
       "w": 2,
-      "h": 3
+      "h": 2
     },
     {
       "component": "heatmap",
@@ -247,9 +247,9 @@
         "obsType": "A"
       },
       "x": 2,
-      "y": 6,
+      "y": 4,
       "w": 5,
-      "h": 6,
+      "h": 4,
       "props": {
         "transpose": true
       }
@@ -268,9 +268,9 @@
         ]
       },
       "x": 0,
-      "y": 4,
+      "y": 2,
       "w": 2,
-      "h": 4
+      "h": 2
     },
     {
       "component": "obsSets",
@@ -285,9 +285,9 @@
         "obsType": "A"
       },
       "x": 0,
-      "y": 6,
+      "y": 4,
       "w": 2,
-      "h": 3
+      "h": 2
     },
     {
       "component": "scatterplot",
@@ -305,7 +305,7 @@
       "x": 7,
       "y": 0,
       "w": 5,
-      "h": 6
+      "h": 4
     },
     {
       "component": "spatialBeta",
@@ -323,7 +323,7 @@
       "x": 2,
       "y": 0,
       "w": 5,
-      "h": 6
+      "h": 4
     },
     {
       "component": "status",
@@ -348,9 +348,9 @@
         "obsType": "A"
       },
       "x": 7,
-      "y": 6,
+      "y": 4,
       "w": 5,
-      "h": 6
+      "h": 4
     }
   ],
   "initStrategy": "auto"
