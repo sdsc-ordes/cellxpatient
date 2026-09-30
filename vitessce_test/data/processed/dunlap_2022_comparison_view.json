@@ -1,0 +1,232 @@
+{
+  "version": "1.0.17",
+  "name": "Dunlap 2022 scRNA dataset",
+  "description": "Investigation of comparison plots at patient/sample metadata",
+  "datasets": [
+    {
+      "uid": "A",
+      "name": "dunlap_2022",
+      "files": [
+        {
+          "fileType": "comparisonMetadata.anndata.zarr",
+          "url": "/data/processed/dunlap_2022_comparison.zarr",
+          "options": {
+            "path": "uns/comparison_metadata"
+          },
+          "coordinationValues": {
+            "obsType": "cell",
+            "sampleType": "sample"
+          }
+        },
+        {
+          "fileType": "sampleSets.anndata.zarr",
+          "url": "/data/processed/dunlap_2022_comparison.zarr/obs",
+          "options": {
+            "sampleSets": []
+          },
+          "coordinationValues": {
+            "sampleType": "sample"
+          }
+        },
+        {
+          "fileType": "sampleEdges.anndata.zarr",
+          "url": "/data/processed/dunlap_2022.zarr",
+          "options": {
+            "path": "obs/sample"
+          },
+          "coordinationValues": {
+            "obsType": "cell",
+            "sampleType": "sample"
+          }
+        },
+        {
+          "fileType": "anndata.zarr",
+          "url": "/data/processed/dunlap_2022.zarr",
+          "options": {
+            "obsEmbedding": [
+              {
+                "path": "obsm/X_umap",
+                "dims": [
+                  0,
+                  1
+                ],
+                "embeddingType": "UMAP"
+              }
+            ],
+            "obsSets": [
+              {
+                "name": "Cell Type",
+                "path": "obs/pred_cell_type_filtered"
+              }
+            ],
+            "obsFeatureMatrix": {
+              "path": "X",
+              "initialFeatureFilterPath": "var/highly_variable"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "coordinationSpace": {
+    "dataset": {
+      "A": "A"
+    },
+    "embeddingType": {
+      "A": "UMAP"
+    },
+    "obsType": {
+      "A": "cell"
+    },
+    "featureType": {
+      "A": "gene"
+    },
+    "featureValueType": {
+      "A": "expression"
+    },
+    "featureSelection": {
+      "A": []
+    },
+    "sampleType": {
+      "A": "sample"
+    },
+    "sampleSetSelection": {
+      "A": []
+    },
+    "sampleSetFilter": {
+      "A": []
+    }
+  },
+  "layout": [
+    {
+      "component": "sampleSetPairManager",
+      "coordinationScopes": {
+        "dataset": "A",
+        "obsType": "A",
+        "featureType": "A",
+        "featureValueType": "A",
+        "featureSelection": "A",
+        "sampleType": "A",
+        "sampleSetSelection": "A",
+        "sampleSetFilter": "A"
+      },
+      "x": 0,
+      "y": 0,
+      "w": 12,
+      "h": 2
+    },
+    {
+      "component": "scatterplot",
+      "coordinationScopes": {
+        "dataset": "A",
+        "embeddingType": "A",
+        "obsType": "A",
+        "featureType": "A",
+        "featureValueType": "A",
+        "featureSelection": "A",
+        "sampleType": "A",
+        "sampleSetSelection": "A",
+        "sampleSetFilter": "A"
+      },
+      "x": 4,
+      "y": 2,
+      "w": 8,
+      "h": 4
+    },
+    {
+      "component": "obsSets",
+      "coordinationScopes": {
+        "dataset": "A",
+        "obsType": "A",
+        "featureType": "A",
+        "featureValueType": "A",
+        "featureSelection": "A",
+        "sampleType": "A",
+        "sampleSetSelection": "A",
+        "sampleSetFilter": "A"
+      },
+      "x": 0,
+      "y": 2,
+      "w": 4,
+      "h": 4
+    },
+    {
+      "component": "dotPlot",
+      "coordinationScopes": {
+        "dataset": "A",
+        "obsType": "A",
+        "featureType": "A",
+        "featureValueType": "A",
+        "featureSelection": "A",
+        "sampleType": "A",
+        "sampleSetSelection": "A",
+        "sampleSetFilter": "A"
+      },
+      "x": 4,
+      "y": 6,
+      "w": 8,
+      "h": 4
+    },
+    {
+      "component": "featureList",
+      "coordinationScopes": {
+        "dataset": "A",
+        "obsType": "A",
+        "featureType": "A",
+        "featureValueType": "A",
+        "featureSelection": "A",
+        "sampleType": "A",
+        "sampleSetSelection": "A",
+        "sampleSetFilter": "A"
+      },
+      "x": 0,
+      "y": 6,
+      "w": 4,
+      "h": 4,
+      "props": {
+        "allowMultipleSelect": true
+      }
+    },
+    {
+      "component": "heatmap",
+      "coordinationScopes": {
+        "dataset": "A",
+        "obsType": "A",
+        "featureType": "A",
+        "featureValueType": "A",
+        "featureSelection": "A",
+        "sampleType": "A",
+        "sampleSetSelection": "A",
+        "sampleSetFilter": "A"
+      },
+      "x": 6,
+      "y": 10,
+      "w": 6,
+      "h": 4,
+      "props": {
+        "transpose": true
+      }
+    },
+    {
+      "component": "obsSetFeatureValueDistribution",
+      "coordinationScopes": {
+        "dataset": "A",
+        "obsType": "A",
+        "featureType": "A",
+        "featureValueType": "A",
+        "featureSelection": "A",
+        "sampleType": "A",
+        "sampleSetSelection": "A",
+        "sampleSetFilter": "A"
+      },
+      "x": 0,
+      "y": 10,
+      "w": 6,
+      "h": 4
+    }
+  ],
+  "initStrategy": "auto",
+  "app": {
+    "height": 1600
+  }
+}

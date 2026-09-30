@@ -1,6 +1,10 @@
 name: Dunlap 2022 - Healthy vs SLE
 description: Comparison of gene expression between Healthy and SLE scRNA-seq data
 
+custom:
+  app:
+    height: 1600
+
 # Add all datasets to be used
 datasets:
   dunlap_2022_healthy:

@@ -1,6 +1,11 @@
 name:
 description:
 
+# To add custom config relative to react app
+custom:
+  app:
+    height: 1000
+
 # Add all datasets to be used
 datasets:
   <dataset_id>: # to differentiate between datasets
@@ -11,6 +16,21 @@ datasets:
       # only need to specify if different from the default
       obs_set_paths: [obs/pred_cell_type_filtered]
       obs_set_names: [Cell Type]
+
+    # Add metadata preparation for sample pair comparison
+    sample_comparison:
+      sample_id_col: sample
+      sample_grouping_cols: [SampleColA, SampleColB]    # Sample/Patient level metadata column, automatically creates all possible pairs among the category
+      sample_pairs: [                                   # Alternative: manual define sample pairs (not one to many)
+        [
+          SampleColA,
+          [Case_in_SampleColA, Control_in_SampleColA]
+        ],
+        [
+          SampleColB,
+          [Case_in_SampleColB, Control_in_SampleColB]
+        ]
+      ]
 
 views:
   <view_type_1>:
