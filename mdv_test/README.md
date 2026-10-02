@@ -36,7 +36,7 @@ just nix develop mdv
 The current setup has been tested with both a spatial and scRNA dataset:
 
 - the **Xenium 0OE1 example** dataset provided by Antonin Thiebault
-- the **scRNA-seq `.h5ad`** dataset of the 
+- the **scRNA-seq `.h5ad`** dataset of the Dunlap et al. 2022 paper (available on the [Skin Science Foundation BioHub](https://biohub.skinsciencefoundation.org/download/Dunlap_2022_all_final_label_transfer_swapped.h5ad)) 
 
 In both cases, `mdvtools` is used to convert the input data into an MDV project directory. This directory is then archived as a .zip file, which can be imported directly into the MDV web application.
 
