@@ -20,17 +20,7 @@ datasets:
     # Add metadata preparation for sample pair comparison
     sample_comparison:
       sample_id_col: sample
-      sample_grouping_cols: [SampleColA, SampleColB]    # Sample/Patient level metadata column, automatically creates all possible pairs among the category
-      sample_pairs: [                                   # Alternative: manual define sample pairs (not one to many)
-        [
-          SampleColA,
-          [Case_in_SampleColA, Control_in_SampleColA]
-        ],
-        [
-          SampleColB,
-          [Case_in_SampleColB, Control_in_SampleColB]
-        ]
-      ]
+      sample_grouping_cols: [SampleColA, SampleColB]    # Sample/Patient level metadata column to show for interactive grouping
 
 views:
   <view_type_1>:

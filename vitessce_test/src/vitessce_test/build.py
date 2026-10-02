@@ -25,7 +25,7 @@ VIEW_MAPPING = {
     "heatmap": cm.HEATMAP,
     "violin": cm.OBS_SET_FEATURE_VALUE_DISTRIBUTION,
     "dotplot": "dotPlot",
-    "sample_manager": "sampleSetPairManager",
+    "group_builder": "sampleGroupBuilder",
     "obs_sets": cm.OBS_SETS,
     "obs_sets_sizes": cm.OBS_SET_SIZES,
     "description": cm.DESCRIPTION,

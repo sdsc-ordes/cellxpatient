@@ -18,12 +18,12 @@
                 "column": "Disease"
               },
               {
-                "name": "Donor",
-                "column": "Donor"
-              },
-              {
                 "name": "Medications Taken",
                 "column": "Medications Taken"
+              },
+              {
+                "name": "Donor",
+                "column": "Donor"
               }
             ]
           },

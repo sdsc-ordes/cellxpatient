@@ -19,11 +19,6 @@ export const REFRESH_SAMPLE_SETS = "refreshSampleSets"
 
 
 // Reload the sample sets in place, without remounting Vitessce.
-//
-// Vitessce passes its own React Query client as the first argument to plugin
-// async functions (public API). The two `dataSource` lines are NOT public API:
-// they rely on how CsvSource caches the parsed CSV in Vitessce 4.0.x.
-// Re-check them when upgrading Vitessce.
 export const refreshSampleSetsFunction = new PluginAsyncFunction(
   REFRESH_SAMPLE_SETS,
   async ({ queryClient }, { loader, dataset, groups }) => {
@@ -40,8 +35,7 @@ export const refreshSampleSetsFunction = new PluginAsyncFunction(
     source.url = url.href
     source._data = undefined
 
-    // Refetch every sampleSets query of this dataset. Query keys start with
-    // [dataset, dataType, ...], so this prefix matches all views.
+    // Refetch every sampleSets query of this dataset
     await queryClient.invalidateQueries({
       queryKey: [dataset, DataType.SAMPLE_SETS],
     })

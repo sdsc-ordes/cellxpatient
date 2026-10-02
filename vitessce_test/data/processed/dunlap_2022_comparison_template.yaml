@@ -16,11 +16,11 @@ datasets:
     sample_comparison:
       sample_id_col:
         sample
-      sample_grouping_cols: [Disease]
+      sample_grouping_cols: [Disease, Medications Taken, Donor]
 
 
 views:
-  sample_manager:
+  group_builder:
     datasets:
       - dunlap_2022
     grid_xywh:
@@ -73,7 +73,7 @@ coordination:
       - obs_sets
       - dotplot
       - feature_list
-      - sample_manager
+      - group_builder
     values:
       obsType: cell
       featureType: gene

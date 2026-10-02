@@ -40,10 +40,6 @@ def resolve_data_path(url: str) -> Path:
 def prepare_custom_groups(
     config_dict: dict[str, Any],
 ) -> tuple[dict[str, Any], pd.DataFrame, dict[str, str]]:
-    """
-    Redirect the sampleSets.csv file to the dynamic endpoint and declare
-    the custom comparison column, so the original JSON config stays untouched.
-    """
     config = copy.deepcopy(config_dict)
 
     for dataset in config.get("datasets", []):
@@ -54,8 +50,6 @@ def prepare_custom_groups(
             options = file.setdefault("options", {})
             sample_sets = options.get("sampleSets", [])
 
-            # dtype=str + keep_default_na=False keeps the raw strings,
-            # i.e. exactly the set names Vitessce shows in its tree.
             samples = pd.read_csv(
                 resolve_data_path(file["url"]),
                 dtype=str,
@@ -80,7 +74,7 @@ def match_samples(
     name_to_column: dict[str, str],
     criteria: dict[str, list[str]],
 ) -> pd.Series:
-    """OR between values of one category, AND between categories."""
+
     active = {name: values for name, values in criteria.items() if values}
 
     if not active:
