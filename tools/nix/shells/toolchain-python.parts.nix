@@ -98,6 +98,9 @@
                 cirrocumulus
                 typing-extensions
                 numcodecs==0.15.1
+                scanpy
+                pyarrow
+                fsspec==2023.1.0
               '';
             };
           };
