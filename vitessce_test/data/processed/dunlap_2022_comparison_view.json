@@ -19,10 +19,16 @@
           }
         },
         {
-          "fileType": "sampleSets.anndata.zarr",
-          "url": "/data/processed/dunlap_2022_comparison.zarr/obs",
+          "fileType": "sampleSets.csv",
+          "url": "/data/processed/dunlap_2022_samples.csv",
           "options": {
-            "sampleSets": []
+            "sampleIndex": "sample",
+            "sampleSets": [
+              {
+                "name": "Disease",
+                "column": "Disease"
+              }
+            ]
           },
           "coordinationValues": {
             "sampleType": "sample"

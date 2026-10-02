@@ -16,7 +16,7 @@ datasets:
     sample_comparison:
       sample_id_col:
         sample
-      sample_grouping_cols:: [Disease]
+      sample_grouping_cols: [Disease]
 
 
 views:

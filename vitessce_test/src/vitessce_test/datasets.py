@@ -100,14 +100,13 @@ def write_sample_sets(
     adata_obs: pd.DataFrame,
     sample_id: str,
     sample_categories: set[str],
-    comparison_zarr_path: Path
+    samples_path: Path
 ):
     columns_subset = [*sample_categories, sample_id]
     samples_metadata = pd.DataFrame(adata_obs[columns_subset].copy())
     samples_metadata = samples_metadata.drop_duplicates(
         subset=sample_id).set_index(sample_id)
-    samples_adata = ad.AnnData(obs=samples_metadata)
-    samples_adata.write_zarr(comparison_zarr_path)
+    samples_metadata.to_csv(samples_path)
 
 
 def prepare_sample_pairs(
@@ -139,7 +138,8 @@ def write_comparison_metadata(
 
     root = zarr.open_group(
         zarr_path,
-        mode="a"
+        mode="w",
+        zarr_format=2
     )
     uns = root.require_group("uns")
     arr = uns.create_array(
@@ -189,7 +189,8 @@ def prepare_comparison_metadata(
     sample_comparison_pairs, comparison_categories = prepare_sample_pairs(
         adata_obs, comparison_config
     )
-    write_sample_sets(adata_obs, sample_col, comparison_categories, comparison_zarr_path)
+    samples_path = dataset_path.parent / (dataset_path.stem + "_samples.csv")
+    write_sample_sets(adata_obs, sample_col, comparison_categories, samples_path)
 
     comparison_metadata = build_comparison_metadata(
         sample_col, obs_type_paths, sample_comparison_pairs)
@@ -208,19 +209,23 @@ def prepare_comparison_metadata(
             "options": {
                 "path": "uns/comparison_metadata"
             }
-        },
+        }
+    ]
+    samples_url = build_data_url(samples_path)
+    comparison_files_config.append(
         {
-            "file_type": "sampleSets.anndata.zarr",
-            "url": url + "/obs",
+            "file_type": "sampleSets.csv",
+            "url": samples_url,
             "coordination_values": {
                 "sampleType": "sample"
             },
             "options": {
-                "sampleSets": [{"name": comparison_cat, "path": comparison_cat}
+                "sampleIndex": sample_col,
+                "sampleSets": [{"name": comparison_cat, "column": comparison_cat}
                 for comparison_cat in comparison_categories]
             }
         }
-    ]
+    )
     url = build_data_url(adata_path)
     comparison_files_config.append({
             "file_type": "sampleEdges.anndata.zarr",
