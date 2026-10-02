@@ -8,17 +8,6 @@
       "name": "dunlap_2022",
       "files": [
         {
-          "fileType": "comparisonMetadata.anndata.zarr",
-          "url": "/data/processed/dunlap_2022_comparison.zarr",
-          "options": {
-            "path": "uns/comparison_metadata"
-          },
-          "coordinationValues": {
-            "obsType": "cell",
-            "sampleType": "sample"
-          }
-        },
-        {
           "fileType": "sampleSets.csv",
           "url": "/data/processed/dunlap_2022_samples.csv",
           "options": {
@@ -27,6 +16,14 @@
               {
                 "name": "Disease",
                 "column": "Disease"
+              },
+              {
+                "name": "Donor",
+                "column": "Donor"
+              },
+              {
+                "name": "Medications Taken",
+                "column": "Medications Taken"
               }
             ]
           },
@@ -105,7 +102,7 @@
   },
   "layout": [
     {
-      "component": "sampleSetPairManager",
+      "component": "sampleGroupBuilder",
       "coordinationScopes": {
         "dataset": "A",
         "obsType": "A",

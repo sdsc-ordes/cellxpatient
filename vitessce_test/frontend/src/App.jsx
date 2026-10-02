@@ -1,6 +1,13 @@
-import { Vitessce } from "vitessce"
+import { Vitessce } from "@vitessce/all"
 import { useEffect, useRef, useState } from "react"
 import "./App.css"
+import { refreshSampleSetsFunction } from "./customGroups.js"
+import { sampleGroupBuilderPlugin } from "./plugins/sampleGroupBuilder.jsx"
+
+
+// Module-level constants, so Vitessce receives stable references.
+const pluginViewTypes = [ sampleGroupBuilderPlugin ]
+const pluginAsyncFunctions = [ refreshSampleSetsFunction ]
 
 
 function resolveDataUrls(config) {
@@ -16,6 +23,7 @@ function resolveDataUrls(config) {
 
   return resolvedConfig
 }
+
 
 export default function App() {
   const [config, setConfig] = useState(null)
@@ -93,6 +101,8 @@ export default function App() {
         config={config}
         height={vitessceHeight}
         theme="dark"
+        pluginViewTypes={pluginViewTypes}
+        pluginAsyncFunctions={pluginAsyncFunctions}
       />
     </div>
   )
