@@ -9,7 +9,7 @@ from vitessce import (
 )
 from vitessce import (
     VitessceConfig,
-    get_initial_coordination_scope_prefix,  # pyright: ignore[reportUnknownVariableType]
+    get_initial_coordination_scope_prefix,
 )
 from vitessce.config import (
     VitessceConfigCoordinationScope,
@@ -19,6 +19,8 @@ from vitessce.config import (
 
 from vitessce_test.datasets import prepare_datasets
 from vitessce_test.settings import DATA_DIR, DATA_URL
+
+VITESSCE_SCHEMA_VERSION = "1.0.17"
 
 VIEW_MAPPING = {
     "scatterplot": cm.SCATTERPLOT,
@@ -52,6 +54,24 @@ def save_config(
     return config_path
 
 
+def get_grid(
+    view: dict[str,Any],
+    view_name: str,
+    vitessce_dataset: dict[str,Any],
+    vitessce_dataset_name: str
+) -> list[int]:
+
+    if "grid_xywh" not in view and "grid_xywh" not in view["datasets"][vitessce_dataset_name]:
+        raise ValueError(f"Grid indent not found for view {view_name} and dataset {vitessce_dataset_name}")
+    if "grid_xywh" in view:
+        grid = view["grid_xywh"]
+        grid_offset = vitessce_dataset.get("grid_offset_xy", [0, 0])
+    else:
+        grid = view["datasets"][vitessce_dataset_name]["grid_xywh"]
+        grid_offset = [0, 0]
+    return [grid[0] + grid_offset[0], grid[1] + grid_offset[1], grid[2], grid[3]]
+
+
 def add_view(
     vc: VitessceConfig,
     dataset: VitessceConfigDataset,
@@ -61,22 +81,49 @@ def add_view(
 ) -> VitessceConfigView:
     x, y, w, h = grid
     if view_name == "scatterplot":
-        view = vc.add_view(                         # pyright: ignore[reportUnknownMemberType]
+        view = vc.add_view(
             VIEW_MAPPING[view_name],
             dataset=dataset,
             mapping="UMAP",
         ).set_xywh(x, y, w, h)
 
     else:
-        view = vc.add_view(                         # pyright: ignore[reportUnknownMemberType]
+        view = vc.add_view(
             VIEW_MAPPING[view_name],
             dataset=dataset,
         ).set_xywh(x, y, w, h)
 
     if props is not None:
-        view = view.set_props(**props)              # pyright: ignore[reportUnknownMemberType]
+        view = view.set_props(**props)
 
     return view
+
+
+def add_views(
+    vc: VitessceConfig,
+    datasets: dict[str,Any],
+    vitessce_datasets: dict[str,Any],
+    views: dict[str,Any]
+):
+    views_per_dataset: dict[str, dict[str, VitessceConfigView]] = {}
+    for vitessce_dataset_name, vitessce_dataset in vitessce_datasets.items():
+        views_to_add = [view_name for view_name in views if vitessce_dataset_name in views[view_name]["datasets"]]
+        views_per_dataset[vitessce_dataset_name] = {}
+        for view in views_to_add:
+            grid = get_grid(
+                view=views[view],
+                view_name=view,
+                vitessce_dataset=datasets[vitessce_dataset_name],
+                vitessce_dataset_name=vitessce_dataset_name
+            )
+            views_per_dataset[vitessce_dataset_name][view] = add_view(
+                vc,
+                vitessce_dataset,
+                view_name=view,
+                grid=grid,
+                props=views[view].get("props", None),
+            )
+    return views_per_dataset
 
 
 def add_image_layer_coordination(
@@ -84,7 +131,7 @@ def add_image_layer_coordination(
     views: list[VitessceConfigView],
     values: str,
 ) -> None:
-    _ = vc.link_views_by_dict(                              # pyright: ignore[reportUnknownMemberType]
+    _ = vc.link_views_by_dict(
         views,
         {
             "imageLayer": CL([
@@ -114,7 +161,7 @@ def add_segmentation_layer_coordination(
     ]
     if not layers:
         return
-    _ = vc.link_views_by_dict(                              # pyright: ignore[reportUnknownMemberType]
+    _ = vc.link_views_by_dict(
         views,
         {
             "segmentationLayer": CL([*layers])
@@ -135,18 +182,14 @@ def resolve_layer_values(
     inherit = layer.get("inherit", False)
     inherit_values = layer.get("inherit_values", {})
 
-    if not inherit and not inherit_values:
-        return dict(values)
+    if inherit_values:
+        inherited = {k: v for k, v in scopes.items() if k in inherit_values}
+    elif inherit:
+        inherited = scopes
     else:
-        if inherit_values:
-            return {
-                **values,
-                **{k: v for k, v in scopes.items() if k in inherit_values}
-            }
-        return {
-            **values,
-            **scopes
-        }
+        inherited = {}
+
+    return {**values, **inherited}
 
 
 def add_coordination_space(
@@ -164,20 +207,20 @@ def add_coordination_space(
 
     # Keep track of the created coordination scopes
     for coord_name, initial_value in coordination_space["values"].items():
-        scope: VitessceConfigCoordinationScope = vc.add_coordination(coord_name)[0]   # pyright: ignore[reportUnknownMemberType, reportUnknownVariableType]
-        _ = scope.set_value(initial_value)                                            # pyright: ignore[reportUnknownMemberType]
+        scope: VitessceConfigCoordinationScope = vc.add_coordination(coord_name)[0]
+        _ = scope.set_value(initial_value)
         scopes[coord_name] = scope
 
         for dataset in datasets:
             for view_name in view_to_link_names:
                 view = views[dataset][view_name]
-                _ = view.use_coordination(scope)                                      # pyright: ignore[reportUnknownMemberType]
+                _ = view.use_coordination(scope)
 
     # Add specific layer coordination spaces for each spatial dataset
     # (required by spatial and layer controller views)
     if "per_layer" in coordination_space:
         for dataset in datasets:
-            dataset_uid : str = vitessce_datasets[dataset].get_uid()                  # pyright: ignore[reportAssignmentType, reportUnknownVariableType]
+            dataset_uid : str = vitessce_datasets[dataset].get_uid()                  # pyright: ignore[reportAssignmentType]
 
             for layer_name, layer_data in coordination_space["per_layer"].items():
                 view_to_link_names = layer_data["views"]
@@ -206,7 +249,7 @@ def build_config(
 
     # Instantiate the Vitessce widget configuration
     vc = VitessceConfig(
-        schema_version="1.0.17",
+        schema_version=VITESSCE_SCHEMA_VERSION,
         name=template["name"],
         description=template["description"],
         base_dir=DATA_DIR)
@@ -217,34 +260,14 @@ def build_config(
 
     # Add views to vitessce config
     views = template["views"]
-    views_per_dataset: dict[str, dict[str, VitessceConfigView]] = {}
-    for vitessce_dataset_name, vitessce_dataset in vitessce_datasets.items():
-        views_to_add = [view_name for view_name in views if vitessce_dataset_name in views[view_name]["datasets"]]
-        views_per_dataset[vitessce_dataset_name] = {}
-        for view in views_to_add:
-            if "grid_xywh" not in views[view] and "grid_xywh" not in views[view]["datasets"][vitessce_dataset_name]:
-                raise ValueError(f"Grid indent not found for view {view} and dataset {vitessce_dataset_name}")
-            if "grid_xywh" in views[view]:
-                grid = views[view]["grid_xywh"]
-                grid_offset = datasets[vitessce_dataset_name].get("grid_offset_xy", [0, 0])
-            else:
-                grid = views[view]["datasets"][vitessce_dataset_name]["grid_xywh"]
-                grid_offset = [0, 0]
-
-            views_per_dataset[vitessce_dataset_name][view] = add_view(
-                vc,
-                vitessce_dataset,
-                view_name=view,
-                grid=[grid[0] + grid_offset[0], grid[1] + grid_offset[1], grid[2], grid[3]],
-                props=views[view].get("props", None),
-            )
+    views_per_dataset = add_views(vc, datasets, vitessce_datasets, views)
 
     # Coordinate views across datasets
     coordination_scopes: dict[str, dict[str, Any]] = {}
     for space_name, coordination_space in template["coordination"].items():
         coordination_scopes[space_name] = add_coordination_space(vc, coordination_space, views_per_dataset, vitessce_datasets)
 
-    config_dict = vc.to_dict(base_url=DATA_URL)                    # pyright: ignore[reportUnknownMemberType, reportUnknownVariableType]
-    config_path = save_config(config_dict, template_path)          # pyright: ignore[reportUnknownArgumentType]
+    config_dict = vc.to_dict(base_url=DATA_URL)
+    config_path = save_config(config_dict, template_path)
 
     return config_path
