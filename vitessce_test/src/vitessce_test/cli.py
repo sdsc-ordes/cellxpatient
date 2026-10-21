@@ -89,6 +89,11 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Replace the output if it already exists.",
     )
+    _ = preprocess_command.add_argument(
+        "--single-threaded",
+        action="store_true",
+        help="For Xenium only: load and write images using single-threaded dask scheduler. In case of memory overload."
+    )
 
 
     build_command = commands.add_parser(
@@ -158,7 +163,8 @@ def main():
                 options = {
                     "umap_path": args.umap,
                     "clusters_path": args.clusters,
-                    "overwrite": args.overwrite
+                    "overwrite": args.overwrite,
+                    "single_threaded": args.single_threaded
                 }
             )
         return

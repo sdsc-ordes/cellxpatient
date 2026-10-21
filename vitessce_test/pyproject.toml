@@ -47,6 +47,9 @@ exclude = [
 reportMissingTypeStubs = false
 reportExplicitAny = false
 reportAny = false
+reportUnknownMemberType = false
+reportUnknownVariableType = false
+reportUnknownArgumentType = false
 
 [tool.ruff]
 extend-include = ["*.ipynb"]
