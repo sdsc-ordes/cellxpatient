@@ -1,0 +1,109 @@
+name: Dunlap 2022 - Healthy vs SLE
+description: Comparison of gene expression between Healthy and SLE scRNA-seq data
+
+# Add all datasets to be used
+datasets:
+  dunlap_2022_healthy:
+    dataset_path: dunlap_2022_corrected_healthy.zarr
+    type: anndata_zarr
+    grid_offset_xy: [0, 0]
+    data:
+      obs_set_paths: [obs/pred_cell_type_filtered]
+      obs_set_names: [Cell Type]
+  dunlap_2022_sle:
+    dataset_path: dunlap_2022_corrected_sle.zarr
+    type: anndata_zarr
+    grid_offset_xy: [6, 0]
+    data:
+      obs_set_paths: [obs/pred_cell_type_filtered]
+      obs_set_names: [Cell Type]
+
+
+views:
+  description:
+    datasets:
+      - dunlap_2022_healthy
+      - dunlap_2022_sle
+    grid_xywh:
+      [0, 0, 6, 2]
+    props:
+      description: Comparison of gene expression between Healthy and SLE scRNA-seq data
+
+  scatterplot:
+    datasets:
+      - dunlap_2022_healthy
+      - dunlap_2022_sle
+    grid_xywh: [0, 2, 6, 4]
+
+  obs_sets:
+    datasets:
+      - dunlap_2022_healthy
+      - dunlap_2022_sle
+    grid_xywh: [0, 6, 3, 4]
+
+  obs_sets_sizes:
+    datasets:
+      - dunlap_2022_healthy
+      - dunlap_2022_sle
+    grid_xywh: [3, 6, 3, 4]
+
+  heatmap:
+    datasets:
+      - dunlap_2022_healthy
+      - dunlap_2022_sle
+    grid_xywh: [0, 10, 6, 4]
+    props:
+      transpose: true
+
+  violin:
+    datasets:
+      - dunlap_2022_healthy
+      - dunlap_2022_sle
+    grid_xywh: [0, 14, 6, 4]
+
+
+coordination:
+
+  # Observation coordination is independent for each dataset.
+  healthy_obs:
+    datasets:
+      - dunlap_2022_healthy
+    views:
+      - scatterplot
+      - obs_sets
+      - obs_sets_sizes
+      - heatmap
+      - violin
+    values:
+      obsType: cell
+      obsSetSelection: null
+      obsHighlight: null
+
+  sle_obs:
+    datasets:
+      - dunlap_2022_sle
+    views:
+      - scatterplot
+      - obs_sets
+      - obs_sets_sizes
+      - heatmap
+      - violin
+    values:
+      obsType: cell
+      obsSetSelection: null
+      obsHighlight: null
+
+  # Feature coordination is shared by both datasets.
+  shared_features:
+    datasets:
+      - dunlap_2022_healthy
+      - dunlap_2022_sle
+    views:
+      - heatmap
+      - violin
+      - scatterplot
+    values:
+      featureType: gene
+      featureValueType: expression
+      featureHighlight: null
+      featureSelection: [FXYD3]
