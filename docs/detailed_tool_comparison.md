@@ -71,6 +71,24 @@ heatmaps with >10'000 of features and support for multi GB images.
 
 - not a ready-to-use solution
 
+#### Deployement test
+
+- not an application: needs a hosting page and a server for data/confgi loading
+- highly extensible but only on the dev side
+- data preparation: need to prepare a config view (json file). Python API covers most common data formats to automatically register datasets to the config view.
+- many documentations (main docs is superficial, Python API docs is very superficial, JS specific docs is very detailed). 
+- steep learning curve to learn how to build custom views and plugins (all in JS).
+- layout fixed oonce built : users cannot add plots. Interactivitity depends on the layout preparation.
+- polished presentation. Interactivity seems limited but might depend on the view preparation.
+- clinical metadata integration could be feasible with a custom plugin or by-side react component
+
+
+
+
+
+
+
+
 ## [WebAtlas](https://cellatlas.io/webatlas)
 
 #### General
@@ -162,6 +180,19 @@ heatmaps with >10'000 of features and support for multi GB images.
 
 - sparse documentation
 
+
+#### Local deployement
+- docker containers already available (one for PostgreSQL database, one for MDV app, user authentification possible)
+- data preparation: dataloaders provided for common transcriptomics data. Smooth for spatial (Xenium, Visium) data, buggy with anndata/pandas version for h5ad.
+- layout organised into "View". Each view is a window that can contain several plots/windows.
+- nice interactivity (list of plots to build on the spot, can manually define and change the settings of the plots)
+- many UI bugs, and the UI in general is not pleasant to use
+- plots lack polish (axis legend not visible if too long, stacked on each other if too many, not manually customisable/editable)
+- many interesting features otherwise
+
+
+
+
 ## [UCSC Cell browser](https://cells.ucsc.edu/?)
 
 #### General
@@ -205,6 +236,17 @@ heatmaps with >10'000 of features and support for multi GB images.
 
 - long term maintenance
 - limited extension
+
+#### Deployement test
+- pip package
+- command to prepare h5ad (from Scanpy) to view in UCSC. Smooth conversion. No extra step needed.
+- no comprehensive data loaders for all common scRNA and **spatial transcriptomics** (especially) data -> need additional data preparation layer!!!
+- web browser built once (folder with hmtl/css/js files, usable on any static web server)
+- each new dataset gets added to the html local folder -> might need additional steps to handle the sensitive data and authentification handling
+- no interactive annotation, only reading the datasets
+- efficient and simple viewer if all required features are covered
+
+
 
 ## [ShinyCellModular](https://monashbioinformaticsplatform.github.io/ShinyCellModular/)
 
@@ -333,3 +375,14 @@ heatmaps with >10'000 of features and support for multi GB images.
 
 - project maturity and sustainability
 - sparse documentation
+
+
+#### Deployement test
+
+- already built: pip install and `cirro launch path_to_file` serve a dataset, no conversion needed for h5ad
+- docker containers already available
+- does not seem actively maintained or developed:
+  - unpinned dependency (fsspec) breaks dataset loading with current releases; had to pin a 2023 version (fsspec<2023.12.0)
+  - missing documentation and extra dependencies for spatial data
+  - Xenium only opened through its expression matrix (cell_feature_matrix.h5 in the Xenium folder)
+- interesting features otherwise
