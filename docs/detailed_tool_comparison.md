@@ -2,26 +2,25 @@
 
 ## Summary
 
-| Criterion      | Vitessce [↓](#vitessce)   | WebAtlas [↓](#webatlas)  | MDV [↓](#mdv) |  UCSC Cell Browser [↓](#ucsc-cell-browser) |
-| -------------- | ----------------------- | ---------------------------------- | ----------------- | ------------------- |
-| Type           | Visualisation framework | Pipeline + portal (Vitessce-based) | Interactive analysis & visualisation web application | Complete viewer   |            |                                              |
-| Language       | TS/JS, React, Python, R | Python, Nextflow, React | Python | Python, JS | 
-| scRNA          | Yes                     | Yes                                | Yes              | Yes | 
-| Spatial        | Yes    | Yes | Yes | Yes  | 
-| Multiomics     | Yes  | No  | Possible | Yes | 
-| Sustainability | High    | Medium  | High | High  | 
-| Dev. Effort | High | medium | medium | low |
+| Criterion      | Vitessce [↓](#vitessce) | WebAtlas [↓](#webatlas)            | MDV [↓](#mdv)                                        | UCSC Cell Browser [↓](#ucsc-cell-browser) |
+| -------------- | ----------------------- | ---------------------------------- | ---------------------------------------------------- | ----------------------------------------- |
+| Type           | Visualisation framework | Pipeline + portal (Vitessce-based) | Interactive analysis & visualisation web application | Complete viewer                           |     |     |
+| Language       | TS/JS, React, Python, R | Python, Nextflow, React            | Python                                               | Python, JS                                |
+| scRNA          | Yes                     | Yes                                | Yes                                                  | Yes                                       |
+| Spatial        | Yes                     | Yes                                | Yes                                                  | Yes                                       |
+| Multiomics     | Yes                     | No                                 | Possible                                             | Yes                                       |
+| Sustainability | High                    | Medium                             | High                                                 | High                                      |
+| Dev. Effort    | High                    | medium                             | medium                                               | low                                       |
 
-
-| Criterion      | ShinyCellModular  [↓](#shinycellmodular)  | scRNAseqApp [↓](#scrnaseqapp) | Cirrocumulus [↓](#cirrocumulus) | 
-| -------------- | ---------------------- | ---------- |  ------------- | 
-| Type           | Shiny app (modular) | Shiny app   | Complete interactive viewer | 
-| Language       | R | R | Python | 
-| scRNA          | Yes | Yes  | Yes | 
-| Spatial        | No (soon) | Yes  | Yes | 
-| Multiomics     | Partial |   Yes | Partial | 
-| Sustainability | medium  | medium | medium |
-| Dev. Effort |  low | low | low | 
+| Criterion      | ShinyCellModular [↓](#shinycellmodular) | scRNAseqApp [↓](#scrnaseqapp) | Cirrocumulus [↓](#cirrocumulus) |
+| -------------- | --------------------------------------- | ----------------------------- | ------------------------------- |
+| Type           | Shiny app (modular)                     | Shiny app                     | Complete interactive viewer     |
+| Language       | R                                       | R                             | Python                          |
+| scRNA          | Yes                                     | Yes                           | Yes                             |
+| Spatial        | No (soon)                               | Yes                           | Yes                             |
+| Multiomics     | Partial                                 | Yes                           | Partial                         |
+| Sustainability | medium                                  | medium                        | medium                          |
+| Dev. Effort    | low                                     | low                           | low                             |
 
 ## [Vitessce](https://vitessce.io/)
 
@@ -58,7 +57,8 @@ heatmaps with >10'000 of features and support for multi GB images.
 #### Features
 
 - highly customisable
-- support for clinical metatdata support (documented example with cell linked to disease state)
+- support for clinical metatdata support (documented example with cell linked to
+  disease state)
 - not an analysis tool but good analysis results display
 
 #### Main strengths
@@ -71,22 +71,22 @@ heatmaps with >10'000 of features and support for multi GB images.
 
 - not a ready-to-use solution
 
-
-
-
-
 ## [WebAtlas](https://cellatlas.io/webatlas)
 
 #### General
 
-- **Languages:** Nextflow for data pipeline, React for Webapp, Vitessce for visualisation
+- **Languages:** Nextflow for data pipeline, React for Webapp, Vitessce for
+  visualisation
 - **Maintainer:** Haniffa lab
-- **Input formats:** h5ad, tif, SpaceRanger, Xenium/Visium, MERSCOPE output, CSV, MERFISH
+- **Input formats:** h5ad, tif, SpaceRanger, Xenium/Visium, MERSCOPE output,
+  CSV, MERFISH
 - **License:** MIT
 
 #### Sustainability
 
-- **Maintenance/Funding:** Developped and maintained by the Haniffa lab. Mostly Wellcome Sanger Institute mentioned in paper. Funding from several sources (Wellcome Trust, NIHR, Medical research council,...)
+- **Maintenance/Funding:** Developped and maintained by the Haniffa lab. Mostly
+  Wellcome Sanger Institute mentioned in paper. Funding from several sources
+  (Wellcome Trust, NIHR, Medical research council,...)
 
 #### Data types
 
@@ -96,9 +96,11 @@ heatmaps with >10'000 of features and support for multi GB images.
 
 #### Performance
 
-- good data scalability and reactivity ([demo with million of cells, with spatial data](https://cellatlas.io/studies/webatlas/dataset/166/vitessce))
-- [2025 Nature atlas](https://webatlas.cog.sanger.ac.uk/dev/index.html?theme=dark&config=https://f1-fb121.s3.us-east-1.amazonaws.com/Merfish_F1_FB121/0.5.2/F1_FB121-scRNAseq-config.json) containing more than 18 million spatially resolved cells used WebAtlas for its interactive MERFISH browser 
-
+- good data scalability and reactivity
+  ([demo with million of cells, with spatial data](https://cellatlas.io/studies/webatlas/dataset/166/vitessce))
+- [2025 Nature atlas](https://webatlas.cog.sanger.ac.uk/dev/index.html?theme=dark&config=https://f1-fb121.s3.us-east-1.amazonaws.com/Merfish_F1_FB121/0.5.2/F1_FB121-scRNAseq-config.json)
+  containing more than 18 million spatially resolved cells used WebAtlas for its
+  interactive MERFISH browser
 
 #### Features
 
@@ -115,21 +117,21 @@ heatmaps with >10'000 of features and support for multi GB images.
 - App repo didn't have contributions since 3 years
 - Not strong maintenance
 
-
-
-
 ## [MDV](https://mdv.ndm.ox.ac.uk/)
 
 #### General
 
 - **Languages:** Python (available Docker container)
-- **Maintainer:** NDM (Nuffield department of Medicine) Data Platform, University of Oxford
-- **Input formats:** h5ad, MuData, zarr, vcf. csv. Mentions custom data loaders to support wide range of data source
+- **Maintainer:** NDM (Nuffield department of Medicine) Data Platform,
+  University of Oxford
+- **Input formats:** h5ad, MuData, zarr, vcf. csv. Mentions custom data loaders
+  to support wide range of data source
 - **License:** GPL-3
 
 #### Sustainability
 
-- **Maintenance/Funding:** Institutionally embedded. No explicit grant/funding mentioned.
+- **Maintenance/Funding:** Institutionally embedded. No explicit grant/funding
+  mentioned.
 
 #### Data types
 
@@ -141,7 +143,8 @@ heatmaps with >10'000 of features and support for multi GB images.
 #### Performance
 
 - excellent reactivity from demo project
-- scalable to large data (Nature paper mentions 10mio data items). Lazy loading, min 4GB RAM for web
+- scalable to large data (Nature paper mentions 10mio data items). Lazy loading,
+  min 4GB RAM for web
 
 #### Features
 
@@ -149,33 +152,30 @@ heatmaps with >10'000 of features and support for multi GB images.
 - many plots/functionalities
 - clinical metadata supported
 
-
 #### Main strengths
 
 - multi-modality
-- clinical metadata support 
+- clinical metadata support
 - already containerised
-
 
 #### Main limitations
 
 - sparse documentation
-
-
-
 
 ## [UCSC Cell browser](https://cells.ucsc.edu/?)
 
 #### General
 
 - **Languages:** Python, Javascript
-- **Maintainer:** UCSC Genome browser organisation (Genomics Institute, UC Santa Cruz)
+- **Maintainer:** UCSC Genome browser organisation (Genomics Institute, UC Santa
+  Cruz)
 - **Input formats:** Seurat RDS/RData/Robj, Scanpy h5ad, Loom, TSV/CSV
 - **License:** GPL3.0
 
 #### Sustainability
 
-- **Maintenance/Funding:** since 2023, funding from NIMH BRAIN and CIRM DISC0 grant
+- **Maintenance/Funding:** since 2023, funding from NIMH BRAIN and CIRM DISC0
+  grant
 
 #### Data types
 
@@ -188,12 +188,12 @@ heatmaps with >10'000 of features and support for multi GB images.
 - fast lightweight browser (uses static, precomputer layout)
 - demo demonstrates excellent speed and reactivity
 
-
 #### Features
 
-- no native statistical analyses 
+- no native statistical analyses
 - display statistical plots and DE tables if externally generated
-- clinical metadata support could be possible. UCSC metadata is flexible and can be used to filter, color cells.
+- clinical metadata support could be possible. UCSC metadata is flexible and can
+  be used to filter, color cells.
 
 #### Main strengths
 
@@ -206,10 +206,6 @@ heatmaps with >10'000 of features and support for multi GB images.
 - long term maintenance
 - limited extension
 
-
-
-
-
 ## [ShinyCellModular](https://monashbioinformaticsplatform.github.io/ShinyCellModular/)
 
 #### General
@@ -221,7 +217,8 @@ heatmaps with >10'000 of features and support for multi GB images.
 
 #### Sustainability
 
-- **Maintenance/Funding:** Not found explicitly. Likely via funding of the Monash Genomics and Bioinformatics Platform.
+- **Maintenance/Funding:** Not found explicitly. Likely via funding of the
+  Monash Genomics and Bioinformatics Platform.
 
 #### Data types
 
@@ -237,9 +234,8 @@ heatmaps with >10'000 of features and support for multi GB images.
 #### Features
 
 - interactive DE analysis
-- violin/box plots, heatmaps 
+- violin/box plots, heatmaps
 - clinical metadata supported
-
 
 #### Main strengths
 
@@ -251,15 +247,13 @@ heatmaps with >10'000 of features and support for multi GB images.
 - recent project, maturity?
 - no spatial support
 
-
-
-
 ## [scRNAseqApp](https://github.com/jianhong/scRNAseqApp)
 
 #### General
 
 - **Languages:** R, Shiny
-- **Maintainer:** Jianhong Ou (bioinformatician at Morgridge Institute for Research)
+- **Maintainer:** Jianhong Ou (bioinformatician at Morgridge Institute for
+  Research)
 - **Input formats:** Seurat Object
 - **License:** GPL-3
 
@@ -275,9 +269,9 @@ heatmaps with >10'000 of features and support for multi GB images.
 
 #### Performance
 
-- scaling: package intended for exploration not heavy computation clearly stated. h5-based expression matrix, only selected genes loaded 
+- scaling: package intended for exploration not heavy computation clearly
+  stated. h5-based expression matrix, only selected genes loaded
 - probable medium reactivity (shiny application)
-
 
 #### Features
 
@@ -290,29 +284,27 @@ heatmaps with >10'000 of features and support for multi GB images.
 
 - multi-modal (spatial, scRNA, omics)
 
-
 #### Main limitations
 
 - long-term maintenance and development hard to assess
 - no accessible demo
 - limited docs
 
-
-
-
-
 ## [Cirrocumulus](https://cirrocumulus.readthedocs.io/en/latest/documentation.html)
 
 #### General
 
 - **Languages:** Python
-- **Maintainer:** Klarmann Cell Observatory, Broad Institute. Also The General Hospital Corporation mentioned
-- **Input formats:** h5ad, 10x h5, Xenium, MERFISH, loom, Seurat, TileDB, or zarr 
+- **Maintainer:** Klarmann Cell Observatory, Broad Institute. Also The General
+  Hospital Corporation mentioned
+- **Input formats:** h5ad, 10x h5, Xenium, MERFISH, loom, Seurat, TileDB, or
+  zarr
 - **License:** BSD-3
 
 #### Sustainability
 
-- **Maintenance/Funding:** Recent project but institutionally embedded. No explicit grant/funding mentioned.
+- **Maintenance/Funding:** Recent project but institutionally embedded. No
+  explicit grant/funding mentioned.
 
 #### Data types
 
@@ -321,13 +313,14 @@ heatmaps with >10'000 of features and support for multi GB images.
 
 #### Performance
 
-- use custom Cirrocumulus format (either zarr, jsonl or parquet) for efficient partial dataset retrieval (can be used over network)
+- use custom Cirrocumulus format (either zarr, jsonl or parquet) for efficient
+  partial dataset retrieval (can be used over network)
 - scalable to large data
 
 #### Features
 
 - DE analysis
-- violin/box plots, heatmaps 
+- violin/box plots, heatmaps
 - clinical metadata supported (via arbitrary anndata.obs metadata)
 - multi-user server deployement
 

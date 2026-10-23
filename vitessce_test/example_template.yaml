@@ -1,0 +1,57 @@
+name:
+description:
+
+# Add all datasets to be used
+datasets:
+  <dataset_id>: # to differentiate between datasets
+    dataset_path:
+    type: anndata_zarr or spatialdata_zarr
+    gird_offset_xy: [0, 0]
+    data:
+      # only need to specify if different from the default
+      obs_set_paths: [obs/pred_cell_type_filtered]
+      obs_set_names: [Cell Type]
+
+views:
+  <view_type_1>:
+    datasets:
+      # the grid can be directly specified per dataset with grid_xywh or with grid_offset_xy
+      # at the dataset level
+      <subset_A>:
+        grid_xywh: [0, 0, 0, 0]
+    grid_xywh: [0, 0, 6, 2]
+    props:
+      <props_name>: <props_value>
+
+coordination:
+  # Coordination spaces define shared elements (e.g. coloring) that should be coordinated
+  # across multiple datasets and views
+  <space_id>:
+    datasets:
+      - <subset_A>
+    views:
+      - <view_type_1>
+    values:
+      # any coordination types supported by Vitessce per view type
+      <coord_type>: <value>
+
+    # Option that concerns only the spatial data and spatial view
+    # The spatial view has hierarchical coordination spaces (one per layer: image or segmentation)
+    # The segmentation layer is itself also hierarchical
+    per_layer:
+      image_layer:
+        values:
+          <coord_type>: <value>
+        views:
+          - <spatial_view_type>
+      segmentation_layer:
+        # nucleus or cell channel
+        <channel_type>:
+          inherit: true # if inherit is true or inherit_values is specified,
+          inherit_values: # the corresponding coord values are inherited from the parent scope
+            values:
+              <coord_type>: <value>
+          values:
+            <coord_type>: <value>
+        views:
+          - <spatial_view_type>
