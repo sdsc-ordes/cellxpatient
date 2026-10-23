@@ -3,7 +3,13 @@
   # Used to find the project root
   projectRootFile = ".git/config";
 
-  settings.global.excludes = [ "external/*" ];
+  settings.global.excludes = [
+    "external/*"
+    # Data and generated files: not source code, and too large for prettier.
+    "**/data/**"
+    "**/*.zarr/**"
+    "**/package-lock.json"
+  ];
 
   # Markdown, JSON, YAML, etc.
   programs.prettier.enable = true;
