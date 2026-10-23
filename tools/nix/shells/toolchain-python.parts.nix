@@ -36,6 +36,11 @@
             pkgs.nodejs_24
           ];
 
+          # Use system certificates in uv
+          env = {
+            UV_SYSTEM_CERTS = "true";
+          };
+
           # We use `devenv` language support since, it's
           # pretty involved to setup a python environment.
           languages.python = {
@@ -47,7 +52,7 @@
 
             # Heavy modules relying (CYTHON, ext. shared libraries etc)
             # should be built by Nix.
-            package = pkgs.python312.withPackages (p: [
+            package = pkgs.python314.withPackages (p: [
               p.numpy
               p.matplotlib
               p.tkinter
@@ -58,6 +63,7 @@
               package = pkgs.uv;
               sync.enable = true;
             };
+
           };
         }
       ];
