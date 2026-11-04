@@ -11,7 +11,7 @@ let
     # (i: i.map (x: lib.info "Importing toolchain :${x}" x))
     (i: i.match ".*/nix/lib/devenv/.*\.nix")
     (i: i.withLib lib)
-    (i: i.leafs repoRoot)
+    (i: i.leaves repoRoot)
   ];
 in
 {
