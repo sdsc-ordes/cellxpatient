@@ -39,51 +39,9 @@ flowchart LR
 Vitessce configurations are generated programmatically using the Python API in
 [build.py](src/vitessce_test/build.py). To facilitate the creation of a Vitessce
 view, the expected configuration is defined using a more human-readable YAML
-template (see [example_template.yaml](example_template.yaml)).
+template (see [example_template.yaml](example_template.yaml) or [template structure section](#template-structure)).
 
-### Template Structure
 
-The template contains three main sections:
-
-- Datasets
-
-  It defines the datasets used in the view and, when required, paths to specific
-  elements within them. Default paths are used for standard AnnData and
-  SpatialData structures, so the template only needs to specify paths that
-  differ from these defaults. Defaults can be found in
-  [datasets.py](src/vitessce_test/datasets.py).
-
-- Views
-
-  It defines which Vitessce views should be displayed, which datasets they refer
-  to, and their position and size on a 12 × 12 grid.
-
-- Coordination
-
-  It defines how views interact and update together. This is the most tricky
-  part of the Vitessce configuration.
-
-  A coordination type represents a property that can be coordinated, such as
-  featureSelection, obsSetSelection or obsColorEncoding. Not every view supports
-  every coordination type and the coordination types have expected values
-  depending on their definition; refer to the
-  [Vitessce coordination documentation](https://vitessce.io/docs/coordination-types/#initial-coordination-values).
-
-  For each coordination type, one or more coordination scopes can exist. Views
-  referencing the same scope share the state of the corresponding coordination
-  type:
-
-  - view_1: coord_type_A -> scope_1
-  - view_2: coord_type_A -> scope_1
-  - view_3: coord_type_A -> scope_2
-
-  Here, view_1 and view_2 are coordinated for coord_type_A, while view_3 is
-  independent.
-
-  Spatial views require additional hierarchical coordination for individual
-  image and segmentation layers. The current prototype uses this to display the
-  morphology image together with cell and nucleus boundaries, while linking the
-  cell segmentation to selected gene expression.
 
 ## Setup
 
@@ -145,21 +103,58 @@ vitessce-test serve --config path/to/dataset_view.json
 Both `build` and `serve` accept `--port`. The server hosts the frontend, the
 processed data and the config, so no separate data server is needed.
 
+### Template Structure
+
+The template contains three main sections:
+
+- Datasets
+
+  It defines the datasets used in the view and, when required, paths to specific
+  elements within them. Default paths are used for standard AnnData and
+  SpatialData structures, so the template only needs to specify paths that
+  differ from these defaults. Defaults can be found in
+  [datasets.py](src/vitessce_test/datasets.py).
+
+- Views
+
+  It defines which Vitessce views should be displayed, which datasets they refer
+  to, and their position and size on a 12 × 12 grid.
+
+- Coordination
+
+  It defines how views interact and update together. This is the most tricky
+  part of the Vitessce configuration.
+
+  A coordination type represents a property that can be coordinated, such as
+  featureSelection, obsSetSelection or obsColorEncoding. Not every view supports
+  every coordination type and the coordination types have expected values
+  depending on their definition; refer to the
+  [Vitessce coordination documentation](https://vitessce.io/docs/coordination-types/#initial-coordination-values).
+
+  For each coordination type, one or more coordination scopes can exist. Views
+  referencing the same scope share the state of the corresponding coordination
+  type:
+
+  - view_1: coord_type_A -> scope_1
+  - view_2: coord_type_A -> scope_1
+  - view_3: coord_type_A -> scope_2
+
+  Here, view_1 and view_2 are coordinated for coord_type_A, while view_3 is
+  independent.
+
+  Spatial views require additional hierarchical coordination for individual
+  image and segmentation layers. The current prototype uses this to display the
+  morphology image together with cell and nucleus boundaries, while linking the
+  cell segmentation to selected gene expression.
+
 ## scRNA data example
 
-> [!IMPORTANT] The current prototype duplicates the input data and several views
-> to compare two conditions (Healthy and Disease). The reason is that although
-> Vitessce already defines an obsFilter coordination type, no filtering is
-> currently applied across the views used here. It is possible to select
-> specific metadata conditions, but the observations are still present in all
-> plots, just greyed out. Proper obsFilter support would allow conditions to be
-> selected dynamically at runtime, avoiding condition-specific data subsets and
-> duplicated views. This could potentially be addressed through a fork or a
-> custom plugin.
-
 To test the view coordination with Vitessce, we consider a theoretical scRNA
-view template that compares gene expression between two conditions (e.g.
-**Healthy vs Disease**).
+view template that compares gene expression between two conditions. The two
+groups can be interactively defined via the sampleGroupBuilder plugin. This
+plugin introduces a new view (GroupBuilder) that splits the data into two 
+groups based on sample IDs, enabling comparison mode in several built-in 
+Vitessce plots.
 
 ### Data source
 
@@ -171,49 +166,32 @@ on the
 ### Prototype view template
 
 The view is generated using the
-[corresponding YAML template](data/processed/dunlap_2022_healthy_x_sle_template.yaml).
+[corresponding YAML template](data/processed/dunlap_2022_comparison_template.yaml).
 The following diagram shows in essence the plots layout and coordination space,
 to facilitate the composition of the template.
 
 <table>
   <tr>
     <th> x </th>
-    <th>Grid 1-3</th>
-    <th>Grid 4-6</th>
-    <th>Grid 7-9</th>
-    <th>Grid 10-12</th>
+    <th>Grid 1-4</th>
+    <th>Grid 5-8</th>
+    <th>Grid 9-12</th>
   </tr>
   <tr>
     <td>Grid 1-4</td>
-    <td colspan="2">Scatterplot UMAP Healthy 
-      (Scope A for gene feature, Scope B for cell feature)</td>
-    <td colspan="2">Scatterplot UMAP Disease
-      (Scope A for gene feature, Scope C for cell feature)</td>
+    <td>Group Builder</td>
+    <td>Scatterplot</td>
+    <td>Cell Sets</td>
   </tr>
   <tr>
-    <td>Grid 5-6</td>
-    <td>Cell type Healthy
-      (Scope B)</td>
-    <td>Cell type Comp. Healthy
-      (Scope B)</td>
-    <td>Cell type Disease
-      (Scope C)</td>
-    <td>Cell type Comp. Disease
-      (Scope C)</td>
+    <td>Grid 5-7</td>
+    <td colspan="2">Dot Plot</td>
+    <td>Gene list</td>
   </tr>
   <tr>
-    <td>Grid 7-10</td>
-    <td colspan="2">Heatmap Healthy
-      (Scope A for gene feature, Scope B for cell feature)</td>
-    <td colspan="2">Heatmap Disease
-      (Scope A for gene feature, Scope C for cell feature)</td>
-  </tr>
-  <tr>
-    <td>Grid 11-12</td>
-    <td colspan="2">Gene-linked Violin Plot Healthy
-      (Scope A for gene feature, Scope B for cell feature)</td>
-    <td colspan="2">Gene-linked Violin Plot Healthy
-      (Scope A for gene feature, Scope C for cell feature)</td>
+    <td>Grid 8-10</td>
+    <td>Violin plot</td>
+    <td colspan="2">Heatmap</td>
   </tr>
 
 </table>
@@ -270,7 +248,7 @@ to facilitate the composition of the template.
 
 
 
-## Hidden Vitessce Plots:
+## Notes:
 
 The main documentation listing the available vitessce plots is not exhaustive. The source code and other sections of the documentation hint at 
 more vitessce plots available, in particular that can be used to compare between sample pairs, e.g. Case vs Control.
@@ -291,8 +269,8 @@ Some Vitessce plots can compare two groups side by side (e.g. one violin per gro
 
 To map cells id to the appropriate group, additional files need to be prepared and provided to the view config ([File type documentation](https://vitessce.io/docs/data-file-types/)):
 
-- sampleSets.csv: one row per sample, one column per category (e.g. Disease) defines the sample groups
-- sampleEdges.anndata.zarr: which column of the AnnData obs table that maps the cells to the sample category
-- comparisonMetadata.anndata.zarr: unstructured metadata to store the comparison information
+- sampleSets.csv: one row per sample, one column per category (e.g. Disease) defines the sample groups (necessary for the built-in **sampleSetPairManager** view and the **groupBuilder** plugin view)
+- sampleEdges.anndata.zarr: which column of the AnnData obs table that maps the cells to the sample category (only for the built-in **sampleSetPairManager** view)
+- comparisonMetadata.anndata.zarr: unstructured metadata to store the comparison information (only for the built-in **sampleSetPairManager** view)
 
-All are generated by `build.py` if the sample_comparison block of a dataset is referenced in the YAML template, see [the example YAML template](example_template.yaml).
+Necessary files are generated by `build.py` if the sample_comparison block of a dataset is referenced in the YAML template, see [the example YAML template](example_template.yaml).

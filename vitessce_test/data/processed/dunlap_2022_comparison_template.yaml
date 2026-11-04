@@ -24,41 +24,41 @@ views:
     datasets:
       - dunlap_2022
     grid_xywh:
-      [0, 0, 12, 2]
+      [0, 0, 4, 4]
 
   scatterplot:
     datasets:
       - dunlap_2022
-    grid_xywh: [4, 2, 8, 4]
+    grid_xywh: [4, 0, 4, 4]
 
   obs_sets:
     datasets:
       - dunlap_2022
-    grid_xywh: [0, 2, 4, 4]
+    grid_xywh: [8, 0, 4, 4]
 
   dotplot:
     datasets:
       - dunlap_2022
-    grid_xywh: [4, 6, 8, 4]
+    grid_xywh: [0, 4, 8, 3]
 
   feature_list:
     datasets:
       - dunlap_2022
-    grid_xywh: [0, 6, 4, 4]
+    grid_xywh: [8, 4, 4, 3]
     props:
-      allowMultipleSelect: true
+      enableMultiSelect: true
 
   heatmap:
     datasets:
       - dunlap_2022
-    grid_xywh: [6, 10, 6, 4]
+    grid_xywh: [6, 7, 6, 3]
     props:
       transpose: true
 
   violin:
     datasets:
       - dunlap_2022
-    grid_xywh: [0, 10, 6, 4]
+    grid_xywh: [0, 7, 6, 3]
 
 coordination:
   # Coordination spaces define shared elements (e.g. coloring) that should be coordinated
