@@ -1,7 +1,7 @@
 import { Vitessce } from "@vitessce/all"
 import { useEffect, useRef, useState } from "react"
 import "./App.css"
-import { refreshSampleSetsFunction } from "./customGroups.js"
+import { refreshSampleSetsFunction } from "./plugins/sampleSetsRefresh.js"
 import { sampleGroupBuilderPlugin } from "./plugins/sampleGroupBuilder.jsx"
 
 

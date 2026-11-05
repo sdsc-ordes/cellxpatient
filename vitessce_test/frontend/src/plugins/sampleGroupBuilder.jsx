@@ -15,10 +15,8 @@ import {
 } from "@vitessce/vit-s"
 
 import {
-  CUSTOM_PAIR,
-  CUSTOM_SET_NAME,
-  REFRESH_SAMPLE_SETS,
-} from "../customGroups.js"
+  REFRESH_SAMPLE_SETS
+} from "./sampleSetsRefresh.js"
 
 
 const EMPTY_DRAFTS = { A: {}, B: {} }
@@ -59,7 +57,6 @@ function getSampleIdsFromNode(node) {
   }
 
   return (node.set ?? []).map((entry) =>
-    // Vitessce set leaves are generally [id, probability].
     String(Array.isArray(entry) ? entry[0] : entry),
   )
 }
@@ -163,10 +160,19 @@ export function SampleGroupBuilderSubscriber(props) {
     theme,
     title = "Sample comparison",
     closeButtonVisible,
+    customSetName,
+    groupLabels,
   } = props
+
+
+  const customPair = [
+    [customSetName, groupLabels.A],
+    [customSetName, groupLabels.B],
+  ]
 
   const loaders = useLoaders()
 
+  // Only keep relevant coordination types from defined scope(s)
   const [{
     dataset,
     obsType,
@@ -180,6 +186,7 @@ export function SampleGroupBuilderSubscriber(props) {
     coordinationScopes,
   )
 
+  // Use built-in Vitessce data loaders
   const sampleSetsLoader = useMatchingLoader(
     loaders,
     dataset,
@@ -198,9 +205,9 @@ export function SampleGroupBuilderSubscriber(props) {
   const [sampleEdges, setSampleEdges] = useState(null)
   const [loadError, setLoadError] = useState(null)
 
+  // External function to refresh the cached samples.csv data
   const refreshSampleSets = useAsyncFunction(REFRESH_SAMPLE_SETS)
 
-  // Group definitions live here again: Vitessce no longer remounts on apply.
   const [drafts, setDrafts] = useState(EMPTY_DRAFTS)
   const [appliedGroups, setAppliedGroups] = useState(null)
   const [applying, setApplying] = useState(false)
@@ -209,6 +216,8 @@ export function SampleGroupBuilderSubscriber(props) {
   const [editingGroup, setEditingGroup] = useState("A")
   const [selectedCategory, setSelectedCategory] = useState("")
 
+  // Load sample-related data
+  // (sampleEdges match sample id to cell id, sampleSets are sets of sample id)
   useEffect(() => {
     if (!sampleSetsLoader || !sampleEdgesLoader) {
       return undefined
@@ -240,14 +249,15 @@ export function SampleGroupBuilderSubscriber(props) {
   }, [sampleSetsLoader, sampleEdgesLoader])
 
 
-  // The generated comparison column is an output, not a building block.
+  // Filter out the comparison column, not part of real data categories
   const categories = useMemo(
     () => (sampleSets?.tree ?? []).filter(
-      (node) => node.name !== CUSTOM_SET_NAME,
+      (node) => node.name !== customSetName,
     ),
     [sampleSets],
   )
 
+  // Set initially first category as selected category in dropdown
   useEffect(() => {
     if (
       categories.length > 0
@@ -264,14 +274,17 @@ export function SampleGroupBuilderSubscriber(props) {
     [categories, selectedCategory],
   )
 
+  // Set which are the values of the selected category (to be ticked)
   const selectedValues = drafts[editingGroup]?.[selectedCategory] ?? []
 
 
+  // Tick handler for checkbox
   function toggleValue(value) {
     setDrafts((previous) => {
       const groupCriteria = previous[editingGroup] ?? {}
       const current = groupCriteria[selectedCategory] ?? []
 
+      // if current value already selected, removes it, otherwise check it
       const next = current.includes(value)
         ? current.filter((candidate) => candidate !== value)
         : [...current, value]
@@ -312,6 +325,8 @@ export function SampleGroupBuilderSubscriber(props) {
     return samplesB.filter((sampleId) => idsA.has(sampleId))
   }, [samplesA, samplesB])
 
+
+  // Validate groups (must be non empty and non-overlapping)
   const canApply = samplesA.length > 0
     && samplesB.length > 0
     && overlappingSamples.length === 0
@@ -326,15 +341,14 @@ export function SampleGroupBuilderSubscriber(props) {
     setApplyError(null)
 
     try {
-      // null = "uninitialized": when the new sample sets arrive, the violin
-      // plot's loader hook re-creates colors for every set, Group A/B included.
+      // Hook in the sample set color manager
       setSampleSetColor(null)
 
       await refreshSampleSets({ loader: sampleSetsLoader, dataset, groups })
 
       // Select only once the new sets exist, so views never point at
       // "Group A/B" while the old CSV is still loaded.
-      const pair = groups ? CUSTOM_PAIR : []
+      const pair = groups ? customPair : []
       setSampleSetSelection(pair)
       setSampleSetFilter(pair)
       setAppliedGroups(groups)

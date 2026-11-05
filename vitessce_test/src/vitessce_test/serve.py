@@ -11,7 +11,7 @@ from fastapi.staticfiles import StaticFiles
 
 from vitessce_test.settings import DATA_DIR, DATA_URL, FRONTEND_DIR, HOST
 
-DEFAULT_HEIGHT = None
+DEFAULT_HEIGHT = 1200
 
 # Custom comparison column, generated on the fly from the groups built in the UI.
 # Keep these values in sync with frontend/src/customGroups.js.
@@ -42,6 +42,15 @@ def prepare_custom_groups(
 ) -> tuple[dict[str, Any], pd.DataFrame, dict[str, str]]:
     config = copy.deepcopy(config_dict)
 
+    # Keep in sync the backend/frontend metadata used to build custom groups
+    for view in config.get("layout", []):
+        if view.get("component") == "sampleGroupBuilder":
+            view.setdefault("props", {}).update({
+                "customSetName": CUSTOM_SET_NAME,
+                "groupLabels": GROUP_LABELS,
+            })
+
+    # Append custom column to label samples belonging to group A/B
     for dataset in config.get("datasets", []):
         for file in dataset.get("files", []):
             if file.get("fileType") != "sampleSets.csv":
@@ -62,6 +71,8 @@ def prepare_custom_groups(
                 *sample_sets,
                 {"name": CUSTOM_SET_NAME, "column": CUSTOM_COLUMN},
             ]
+
+            # Do not read from csv file anymore but update cached data directly
             file["url"] = SAMPLES_ENDPOINT
 
             return config, samples, name_to_column

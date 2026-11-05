@@ -1,22 +1,6 @@
 import { DataType, PluginAsyncFunction } from "vitessce"
 
-// Keep in sync with serve.py.
-export const CUSTOM_SET_NAME = "Custom comparison"
-
-export const GROUP_LABELS = {
-  A: "Group A",
-  B: "Group B",
-}
-
-// Path pair written to sampleSetSelection / sampleSetFilter:
-// [control, case], same convention as Vitessce's SampleSetPairManager.
-export const CUSTOM_PAIR = [
-  [CUSTOM_SET_NAME, GROUP_LABELS.A],
-  [CUSTOM_SET_NAME, GROUP_LABELS.B],
-]
-
 export const REFRESH_SAMPLE_SETS = "refreshSampleSets"
-
 
 // Reload the sample sets in place, without remounting Vitessce.
 export const refreshSampleSetsFunction = new PluginAsyncFunction(
