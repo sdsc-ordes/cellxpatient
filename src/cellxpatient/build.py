@@ -17,8 +17,8 @@ from vitessce.config import (
     VitessceConfigView,
 )
 
-from vitessce_test.datasets import prepare_datasets
-from vitessce_test.settings import DATA_DIR, DATA_URL
+from cellxpatient.datasets import prepare_datasets
+from cellxpatient.settings import DATA_DIR, DATA_URL
 
 VITESSCE_SCHEMA_VERSION = "1.0.17"
 

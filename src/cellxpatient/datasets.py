@@ -12,7 +12,7 @@ from vitessce.config import (
     VitessceConfigDataset,
 )
 
-from vitessce_test.settings import DATA_DIR, DATA_URL
+from cellxpatient.settings import DATA_DIR, DATA_URL
 
 ANNDATA_DEFAULTS = {
     "obs_embedding_paths": ["obsm/X_umap"],

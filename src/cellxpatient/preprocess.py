@@ -18,7 +18,7 @@ from spatialdata_io import xenium
 from spatialdata_io._constants._constants import XeniumKeys
 from tifffile import TiffFile, imread
 
-from vitessce_test.settings import DATA_DIR
+from cellxpatient.settings import DATA_DIR
 
 
 def write_with_backup(

@@ -1,7 +1,7 @@
 import argparse
 from pathlib import Path
 
-from vitessce_test import build, preprocess, serve
+from cellxpatient import build, preprocess, serve
 
 
 def existing_file(

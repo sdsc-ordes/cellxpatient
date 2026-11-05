@@ -7,10 +7,10 @@ resolution-markers = [
     "python_full_version >= '3.14' and sys_platform == 'emscripten'",
     "python_full_version >= '3.14' and sys_platform != 'emscripten' and sys_platform != 'win32'",
     "python_full_version == '3.13.*' and sys_platform == 'win32'",
-    "python_full_version < '3.13' and sys_platform == 'win32'",
     "python_full_version == '3.13.*' and sys_platform == 'emscripten'",
-    "python_full_version < '3.13' and sys_platform == 'emscripten'",
     "python_full_version == '3.13.*' and sys_platform != 'emscripten' and sys_platform != 'win32'",
+    "python_full_version < '3.13' and sys_platform == 'win32'",
+    "python_full_version < '3.13' and sys_platform == 'emscripten'",
     "python_full_version < '3.13' and sys_platform != 'emscripten' and sys_platform != 'win32'",
 ]
 
@@ -495,6 +495,45 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/6e/a0/d0a5c44ad6a01f195681ddcb4ce203f06c712811daf1d15f8f8785e8a9f8/botocore-1.43.117.tar.gz", hash = "sha256:71993702832cc37c2495048b9945f2929d306fccb3fb767e9964e437e637fa6c", size = 16366888, upload-time = "2026-10-21T19:29:59.274Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/10/94/050e35c9febf6dd2fce4a76be587ae4a323964865700467d9d7b082f7133/botocore-1.43.117-py3-none-any.whl", hash = "sha256:5920ef9b3002e1361846549078549d9154a6e0004c22853c01ce7b279d05d495", size = 16061765, upload-time = "2026-10-21T19:29:56.001Z" },
+]
+
+[[package]]
+name = "cellxpatient"
+version = "0.0.1"
+source = { editable = "." }
+dependencies = [
+    { name = "fastapi" },
+    { name = "pydantic" },
+    { name = "pytest" },
+    { name = "spatialdata" },
+    { name = "spatialdata-io" },
+    { name = "vitessce" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "easy-vitessce" },
+    { name = "jupyterlab" },
+    { name = "notebook" },
+    { name = "ruff" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "fastapi" },
+    { name = "pydantic", specifier = ">=2.10.6" },
+    { name = "pytest", specifier = ">=8.4.2" },
+    { name = "spatialdata", specifier = ">=0.8.0" },
+    { name = "spatialdata-io" },
+    { name = "vitessce" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "easy-vitessce" },
+    { name = "jupyterlab" },
+    { name = "notebook", specifier = ">=7.3.2" },
+    { name = "ruff" },
 ]
 
 [[package]]
@@ -5246,45 +5285,6 @@ all = [
     { name = "tifffile" },
     { name = "ujson" },
     { name = "uvicorn" },
-]
-
-[[package]]
-name = "vitessce-test"
-version = "0.0.1"
-source = { editable = "." }
-dependencies = [
-    { name = "fastapi" },
-    { name = "pydantic" },
-    { name = "pytest" },
-    { name = "spatialdata" },
-    { name = "spatialdata-io" },
-    { name = "vitessce" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "easy-vitessce" },
-    { name = "jupyterlab" },
-    { name = "notebook" },
-    { name = "ruff" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "fastapi" },
-    { name = "pydantic", specifier = ">=2.10.6" },
-    { name = "pytest", specifier = ">=8.4.2" },
-    { name = "spatialdata", specifier = ">=0.8.0" },
-    { name = "spatialdata-io" },
-    { name = "vitessce" },
-]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "easy-vitessce" },
-    { name = "jupyterlab" },
-    { name = "notebook", specifier = ">=7.3.2" },
-    { name = "ruff" },
 ]
 
 [[package]]
