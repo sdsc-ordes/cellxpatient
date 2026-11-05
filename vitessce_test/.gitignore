@@ -2,6 +2,7 @@
 data/raw/
 *.zarr/
 *.h5ad
+*.csv
 
 # Notebook checkpoints
 .ipynb_checkpoints/

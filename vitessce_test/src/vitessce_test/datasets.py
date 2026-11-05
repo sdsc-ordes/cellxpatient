@@ -1,5 +1,7 @@
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
+import pandas as pd
+import anndata as ad
 
 from vitessce import (
     AnnDataWrapper,
@@ -32,6 +34,9 @@ SPATIALDATA_DEFAULTS = {
 }
 
 
+SAMPLE_ID_DEFAULT = "sample"
+
+
 def get_valid_dataset_path(
     options: dict[str, Any],
 ) -> Path:
@@ -51,6 +56,76 @@ def get_dataset_data(
     return {**defaults, **dataset_data}
 
 
+def read_anndata_obs(zarr_path: Path) -> pd.DataFrame:
+    adata = ad.read_zarr(zarr_path)
+    return cast(pd.DataFrame, adata.obs)
+
+
+def build_data_url(path: Path) -> str:
+    return (
+        f"{DATA_URL}/"
+        f"{path.relative_to(DATA_DIR).as_posix()}"
+    )
+
+
+def write_sample_sets(
+    adata_obs: pd.DataFrame,
+    sample_id: str,
+    sample_categories: set[str],
+    samples_path: Path
+):
+    columns_subset = [*sample_categories, sample_id]
+    samples_metadata = pd.DataFrame(adata_obs[columns_subset].copy())
+    samples_metadata = samples_metadata.drop_duplicates(
+        subset=sample_id).set_index(sample_id)
+    samples_metadata.to_csv(samples_path)
+
+
+def prepare_comparison_metadata(
+    adata_path: Path,
+    comparison_config: dict[str, Any]
+)-> list[dict[str,Any]]:
+
+    dataset_path = Path(str(adata_path).split(".zarr")[0])
+    samples_path = dataset_path.parent / (dataset_path.stem + "_samples.csv")
+
+    adata_obs = pd.DataFrame(ad.read_zarr(adata_path).obs)
+    sample_col = comparison_config.get("sample_id_col", SAMPLE_ID_DEFAULT)
+    comparison_categories = comparison_config.get("sample_grouping_cols", [])
+    write_sample_sets(adata_obs, sample_col, comparison_categories, samples_path)
+
+    url = build_data_url(samples_path)
+    comparison_files_config = [
+        {
+            "file_type": "sampleSets.csv",
+            "url": url,
+            "coordination_values": {
+                "sampleType": "sample"
+            },
+            "options": {
+                "sampleIndex": sample_col,
+                "sampleSets": [{"name": comparison_cat, "column": comparison_cat}
+                for comparison_cat in comparison_categories]
+            }
+        }
+    ]
+    url = build_data_url(adata_path)
+    comparison_files_config.append(
+        {
+            "file_type": "sampleEdges.anndata.zarr",
+            "url": url,
+            "coordination_values": {
+                "obsType": "cell",
+                "sampleType": "sample"
+            },
+            "options": {
+                "path": f"obs/{sample_col}"
+            }
+        }
+    )
+    return comparison_files_config
+
+
 def add_anndata_dataset(
     vc: VitessceConfig,
     dataset_name: str,
@@ -61,16 +136,29 @@ def add_anndata_dataset(
     adata_path = get_valid_dataset_path(dataset)
 
     # Add datasets to the widget (dataset = container for file per data type)
-    vit_dataset = vc.add_dataset(                       # pyright: ignore[reportUnknownMemberType]
+    vit_dataset = vc.add_dataset(
         name=dataset_name)
 
     # Use AnnDataWrapper to automatically handle pahts to relevant data
-    _ = vit_dataset.add_object(                         # pyright: ignore[reportUnknownMemberType]
+    _ = vit_dataset.add_object(
         AnnDataWrapper(
             adata_path=adata_path.relative_to(DATA_DIR),
             **options
         )
     )
+
+    comparison_metadata = dataset.get("sample_comparison", {})
+    if comparison_metadata:
+        comparison_files = prepare_comparison_metadata(
+            adata_path, comparison_metadata)
+        for file_info in comparison_files:
+            _ = vit_dataset.add_file(                      # pyright: ignore[reportUnknownMemberType]
+                file_type=file_info["file_type"],
+                url=file_info["url"],
+                options=file_info["options"],
+                coordination_values=file_info["coordination_values"]
+            )
+
     return {dataset_name: vit_dataset}
 
 
@@ -120,12 +208,25 @@ def add_spatial_dataset(
                 "tablePath": "tables/table"
             }
         )
+
+    comparison_metadata = dataset.get("sample_comparison", {})
+    if comparison_metadata:
+        comparison_files = prepare_comparison_metadata(
+            spatialzarr_path / "tables" / "table", comparison_metadata)
+        for file_info in comparison_files:
+            _ = vitessce_dataset.add_file(
+                file_type=file_info["file_type"],
+                url=file_info["url"],
+                options=file_info["options"],
+                coordination_values=file_info["coordination_values"]
+            )
+
     return { dataset_name: vitessce_dataset }
 
 
 def prepare_datasets(
     vc: VitessceConfig,
-    datasets: dict[str, Any],
+    datasets: dict[str, Any]
 ) -> dict[str, VitessceConfigDataset]:
 
     vitessce_datasets: dict[str, VitessceConfigDataset] = {}
