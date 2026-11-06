@@ -30,6 +30,7 @@
 
 # Data
 data/raw/*
+data/processed/local
 *.zarr/
 *.h5ad
 *.csv

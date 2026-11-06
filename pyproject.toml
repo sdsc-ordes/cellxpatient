@@ -27,7 +27,7 @@ dev = [
 ]
 
 [project.scripts]
-cellxpatient = "cellxpatient.cli:main"
+clxpt = "cellxpatient.cli:main"
 
 [build-system]
 requires = ["hatchling"]

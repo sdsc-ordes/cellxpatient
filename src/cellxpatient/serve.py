@@ -1,5 +1,6 @@
 import copy
 import json
+import os
 from pathlib import Path
 from typing import Any
 
@@ -9,7 +10,7 @@ from fastapi import FastAPI, HTTPException, Query
 from fastapi.responses import Response
 from fastapi.staticfiles import StaticFiles
 
-from cellxpatient.settings import DATA_DIR, DATA_URL, FRONTEND_DIR, HOST
+from src.cellxpatient.settings import DATA_DIR, DATA_URL, FRONTEND_DIR, HOST
 
 DEFAULT_HEIGHT = 1200
 
@@ -172,8 +173,22 @@ def serve_config(
     config_dict = load_config(config_path)
 
     app = create_app(config_dict)
+
+    # Env varibale set in just recipe when launching frontend in dev mode
+    dev_flag = os.environ.get("CELLXPATIENT_DEV", "")
+    if dev_flag in {"1", "true", "True"}:
+        dev_mode = True
+    else:
+        dev_mode = False
+
+    # Hide uvicorn's startup lines with wrong address in dev mode
+    log_level = "info"
+    if dev_mode:
+        log_level="warning"
+
     uvicorn.run(
         app,
         host=HOST,
         port=port,
+        log_level=log_level
     )
