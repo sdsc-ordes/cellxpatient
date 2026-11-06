@@ -35,7 +35,6 @@ setup *args:
 ci *args:
     just nix::develop "ci" "$@"
 
-
 # Cellxpatient dev mode recipes
 [group('cellxpatient')]
 clxpt-dev *args:
@@ -45,6 +44,11 @@ clxpt-dev *args:
     (cd "{{root_dir}}/frontend" && npm run dev)&
     CELLXPATIENT_DEV=1 clxpt "$@"
 
+build-frontend *args:
+    cd "{{root_dir}}/frontend" && npm run build
+
+rebuild-stale-frontend *args:
+    "{{root_dir}}/tools/scripts/rebuild-frontend.sh"
 
 # Lint the project.
 [group('general')]

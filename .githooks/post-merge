@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC1091
+#
+# Rebuild frontend dependencies and dist if necessary
+
+set -euo pipefail
+
+. "tools/ci/general.sh"
+
+if ! command -v just >/dev/null; then
+    ci::print_warning "'just' not found." >&2
+    exit 0
+fi
+
+just rebuild-stale-frontend
