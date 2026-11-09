@@ -15,27 +15,32 @@ mod nix "./tools/just/nix.just"
 mod changelog "./tools/just/changelog.just"
 
 # Default target if you do not specify a target.
+[group('general')]
 default:
     just --list --unsorted
 
-# Enter the default Nix development shell and execute the command `"$@"`.
-develop *args:
-    just nix::develop "default" "$@"
-
-# Format the project.
-format *args:
-    "{{root_dir}}/tools/scripts/setup-config-files.sh"
-    nix run --accept-flake-config {{flake_dir}}#treefmt -- "$@"
-
 # Setup the project.
+[group('general')]
 setup *args:
     cd "{{root_dir}}" && ./tools/scripts/setup.sh
 
+# Format the project.
+[group('general')]
+format *args:
+    "{{root_dir}}/tools/scripts/setup-config-files.sh"
+    "{{root_dir}}/tools/scripts/format.sh" "$@"
+
+# Enter the default Nix development shell and execute the *args.
+[group('nix')]
+develop *args:
+    just nix::develop "default" "$@"
+
 # Run commands over the ci development shell.
+[group('nix')]
 ci *args:
     just nix::develop "ci" "$@"
 
-# Cellxpatient dev mode recipes
+# Run Cellxpatient CLI in dev mode
 [group('cellxpatient')]
 clxpt-dev *args:
     #!/usr/bin/env bash
@@ -44,28 +49,37 @@ clxpt-dev *args:
     (cd "{{root_dir}}/frontend" && npm run dev)&
     CELLXPATIENT_DEV=1 clxpt "$@"
 
+# Install the React app
+[group('cellxpatient')]
+install-frontend *args:
+    cd "{{root_dir}}/frontend" && npm ci && npm run build
+
+# Build the frontend
+[group('cellxpatient')]
 build-frontend *args:
     cd "{{root_dir}}/frontend" && npm run build
 
+# Re-build the frontend only if the current build is stale
+[group('cellxpatient')]
 rebuild-stale-frontend *args:
     "{{root_dir}}/tools/scripts/rebuild-frontend.sh"
 
 # Lint the project.
-[group('general')]
+[group('TODO')]
 lint *args:
     echo "TODO: Not implemented"
 
 # Build the module.
-[group('general')]
+[group('TODO')]
 build *args:
     echo "TODO: Not implemented"
 
 # Test the project.
-[group('general')]
+[group('TODO')]
 test *args:
     echo "TODO: Not implemented"
 
 # Run an executable.
-[group('general')]
+[group('TODO')]
 run *args:
     echo "TODO: Not implemented"
