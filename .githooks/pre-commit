@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC1091
 #
-# Format all files.
+# Format staged files.
 
 set -e
 set -u
@@ -9,8 +9,18 @@ set -o pipefail
 
 . "tools/ci/general.sh"
 
+if ! command -v "nix" &>/dev/null; then
+    ci::print_warning "Nix not installed, aborting." >&2
+    exit 0
+fi
+
+if ! command -v "just" &>/dev/null; then
+    ci::print_warning "Tool 'just' is not on your path." >&2
+    exit 0
+fi
+
 # Use backward compatible syntax to store lines in array
-# (readarray not available in recent bash version)
+# (readarray not available in some bash version)
 FILES=()
 while IFS= read -r line
 do
@@ -20,11 +30,6 @@ done < <(git diff --cached --name-only --diff-filter=ACMR)
 # shellcheck disable=SC2128
 if [ "${#FILES[@]}" = "0" ]; then
     ci::print_info "No files to format."
-    exit 0
-fi
-
-if ! command -v "just" &>/dev/null; then
-    ci::print_warning "Tool 'just' is not on your path." >&2
     exit 0
 fi
 
