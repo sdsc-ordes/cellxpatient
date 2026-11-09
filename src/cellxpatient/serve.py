@@ -10,7 +10,7 @@ from fastapi import FastAPI, HTTPException, Query
 from fastapi.responses import Response
 from fastapi.staticfiles import StaticFiles
 
-from src.cellxpatient.settings import DATA_DIR, DATA_URL, FRONTEND_DIR, HOST
+from cellxpatient.settings import DATA_DIR, DATA_URL, FRONTEND_DIR, HOST
 
 DEFAULT_HEIGHT = 1200
 
