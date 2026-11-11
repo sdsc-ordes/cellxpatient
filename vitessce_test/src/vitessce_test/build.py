@@ -22,6 +22,11 @@ from vitessce_test.settings import DATA_DIR, DATA_URL
 
 VITESSCE_SCHEMA_VERSION = "1.0.17"
 
+# Maps the view names used in the YAML template to Vitessce view types
+#
+# Vitessce Python API declares an incomplete list of view types in Compnent
+# Where missing, the view component name as declared in the Vitessce JS docs is used
+# (https://vitessce.io/docs/constants/#view-types).
 VIEW_MAPPING = {
     "scatterplot": cm.SCATTERPLOT,
     "heatmap": cm.HEATMAP,
