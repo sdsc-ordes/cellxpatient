@@ -22,10 +22,17 @@ from vitessce_test.settings import DATA_DIR, DATA_URL
 
 VITESSCE_SCHEMA_VERSION = "1.0.17"
 
+# Maps the view names used in the YAML template to Vitessce view types
+#
+# Vitessce Python API declares an incomplete list of view types in Compnent
+# Where missing, the view component name as declared in the Vitessce JS docs is used
+# (https://vitessce.io/docs/constants/#view-types).
 VIEW_MAPPING = {
     "scatterplot": cm.SCATTERPLOT,
     "heatmap": cm.HEATMAP,
     "violin": cm.OBS_SET_FEATURE_VALUE_DISTRIBUTION,
+    "dotplot": "dotPlot",
+    "group_builder": "sampleGroupBuilder",
     "obs_sets": cm.OBS_SETS,
     "obs_sets_sizes": cm.OBS_SET_SIZES,
     "description": cm.DESCRIPTION,
@@ -254,6 +261,7 @@ def build_config(
         description=template["description"],
         base_dir=DATA_DIR)
 
+
     # Add to vitessce config all datasets to display
     datasets = template["datasets"]
     vitessce_datasets = prepare_datasets(vc, datasets)
@@ -268,6 +276,11 @@ def build_config(
         coordination_scopes[space_name] = add_coordination_space(vc, coordination_space, views_per_dataset, vitessce_datasets)
 
     config_dict = vc.to_dict(base_url=DATA_URL)
+
+    # Add custom config elements
+    custom_config = template.get("custom", {})
+    if custom_config:
+        config_dict.update(custom_config)
     config_path = save_config(config_dict, template_path)
 
     return config_path
