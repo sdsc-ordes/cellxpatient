@@ -63,23 +63,3 @@ build-frontend *args:
 [group('cellxpatient')]
 rebuild-stale-frontend *args:
     "{{root_dir}}/tools/scripts/rebuild-frontend.sh"
-
-# Lint the project.
-[group('TODO')]
-lint *args:
-    echo "TODO: Not implemented"
-
-# Build the module.
-[group('TODO')]
-build *args:
-    echo "TODO: Not implemented"
-
-# Test the project.
-[group('TODO')]
-test *args:
-    echo "TODO: Not implemented"
-
-# Run an executable.
-[group('TODO')]
-run *args:
-    echo "TODO: Not implemented"
