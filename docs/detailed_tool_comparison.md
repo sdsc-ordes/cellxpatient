@@ -73,12 +73,12 @@ heatmaps with >10'000 of features and support for multi GB images.
 
 #### Deployement test
 
-- not an application: needs a hosting page and a server for data/confgi loading
+- not an application: needs a hosting page and a server for data/config loading
 - highly extensible but only on the dev side
 - data preparation: need to prepare a config view (json file). Python API covers most common data formats to automatically register datasets to the config view.
 - many documentations (main docs is superficial, Python API docs is very superficial, JS specific docs is very detailed). 
 - steep learning curve to learn how to build custom views and plugins (all in JS).
-- layout fixed oonce built : users cannot add plots. Interactivitity depends on the layout preparation.
+- layout fixed once built : users cannot add plots. Interactivitity depends on the layout preparation.
 - polished presentation. Interactivity seems limited but might depend on the view preparation.
 - clinical metadata integration could be feasible with a custom plugin or by-side react component
 
