@@ -6,7 +6,7 @@
     { lib, pkgs, ... }:
     {
 
-      toolchains.common = [
+      toolchains.common-py = [
         {
           packages = [
             # Language Server.
@@ -30,7 +30,7 @@
         }
       ];
 
-      toolchains.vitessce = [
+      toolchains.cellxpatient = [
         {
           packages = [
             pkgs.nodejs_24
@@ -62,60 +62,6 @@
               enable = true;
               package = pkgs.uv;
               sync.enable = true;
-            };
-
-          };
-        }
-      ];
-
-      toolchains.mdv = [
-        {
-          # We use `devenv` language support since, it's
-          # pretty involved to setup a python environment.
-          languages.python = {
-            enable = true;
-            venv.enable = true;
-
-            # Heavy modules relying (CYTHON, ext. shared libraries etc)
-            # should be built by Nix.
-            package = pkgs.python312.withPackages (p: [
-              p.numpy
-              p.matplotlib
-            ]);
-
-            uv = {
-              enable = true;
-              package = pkgs.uv;
-              sync.enable = true;
-            };
-          };
-        }
-      ];
-
-      toolchains.cirrocumulus = [
-        {
-          # We use `devenv` language support since, it's
-          # pretty involved to setup a python environment.
-          languages.python = {
-            enable = true;
-
-            # Heavy modules relying (CYTHON, ext. shared libraries etc)
-            # should be built by Nix.
-            package = pkgs.python312.withPackages (p: [
-              p.numpy
-              p.matplotlib
-            ]);
-
-            venv = {
-              enable = true;
-              requirements = ''
-                cirrocumulus
-                typing-extensions
-                numcodecs==0.15.1
-                scanpy
-                pyarrow
-                fsspec==2023.1.0
-              '';
             };
           };
         }
