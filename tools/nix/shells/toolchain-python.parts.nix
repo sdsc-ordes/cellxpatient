@@ -6,7 +6,7 @@
     { lib, pkgs, ... }:
     {
 
-      toolchains.common = [
+      toolchains.common-py = [
         {
           packages = [
             # Language Server.

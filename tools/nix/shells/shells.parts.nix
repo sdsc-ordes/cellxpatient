@@ -19,7 +19,8 @@
     {
       devShells.default = self.lib.shell.mkShell {
         inherit (args) system;
-        modules = toolchains.general ++ toolchains.${language} ++ toolchains.cellxpatient ++ toolchains.common;
+        modules =
+          toolchains.general ++ toolchains.${language} ++ toolchains.cellxpatient ++ toolchains.common-py;
       };
 
       devShells.changelog = self.lib.shell.mkShell {
