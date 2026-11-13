@@ -36,11 +36,6 @@
             pkgs.nodejs_24
           ];
 
-          # Use system certificates in uv
-          env = {
-            UV_SYSTEM_CERTS = "true";
-          };
-
           # We use `devenv` language support since, it's
           # pretty involved to setup a python environment.
           languages.python = {
