@@ -15,7 +15,7 @@ from cellxpatient.settings import DATA_DIR, DATA_URL, FRONTEND_DIR, HOST
 DEFAULT_HEIGHT = 1200
 
 # Custom comparison column, generated on the fly from the groups built in the UI.
-# Keep these values in sync with frontend/src/customGroups.js.
+# Sent to Group Builder view as props; its code assumes group keys "A" and "B".
 CUSTOM_SET_NAME = "Custom comparison"
 CUSTOM_COLUMN = "__custom_comparison__"
 GROUP_LABELS = {"A": "Group A", "B": "Group B"}
