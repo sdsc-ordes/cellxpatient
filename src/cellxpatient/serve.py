@@ -15,7 +15,7 @@ from cellxpatient.settings import DATA_DIR, DATA_URL, FRONTEND_DIR, HOST
 DEFAULT_HEIGHT = 1200
 
 # Custom comparison column, generated on the fly from the groups built in the UI.
-# Keep these values in sync with frontend/src/customGroups.js.
+# Sent to Group Builder view as props; its code assumes group keys "A" and "B".
 CUSTOM_SET_NAME = "Custom comparison"
 CUSTOM_COLUMN = "__custom_comparison__"
 GROUP_LABELS = {"A": "Group A", "B": "Group B"}
@@ -40,12 +40,14 @@ def resolve_data_path(url: str) -> Path:
 
 def prepare_custom_groups(
     config_dict: dict[str, Any],
-) -> tuple[dict[str, Any], pd.DataFrame, dict[str, str]]:
+) -> tuple[dict[str, Any], pd.DataFrame | None, dict[str, str]]:
     config = copy.deepcopy(config_dict)
 
     # Keep in sync the backend/frontend metadata used to build custom groups
+    has_group_builder = False
     for view in config.get("layout", []):
         if view.get("component") == "sampleGroupBuilder":
+            has_group_builder = True
             view.setdefault("props", {}).update({
                 "customSetName": CUSTOM_SET_NAME,
                 "groupLabels": GROUP_LABELS,
@@ -78,7 +80,14 @@ def prepare_custom_groups(
 
             return config, samples, name_to_column
 
-    raise ValueError("The config has no sampleSets.csv file.")
+    # Group Builder has nothing to build groups from without sample sets
+    if has_group_builder:
+        raise ValueError(
+            "The config has a sampleGroupBuilder view but no sampleSets.csv file."
+        )
+
+    # Config without sample comparison: serve it unchanged
+    return config, None, {}
 
 
 def match_samples(
@@ -118,7 +127,6 @@ def create_app(
             "height": app_height,
         }
 
-    @app.get(SAMPLES_ENDPOINT)
     def get_samples(groups: str | None = Query(None)):
         table = samples.copy()
         table[CUSTOM_COLUMN] = OTHER_LABEL
@@ -148,6 +156,10 @@ def create_app(
             table.to_csv(index=False),
             media_type="text/csv",
         )
+
+    # Sample table endpoint only exists for configs with sample comparison
+    if samples is not None:
+        app.add_api_route(SAMPLES_ENDPOINT, get_samples, methods=["GET"])
 
     # Serve data files.
     app.mount(
