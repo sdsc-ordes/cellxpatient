@@ -95,7 +95,7 @@ pixels by default).
 
 A spatial view coordinating multi-layer spatial data with gene expression.
 
-**Data:** the Xenium 0OE1 example dataset provided by Antonin Thiebault.
+**Data:** the Xenium 0OE1 example dataset provided by Antonin Thiébaut.
 
 **Template:**
 [xenium_0OE1_example_template.yaml](../../data/processed/xenium_0OE1_example_template.yaml)
