@@ -25,9 +25,9 @@ datasets:
 views:
   <view_type_1>:
     datasets:
-      # the grid can be directly specified per dataset with grid_xywh or with grid_offset_xy
-      # at the dataset level
-      <subset_A>:
+      # The grid can be directly specified per dataset with grid_xywh or with grid_offset_xy
+      # at the dataset level (view-level grid_xywh below takes precedence)
+      <dataset_id>:
         grid_xywh: [0, 0, 0, 0]
     grid_xywh: [0, 0, 6, 2]
     props:
@@ -38,7 +38,7 @@ coordination:
   # across multiple datasets and views
   <space_id>:
     datasets:
-      - <subset_A>
+      - <dataset_id>
     views:
       - <view_type_1>
     values:
@@ -55,13 +55,11 @@ coordination:
         views:
           - <spatial_view_type>
       segmentation_layer:
-        # nucleus or cell channel
+        # cell_channel or nucleus_channel
         <channel_type>:
-          inherit: true # if inherit is true or inherit_values is specified,
-          inherit_values: # the corresponding coord values are inherited from the parent scope
-            values:
-              <coord_type>: <value>
-          values:
+          inherit: true # link to all coordination scopes of parent space
+          inherit_values: [<coord_type>] # or only these; takes precedence over inherit
+          values: # inherited scopes override same coord types here
             <coord_type>: <value>
         views:
           - <spatial_view_type>
