@@ -47,7 +47,7 @@ flowchart LR
    package. For now, there are still remaining reformatting steps necessary.
 2. **Build** generates a Vitessce view configuration from a human-readable YAML
    template (see the
-   [documentation](docs/vitessce_documentation/view-templates.md) about the view
+   [documentation](docs/vitessce_documentation/view_templates.md) about the view
    template).
 3. **Serve** starts a web server that hosts the frontend, the processed data and
    the view config, so no separate data server is needed. The frontend in
